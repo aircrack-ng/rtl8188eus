@@ -2,9 +2,10 @@
 
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
 <b>This driver supports:</b>
-* frame injection
-* monitor mode
-* MESH mode
+* Android 8
+* Frame injection
+* Monitor Mode
+* MESH Mode Operation
 * .. and kernels up to v5.0+ (rc3 tested)
 
 This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
@@ -17,7 +18,7 @@ Create a file named "rtl8188eus.conf", add a 1 liner to it: "blacklist r8188eu"
 <br>
 2. Then move the file to "/etc/modprobe.d/"
 <br>
-3. "make && make install"
+3. "make && make install"<br>
 4. "rmmod r8188eu && insmod rtl8188eus"
 
 # MONITOR MODE ATTENTION
@@ -30,6 +31,9 @@ Create a file named "rtl8188eus.conf", add a 1 liner to it: "blacklist r8188eu"
 * Finish the walkthrough of the base for understanding.
 * There is a bug in monitor mode related to Network-Manager.
   This needs priority because it causes interferrence.
+* Add HT (RX) Greenfield capabilities
+* pcap_activate error on "reaver" - investigate
+* Go through the VHT.
 * Add more VID/PIDS for all 3 chipsets supported.
 <br>
 more tba..
