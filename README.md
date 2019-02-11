@@ -20,15 +20,11 @@ The performance and code quality has been improved and thats about time.
 
 # HowTo build/install
 1. You will need to blacklist another driver in order to use this one instead of the kernel provided.
-Create a file named "rtl8188eus.conf", add a 1 liner to it: "blacklist r8188eu"
-<br>
-2. Then move the file to "/etc/modprobe.d/"
-<br>
+   We included a "realtek_blacklist.conf" file in the folder. "cp realtek_blacklist.conf /etc/modprobe.d"
 3. "make && make install"<br>
-4. "rmmod r8188eu && insmod rtl8188eus"
+4. "rmmod r8188eu && insmod rtl8188eu"
 
 # MONITOR MODE ATTENTION
-
 There is a bug or interferrence with the driver and/or Network-Manager,
 so if you wan't to use the monitor mode, DON'T kill the network-manager or use airmon-ng (infact)
 
@@ -49,7 +45,7 @@ wifi.powersave=0
 plugins=keyfile
 
 [keyfile]
-unmanaged-devices=mac:c4:e9:84:dc:99:e9
+unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
 # TODO
