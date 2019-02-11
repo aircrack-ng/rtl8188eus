@@ -5,7 +5,7 @@
 * frame injection
 * monitor mode
 * MESH mode
-* and kernels up to v5.0+ (rc3 tested)
+* .. and kernels up to v5.0+ (rc3 tested)
 <br>
 <br>
 This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"<br>
