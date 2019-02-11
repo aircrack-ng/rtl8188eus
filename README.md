@@ -59,6 +59,9 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 * Add HT (RX) Greenfield capabilities
 * pcap_activate error on "reaver" - investigate
 * Go through the VHT.
+* Add DKMS support
+* Finish up badges
+* Add/upload the documentation
 * Add more VID/PIDS for all 3 chipsets supported.
 <br>
 more tba..
