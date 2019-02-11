@@ -50,6 +50,8 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 # TODO
 * Finish the walkthrough of the base for understanding.
+* Fix a issue where the interface is down on startup
+* Fix the out of bounds reference
 * There is a bug in monitor mode related to Network-Manager.
   This needs priority because it causes interferrence.
 * Add HT (RX) Greenfield capabilities
