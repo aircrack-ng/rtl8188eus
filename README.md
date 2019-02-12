@@ -2,17 +2,15 @@
 
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
 
-[![Monitor mode](https://img.shields.io/badge/monitor%20mode-working-brightgreen.svg)](#)
-[![Frame Injection](https://img.shields.io/badge/frame%20injection-working-brightgreen.svg)](#)
+[![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
+[![Frame Injection](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
+[![MESH Mode](https://img.shields.io/badge/mesh%20mode-supported-brightgreen.svg)](#)
 [![GitHub issues](https://img.shields.io/github/issues/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/issues)
 [![GitHub forks](https://img.shields.io/github/forks/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/network)
 [![GitHub stars](https://img.shields.io/github/stars/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/stargazers)
-[![GitHub license](https://img.shields.io/github/license/kimocoder/rtl8812au.svg)](https://github.com/kimocoder/rtl8188eus/blob/master/LICENSE)
-
-<b>This driver supports:</b>
-* Android 8
-* MESH Mode Operation
-* .. and kernels up to v5.0+ (rc3 tested)
+[![GitHub license](https://img.shields.io/github/license/kimocoder/rtl8812au.svg)](https://github.com/kimocoder/rtl8188eus/blob/master/LICENSE)<br>
+[![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
+[![aircrack-ng](https://img.shields.io/badge/aircrack--ng-supported-blue.svg)](#)
 
 This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
 we've seen, this must be the newest, most stable and effective one.
