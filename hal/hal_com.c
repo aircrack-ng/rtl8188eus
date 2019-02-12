@@ -2292,9 +2292,6 @@ bool rtw_sec_read_cam_is_gk(_adapter *adapter, u8 id)
 #ifdef CONFIG_MBSSID_CAM
 void rtw_mbid_cam_init(struct dvobj_priv *dvobj)
 {
-	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
-
-	_rtw_spinlock_init(&mbid_cam_ctl->lock);
 	mbid_cam_ctl->bitmap = 0;
 	ATOMIC_SET(&mbid_cam_ctl->mbid_entry_num, 0);
 	_rtw_memset(&dvobj->mbid_cam_cache, 0, sizeof(dvobj->mbid_cam_cache));

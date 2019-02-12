@@ -146,7 +146,7 @@ sint	_rtw_init_mlme_priv(_adapter *padapter)
 #if defined(CONFIG_RTW_WNM) || defined(CONFIG_RTW_80211K)
 	rtw_roam_nb_info_init(padapter);
 	pmlmepriv->ch_cnt = 0;
-#endif	
+#endif
 #endif
 	rtw_init_mlme_timer(padapter);
 
@@ -156,12 +156,8 @@ exit:
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv);
 void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
 {
-	_rtw_spinlock_free(&pmlmepriv->lock);
-	_rtw_spinlock_free(&(pmlmepriv->free_bss_pool.lock));
-	_rtw_spinlock_free(&(pmlmepriv->scanned_queue.lock));
 }
 
 static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
