@@ -50,16 +50,13 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 * Finish the walkthrough of the base for understanding.
 * Fix a issue where the interface is down on startup
 * Fix the out of bounds reference
-* Supress some debug messages (dmesg) about powersave
-* Add support for more platforms,
-  RPI, generic ARM/ARM64, Odroid, PPC ..
+* Supress some debug messages (dmesg) about powersaving
 * There is a bug in monitor mode related to Network-Manager.
   This needs priority because it causes interferrence.
 * Add HT (RX) Greenfield capabilities
 * pcap_activate error on "reaver" - investigate
 * Go through the VHT.
 * Add DKMS support
-* Finish up badges
 * Add/upload the documentation
 * Add more VID/PIDS for all 3 chipsets supported.
 <br>
