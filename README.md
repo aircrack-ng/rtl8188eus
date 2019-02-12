@@ -4,12 +4,12 @@
 
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-working-brightgreen.svg)](#)
 [![Frame Injection](https://img.shields.io/badge/frame%20injection-working-brightgreen.svg)](#)
-[![MESH Mode](https://img.shields.io/badge/MESH%20mode-supported-green.svg)](#)
+[![MESH Mode](https://img.shields.io/badge/mesh%20mode-supported-brightgreen.svg)](#)
 [![GitHub issues](https://img.shields.io/github/issues/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/issues)
 [![GitHub forks](https://img.shields.io/github/forks/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/network)
 [![GitHub stars](https://img.shields.io/github/stars/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/stargazers)
 [![GitHub license](https://img.shields.io/github/license/kimocoder/rtl8812au.svg)](https://github.com/kimocoder/rtl8188eus/blob/master/LICENSE)<br>
-[![Android](https://img.shields.io/badge/Android%20(8)-supported-green.svg)](#)
+[![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
 
 This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
 we've seen, this must be the newest, most stable and effective one.
