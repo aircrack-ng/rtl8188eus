@@ -52,6 +52,7 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 * Finish the walkthrough of the base for understanding.
 * Fix a issue where the interface is down on startup
 * Fix the out of bounds reference
+* Supress some debug messages (dmesg) about powersave
 * Add support for more platforms,
   RPI, generic ARM/ARM64, Odroid, PPC ..
 * There is a bug in monitor mode related to Network-Manager.
