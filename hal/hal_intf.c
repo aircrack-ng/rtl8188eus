@@ -145,8 +145,6 @@ void rtw_hal_dm_deinit(_adapter *padapter)
 		PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(padapter);
 
 		padapter->hal_func.dm_deinit(padapter);
-
-		_rtw_spinlock_free(&pHalData->IQKSpinLock);
 	}
 }
 

@@ -305,13 +305,12 @@ void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
 	/* _rtw_spinlock_init(&(pHalData->odm_stainfo_lock)); */
 	Init_ODM_ComInfo_88E(Adapter);
 	odm_init_all_timers(podmpriv);
-	
+	pHalData->CurrentTxPwrIdx = 13;
 }
 
 void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_struct		*podmpriv = &pHalData->odmpriv;
-	/* _rtw_spinlock_free(&pHalData->odm_stainfo_lock); */
 	odm_cancel_all_timers(podmpriv);
 }

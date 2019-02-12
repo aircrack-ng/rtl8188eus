@@ -475,6 +475,7 @@ typedef struct hal_com_data {
 	u8	txpwr_limit_loaded:1;
 	u8	txpwr_limit_from_file:1;
 	u8	rf_power_tracking_type;
+	u8	CurrentTxPwrIdx;
 
 	/* Read/write are allow for following hardware information variables	 */
 	u8	crystal_cap;
