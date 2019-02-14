@@ -2656,6 +2656,7 @@ static int netdev_vir_if_close(struct net_device *pnetdev)
 	rtw_scan_abort(padapter);
 	rtw_cfg80211_wait_scan_req_empty(padapter, 200);
 	adapter_wdev_data(padapter)->bandroid_scan = _FALSE;
+	pnetdev->reg_state = NETREG_REGISTERED;
 #endif
 
 	return 0;
