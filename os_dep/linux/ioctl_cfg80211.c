@@ -981,8 +981,10 @@ void rtw_cfg80211_ibss_indicate_connect(_adapter *padapter)
 				return ;
 			}
 		} else {
-			if (scanned == NULL)
+			if (scanned == NULL) {
 				rtw_warn_on(1);
+				return;
+			}
 
 			if (_rtw_memcmp(&(scanned->network.Ssid), &(pnetwork->Ssid), sizeof(NDIS_802_11_SSID)) == _TRUE
 				&& _rtw_memcmp(scanned->network.MacAddress, pnetwork->MacAddress, sizeof(NDIS_802_11_MAC_ADDRESS)) == _TRUE
@@ -1240,7 +1242,7 @@ static int rtw_cfg80211_ap_set_encryption(struct net_device *dev, struct ieee_pa
 	if (is_broadcast_mac_addr(param->sta_addr)) {
 		if (param->u.crypt.idx >= WEP_KEYS
 			#ifdef CONFIG_IEEE80211W
-			&& param->u.crypt.idx > BIP_MAX_KEYID
+			|| param->u.crypt.idx > BIP_MAX_KEYID
 			#endif
 		) {
 			ret = -EINVAL;
@@ -1487,7 +1489,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 	if (is_broadcast_mac_addr(param->sta_addr)) {
 		if (param->u.crypt.idx >= WEP_KEYS
 			#ifdef CONFIG_IEEE80211W
-			&& param->u.crypt.idx > BIP_MAX_KEYID
+			|| param->u.crypt.idx > BIP_MAX_KEYID
 			#endif
 		) {
 			ret = -EINVAL;
@@ -4258,8 +4260,10 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 
 	RTW_INFO(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
-	if (skb)
-		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
+	if (!skb)
+		goto fail;
+
+	rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
 
 	if (IS_CH_WAITING(rfctl)) {
 		#ifdef CONFIG_DFS_MASTER

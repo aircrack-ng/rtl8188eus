@@ -3598,7 +3598,9 @@ void rtw_ndev_destructor(struct net_device *ndev)
 	if (ndev->ieee80211_ptr)
 		rtw_mfree((u8 *)ndev->ieee80211_ptr, sizeof(struct wireless_dev));
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 11, 8))
 	free_netdev(ndev);
+#endif
 }
 
 #ifdef CONFIG_ARP_KEEP_ALIVE
