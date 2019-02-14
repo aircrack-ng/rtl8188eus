@@ -9058,6 +9058,9 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *adapter, struct wiphy *wiphy)
 #endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
+#if defined(CONFIG_NET_NS)
+	wiphy->flags |= WIPHY_FLAG_NETNS_OK;
+#endif //CONFIG_NET_NS
 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_SEPARATE_DEFAULT_KEYS;
 #endif
 
