@@ -954,7 +954,7 @@ void update_bmc_sta(_adapter *padapter)
 
 		psta->ieee8021x_blocked = 0;
 
-		_rtw_memset((void *)&psta->sta_stats, 0, sizeof(struct stainfo_stats));
+		memset((void *)&psta->sta_stats, 0, sizeof(struct stainfo_stats));
 
 		/* psta->dot118021XPrivacy = _NO_PRIVACY_; */ /* !!! remove it, because it has been set before this. */
 
@@ -1134,7 +1134,7 @@ void update_sta_info_apmode(_adapter *padapter, struct sta_info *psta)
 
 	/* todo: init other variables */
 
-	_rtw_memset((void *)&psta->sta_stats, 0, sizeof(struct stainfo_stats));
+	memset((void *)&psta->sta_stats, 0, sizeof(struct stainfo_stats));
 
 
 	/* add ratid */
@@ -1806,7 +1806,7 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 
 	pbss_network->IELength = len;
 
-	_rtw_memset(ie, 0, MAX_IE_SZ);
+	memset(ie, 0, MAX_IE_SZ);
 
 	_rtw_memcpy(ie, pbuf, pbss_network->IELength);
 
@@ -1839,7 +1839,7 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	/* SSID */
 	p = rtw_get_ie(ie + _BEACON_IE_OFFSET_, _SSID_IE_, &ie_len, (pbss_network->IELength - _BEACON_IE_OFFSET_));
 	if (p && ie_len > 0) {
-		_rtw_memset(&pbss_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
+		memset(&pbss_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
 		_rtw_memcpy(pbss_network->Ssid.Ssid, (p + 2), ie_len);
 		pbss_network->Ssid.SsidLength = ie_len;
 #ifdef CONFIG_P2P
@@ -1870,7 +1870,7 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	pbss_network->Configuration.DSConfig = channel;
 
 
-	_rtw_memset(supportRate, 0, NDIS_802_11_LENGTH_RATES_EX);
+	memset(supportRate, 0, NDIS_802_11_LENGTH_RATES_EX);
 	/* get supported rates */
 	p = rtw_get_ie(ie + _BEACON_IE_OFFSET_, _SUPPORTEDRATES_IE_, &ie_len, (pbss_network->IELength - _BEACON_IE_OFFSET_));
 	if (p !=  NULL) {
@@ -2606,7 +2606,7 @@ static int rtw_ap_set_key(_adapter *padapter, u8 *key, u8 alg, int keyid, u8 set
 		goto exit;
 	}
 
-	_rtw_memset(psetkeyparm, 0, sizeof(struct setkey_parm));
+	memset(psetkeyparm, 0, sizeof(struct setkey_parm));
 
 	psetkeyparm->keyid = (u8)keyid;
 	if (is_wep_enc(alg))
@@ -3972,7 +3972,7 @@ void start_ap_mode(_adapter *padapter)
 	pmlmepriv->sw_to_20mhz = 0;
 #endif
 
-	_rtw_memset(pmlmepriv->ext_capab_ie_data, 0, sizeof(pmlmepriv->ext_capab_ie_data));
+	memset(pmlmepriv->ext_capab_ie_data, 0, sizeof(pmlmepriv->ext_capab_ie_data));
 	pmlmepriv->ext_capab_ie_len = 0;
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -4036,7 +4036,7 @@ void stop_ap_mode(_adapter *padapter)
 	padapter->netif_up = _FALSE;
 
 	/* reset and init security priv , this can refine with rtw_reset_securitypriv */
-	_rtw_memset((unsigned char *)&padapter->securitypriv, 0, sizeof(struct security_priv));
+	memset((unsigned char *)&padapter->securitypriv, 0, sizeof(struct security_priv));
 	padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;
 	padapter->securitypriv.ndisencryptstatus = Ndis802_11WEPDisabled;
 
