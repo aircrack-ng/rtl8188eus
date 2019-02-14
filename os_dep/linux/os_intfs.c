@@ -2302,9 +2302,6 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 	/* add for CONFIG_IEEE80211W, none 11w also can use */
 	_rtw_spinlock_init(&padapter->security_key_mutex);
 
-	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
-	/* _rtw_memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
-
 	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
 		RTW_INFO("Can't _rtw_init_sta_priv\n");
 		ret8 = _FAIL;
@@ -2392,6 +2389,8 @@ void rtw_cancel_dynamic_chk_timer(_adapter *padapter)
 
 void rtw_cancel_all_timer(_adapter *padapter)
 {
+	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
+	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
 
@@ -2434,7 +2433,17 @@ void rtw_cancel_all_timer(_adapter *padapter)
 	_cancel_timer_ex(&(adapter_to_pwrctl(padapter)->pwr_rpwm_timer));
 #endif /* CONFIG_LPS_RPWM_TIMER */
 
+	_cancel_timer_ex(&pwdinfo->find_phase_timer);
+	_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
+	_cancel_timer_ex(&pwdinfo->pre_tx_scan_timer);
+	_cancel_timer_ex(&pwdinfo->reset_ch_sitesurvey);
+	_cancel_timer_ex(&pmlmeext->survey_timer);
+	_cancel_timer_ex(&pmlmeext->link_timer);
+#ifdef CONFIG_IEEE80211W
+	_cancel_timer_ex(&pmlmeext->sa_query_timer);
 	/* cancel dm timer */
+#endif
+
 	rtw_hal_dm_deinit(padapter);
 
 #ifdef CONFIG_PLATFORM_FS_MX61
