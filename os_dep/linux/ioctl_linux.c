@@ -7880,7 +7880,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		return -EFAULT;
 
 	len = dwrq->length;
-	ext = rtw_vmalloc(len);
+	ext = vmalloc(len);
 	if (!ext)
 		return -ENOMEM;
 
@@ -7892,7 +7892,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 
 
 #ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	ext_dbg = rtw_vmalloc(len);
+	ext_dbg = vmalloc(len);
 	if (!ext_dbg) {
 		rtw_vmfree(ext, len);
 		return -ENOMEM;
