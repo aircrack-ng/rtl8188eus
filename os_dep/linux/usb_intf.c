@@ -1498,6 +1498,8 @@ free_dvobj:
 	if (status != _SUCCESS)
 		usb_dvobj_deinit(pusb_intf);
 exit:
+	if (!status)
+		pr_info("In %s return -ENODEV\n", __func__);
 	return status == _SUCCESS ? 0 : -ENODEV;
 }
 

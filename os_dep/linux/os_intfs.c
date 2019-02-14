@@ -2851,8 +2851,12 @@ void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj)
 
 void rtw_drv_del_vir_if(_adapter *padapter)
 {
+	struct dvobj_priv *pdvobjpriv;
+
 	rtw_drv_stop_vir_if(padapter);
 	rtw_drv_free_vir_if(padapter);
+	pdvobjpriv = adapter_to_dvobj(padapter);
+	--pdvobjpriv->iface_nums;
 }
 
 void rtw_drv_del_vir_ifaces(_adapter *primary_padapter)
