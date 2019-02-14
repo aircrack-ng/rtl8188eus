@@ -1476,8 +1476,6 @@ int rtw_mp_mon(struct net_device *dev,
 	LeaveAllPowerSaveMode(padapter);
 
 #ifdef CONFIG_MP_INCLUDED
-	if (init_mp_priv(padapter) == _FAIL)
-		RTW_INFO("%s: initialize MP private data Fail!\n", __func__);
 	padapter->mppriv.channel = 6;
 
 	bstart = strncmp(extra, "start", 5); /* strncmp TRUE is 0*/

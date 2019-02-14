@@ -688,7 +688,7 @@ extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);
 extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe);
 #endif
 
-extern s32 init_mp_priv(PADAPTER padapter);
+void init_mp_priv(PADAPTER padapter);
 extern void free_mp_priv(struct mp_priv *pmp_priv);
 extern s32 MPT_InitializeAdapter(PADAPTER padapter, u8 Channel);
 extern void MPT_DeInitAdapter(PADAPTER padapter);

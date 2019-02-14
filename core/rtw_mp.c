@@ -310,7 +310,7 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 #endif
 }
 
-s32 init_mp_priv(PADAPTER padapter)
+void init_mp_priv(PADAPTER padapter)
 {
 	struct mp_priv *pmppriv = &padapter->mppriv;
 	PHAL_DATA_TYPE pHalData;
@@ -351,7 +351,6 @@ s32 init_mp_priv(PADAPTER padapter)
 	pHalData->AntennaRxPath = pmppriv->antenna_rx;
 	pHalData->antenna_tx_path = pmppriv->antenna_tx;
 
-	return _SUCCESS;
 }
 
 void free_mp_priv(struct mp_priv *pmp_priv)
