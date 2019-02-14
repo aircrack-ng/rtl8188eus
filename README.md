@@ -52,9 +52,7 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
   I didn't have more time after "rtw_beamforming.c"
 * There is a bug in monitor mode related to Network-Manager.
   This needs priority because it causes interferrence.
-* Add HT (RX) Greenfield capabilities
 * pcap_activate error on "reaver" - investigate
-* Go through the VHT.
 * Add/upload the documentation
 * Add more VID/PIDS for all 3 chipsets supported.
 * Remove unused functions
