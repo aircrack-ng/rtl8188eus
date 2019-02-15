@@ -56,8 +56,12 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 # TODO
 * Fix a issue where the interface is down on startup
+* Implement txpower control
+
 * Finish up the elimination of the wrapper _rtw_memset.
   I didn't have more time after "rtw_beamforming.c"
+
+* Check code with checkpatch.pl (found in "tools")
 
 * pcap_activate error on "reaver" - investigate
 * Add/upload the documentation
