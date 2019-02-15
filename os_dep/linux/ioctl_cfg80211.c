@@ -1993,10 +1993,10 @@ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 
 #define SET_DEF_KEY_PARAM_FMT " key_index=%d"
-#define SET_DEF_KEY_PARAM_ARG, key_index
+#define SET_DEF_KEY_PARAM_ARG , key_index
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38)) || defined(COMPAT_KERNEL_RELEASE)
 	#define SET_DEF_KEY_PARAM_FMT_2_6_38 ", unicast=%d, multicast=%d"
-	#define SET_DEF_KEY_PARAM_ARG_2_6_38, unicast, multicast
+	#define SET_DEF_KEY_PARAM_ARG_2_6_38 , unicast, multicast
 #else
 	#define SET_DEF_KEY_PARAM_FMT_2_6_38 ""
 	#define SET_DEF_KEY_PARAM_ARG_2_6_38

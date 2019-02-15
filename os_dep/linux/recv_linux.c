@@ -127,7 +127,7 @@ int rtw_os_alloc_recvframe(_adapter *padapter, union recv_frame *precvframe, u8 
 		res = _FAIL;
 #else
 		if ((pattrib->mfrag == 1) && (pattrib->frag_num == 0)) {
-			RTW_INFO("%s: alloc_skb fail , drop frag frame\n", __FUNCTION__);
+			RTW_INFO("%s: alloc_skb fail , drop frag frame\n", __func__);
 			/* rtw_free_recvframe(precvframe, pfree_recv_queue); */
 			res = _FAIL;
 			goto exit_rtw_os_recv_resource_alloc;
@@ -144,7 +144,7 @@ int rtw_os_alloc_recvframe(_adapter *padapter, union recv_frame *precvframe, u8 
 			precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pdata;
 			precvframe->u.hdr.rx_end =  pdata + alloc_sz;
 		} else {
-			RTW_INFO("%s: rtw_skb_clone fail\n", __FUNCTION__);
+			RTW_INFO("%s: rtw_skb_clone fail\n", __func__);
 			/* rtw_free_recvframe(precvframe, pfree_recv_queue); */
 			/*exit_rtw_os_recv_resource_alloc;*/
 			res = _FAIL;
@@ -281,7 +281,7 @@ int rtw_os_recvbuf_resource_free(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-_pkt *rtw_os_alloc_msdu_pkt(union recv_frame *prframe, const u8 *da, const u8 *sa, u8 *msdu ,u16 msdu_len)
+_pkt *rtw_os_alloc_msdu_pkt(union recv_frame *prframe, const u8 *da, const u8 *sa, u8 *msdu, u16 msdu_len)
 {
 	u16	eth_type;
 	u8	*data_ptr;
@@ -305,7 +305,7 @@ _pkt *rtw_os_alloc_msdu_pkt(union recv_frame *prframe, const u8 *da, const u8 *s
 			sub_skb->len = msdu_len;
 			skb_set_tail_pointer(sub_skb, msdu_len);
 		} else {
-			RTW_INFO("%s(): rtw_skb_clone() Fail!!!\n", __FUNCTION__);
+			RTW_INFO("%s(): rtw_skb_clone() Fail!!!\n", __func__);
 			return NULL;
 		}
 	}
@@ -399,7 +399,7 @@ void dynamic_napi_th_chk (_adapter *adapter)
 	if (adapter->registrypriv.en_napi) {
 		struct dvobj_priv *dvobj;
 		struct registry_priv *registry;
-	
+
 		dvobj = adapter_to_dvobj(adapter);
 		registry = &adapter->registrypriv;
 		if (dvobj->traffic_stat.cur_rx_tp > registry->napi_threshold)
@@ -422,7 +422,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, union recv_frame *r
 #endif
 	int ret;
 
-	/* Indicat the packets to upper layer */
+	/* Indicate the packets to upper layer */
 	if (pkt) {
 		struct ethhdr *ehdr = (struct ethhdr *)pkt->data;
 
@@ -510,7 +510,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, union recv_frame *r
 #ifdef CONFIG_RTW_NAPI
 #ifdef CONFIG_RTW_NAPI_DYNAMIC
 		if (!skb_queue_empty(&precvpriv->rx_napi_skb_queue)
-			&& !adapter_to_dvobj(padapter)->en_napi_dynamic			
+			&& !adapter_to_dvobj(padapter)->en_napi_dynamic
 			)
 			napi_recv(padapter, RTL_NAPI_WEIGHT);
 #endif
@@ -604,13 +604,13 @@ void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
 	skb->len = precv_frame->u.hdr.len;
 
 	/* pskb_copy = rtw_skb_copy(skb);
-	*	if(skb == NULL) goto _exit; */
+		if(skb == NULL) goto _exit; */
 
 	skb->dev = pmgnt_netdev;
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->pkt_type = PACKET_OTHERHOST;
 	/* skb->protocol = __constant_htons(0x0019); ETH_P_80211_RAW */
-	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
+	skb->protocol = htons(0x0003); /*ETH_P_80211_RAW*/
 
 	/* RTW_INFO("(1)data=0x%x, head=0x%x, tail=0x%x, mac_header=0x%x, len=%d\n", skb->data, skb->head, skb->tail, skb->mac_header, skb->len); */
 

@@ -18,7 +18,8 @@ The performance and code quality has been improved and thats about time.
 
 # HowTo build/install
 1. You will need to blacklist another driver in order to use this one instead of the kernel provided.
-   We included a "realtek_blacklist.conf" file in the folder. "cp realtek_blacklist.conf /etc/modprobe.d"
+   We included a "realtek_blacklist.conf" file in the folder:<br>
+2. "cp realtek_blacklist.conf /etc/modprobe.d/"<br>
 3. "make && make install"<br>
 4. "rmmod 8188eu && insmod 8188eu.ko"
 
@@ -29,7 +30,7 @@ airmon-ng check-kill
 ip link set <interface> down
 iw dev <interface> set type monitor
 ```
-Frame injection test may be performerd with
+Frame injection test may be performed with
 ```
 aireplay -9 <interface>
 ```
@@ -55,7 +56,6 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
 # TODO
-* Fix a issue where the interface is down on startup
 * Implement txpower control
 
 * Finish up the elimination of the wrapper _rtw_memset.
