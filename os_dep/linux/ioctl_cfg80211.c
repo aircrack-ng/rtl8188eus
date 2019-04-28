@@ -4286,11 +4286,6 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if (rtap_len != 14) {
-		RTW_INFO("radiotap len (should be 14): %d\n", rtap_len);
-		goto fail;
-	}
-
 	/* Skip the ratio tap header */
 	skb_pull(skb, rtap_len);
 
