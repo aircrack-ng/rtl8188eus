@@ -4355,7 +4355,7 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	unsigned char	*pframe;
 	u8 dummybuf[32];
-	int len = skb->len, rtap_len;
+	int len = skb->len, rtap_len, consume;
 
 	if (skb)
 		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
@@ -4372,12 +4372,15 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if (rtap_len != 12) {
-		RTW_INFO("radiotap len (should be 14): %d\n", rtap_len);
-		goto fail;
+	len -= sizeof(struct ieee80211_radiotap_header);
+	rtap_len -= sizeof(struct ieee80211_radiotap_header);
+
+	while(rtap_len) {
+		consume = rtap_len > sizeof(dummybuf) ? sizeof(dummybuf) : rtap_len;
+		_rtw_pktfile_read(&pktfile, dummybuf, consume);
+		rtap_len -= consume;
+		len -= consume;
 	}
-	_rtw_pktfile_read(&pktfile, dummybuf, rtap_len-sizeof(struct ieee80211_radiotap_header));
-	len = len - rtap_len;
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL) {
