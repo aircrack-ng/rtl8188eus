@@ -1676,6 +1676,10 @@ void rtw_os_ndev_unregister(_adapter *adapter)
 #endif
 
 	if ((adapter->DriverState != DRIVER_DISAPPEAR) && netdev) {
+#ifdef CONFIG_IOCTL_CFG80211
+		struct wireless_dev *wdev = padapter->rtw_wdev;
+		wdev->current_bss = NULL;
+#endif
 		struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 		u8 rtnl_lock_needed = rtw_rtnl_lock_needed(dvobj);
 
@@ -3553,10 +3557,11 @@ static int netdev_close(struct net_device *pnetdev)
 #endif /* CONFIG_P2P */
 
 #ifdef CONFIG_IOCTL_CFG80211
+	wdev->iftype = NL80211_IFTYPE_STATION;
 	rtw_scan_abort(padapter);
 	rtw_cfg80211_wait_scan_req_empty(padapter, 200);
 	adapter_wdev_data(padapter)->bandroid_scan = _FALSE;
-	//padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
+	padapter->rtw_wdev->iftype = NL80211_IFTYPE_STATION; /* set this at the end */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_WAPI_SUPPORT
