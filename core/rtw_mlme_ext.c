@@ -9003,7 +9003,7 @@ void issue_auth(_adapter *padapter, struct sta_info *psta, unsigned short status
 			val16 = cpu_to_le16(val16);
 			use_shared_key = 1;
 		} else {
-			le_val16 = 0;
+			val16 = 0;
 		}
 
 		pframe = rtw_set_fixed_ie(pframe, _AUTH_ALGM_NUM_, (unsigned char *)&val16, &(pattrib->pktlen));
