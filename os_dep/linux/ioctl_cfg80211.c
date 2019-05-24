@@ -4137,6 +4137,7 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
 #if defined(RTW_USE_CFG80211_STA_EVENT) || defined(COMPAT_KERNEL_RELEASE)
 	{
 		struct station_info sinfo;
+		_rtw_memset(&sinfo, 0, sizeof(struct station_info));
 		u8 ie_offset;
 		if (get_frame_sub_type(pmgmt_frame) == WIFI_ASSOCREQ)
 			ie_offset = _ASOCREQ_IE_OFFSET_;
@@ -4426,7 +4427,11 @@ static const struct net_device_ops rtw_cfg80211_monitor_if_ops = {
 };
 #endif
 
-static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, struct net_device **ndev)
+static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+		unsigned char name_assign_type,
+#endif
+		struct net_device **ndev)
 {
 	int ret = 0;
 	struct net_device *mon_ndev = NULL;
@@ -4457,6 +4462,9 @@ static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, struct ne
 	mon_ndev->type = ARPHRD_IEEE80211_RADIOTAP;
 	strncpy(mon_ndev->name, name, IFNAMSIZ);
 	mon_ndev->name[IFNAMSIZ - 1] = 0;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+	mon_ndev->name_assign_type = name_assign_type;
+#endif
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(4, 11, 8))
 	mon_ndev->priv_destructor = rtw_ndev_destructor;
 #else
@@ -4546,7 +4554,11 @@ static int
 	switch (type) {
 	case NL80211_IFTYPE_MONITOR:
 		padapter = wiphy_to_adapter(wiphy); /* TODO: get ap iface ? */
-		ret = rtw_cfg80211_add_monitor_if(padapter, (char *)name, &ndev);
+		ret = rtw_cfg80211_add_monitor_if(padapter, (char *)name,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+				name_assign_type,
+#endif
+				&ndev);
 		if (ret == 0)
 			wdev = ndev->ieee80211_ptr;
 		break;
@@ -8826,7 +8838,13 @@ static void rtw_cfg80211_init_ht_capab(_adapter *padapter
 
 	ht_cap->ht_supported = _TRUE;
 
-	ht_cap->cap = IEEE80211_HT_CAP_SUP_WIDTH_20_40 |
+	/* According to the comment in rtw_ap.c:
+	 * "Note: currently we switch to the MIXED op mode if HT non-greenfield
+	 * station is associated. Probably it's a theoretical case, since
+	 * it looks like all known HT STAs support greenfield."
+	 * Therefore Greenfield is added to ht_cap
+	 */
+	ht_cap->cap = IEEE80211_HT_CAP_SUP_WIDTH_20_40 | IEEE80211_HT_CAP_GRN_FLD |
 				IEEE80211_HT_CAP_SGI_40 | IEEE80211_HT_CAP_SGI_20 |
 				IEEE80211_HT_CAP_DSSSCCK40 | IEEE80211_HT_CAP_MAX_AMSDU;
 	rtw_cfg80211_init_ht_capab_ex(padapter, ht_cap, band, rf_type);

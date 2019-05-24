@@ -63,6 +63,9 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 * Check code with checkpatch.pl (found in "tools")
 
+* There is a bug in monitor mode related to Network-Manager.
+  This needs priority because it causes interferrence.
+  
 * pcap_activate error on "reaver" - investigate
 * Add/upload the documentation
 * Add more VID/PIDS for all 3 chipsets supported.
