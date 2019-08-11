@@ -57,17 +57,10 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 # TODO
 * Implement txpower control
+* Add HT (RX) Greenfield capability
+* Add newer kernel support
+* Optimize and tweak the Makefile
 
-* Finish up the elimination of the wrapper _rtw_memset.
-  I didn't have more time after "rtw_beamforming.c"
+* Do a complete walkthrough of new base
 
-* Check code with checkpatch.pl (found in "tools")
-
-* There is a bug in monitor mode related to Network-Manager.
-  This needs priority because it causes interferrence.
-
-* Add more VID/PIDS for all 3 chipsets supported.
-* Remove unused functions
-<br>
-more tba..
 
