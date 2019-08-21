@@ -147,6 +147,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	/*=== Customer ID ===*/
 	/****** 8188EUS ********/
 	{USB_DEVICE(0x07B8, 0x8179), .driver_info = RTL8188E}, /* Abocom - Abocom */
+	{USB_DEVICE(0x2357, 0x010c), .driver_info = RTL8188E}, /* TP-Link - TL-WN722N v2 */
 #endif
 
 #ifdef CONFIG_RTL8812A
