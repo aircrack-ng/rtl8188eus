@@ -9,7 +9,7 @@ fi
 
 DRV_DIR=rtl8188eus
 DRV_NAME=rtl8188eus
-DRV_VERSION=5.7.4
+DRV_VERSION=5.7.6.1
 
 dkms remove ${DRV_NAME}/${DRV_VERSION} --all
 rm -rf /usr/src/${DRV_NAME}-${DRV_VERSION}

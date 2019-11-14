@@ -204,6 +204,7 @@ struct rtw_external_auth_params {
 	struct cfg80211_ssid ssid;
 	unsigned int key_mgmt_suite;
 	u16 status;
+	u8 pmkid[PMKID_LEN];
 };
 
 bool rtw_cfg80211_is_connect_requested(_adapter *adapter);
@@ -401,8 +402,10 @@ void rtw_cfg80211_deinit_rfkill(struct wiphy *wiphy);
 #endif
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 0, 0))
-#define rtw_cfg80211_notify_new_peer_candidate(wdev, addr, ie, ie_len, gfp) cfg80211_notify_new_peer_candidate(wdev_to_ndev(wdev), addr, ie, ie_len, gfp)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 0, 0))
+#define rtw_cfg80211_notify_new_peer_candidate(wdev, addr, ie, ie_len, sig_dbm, gfp) cfg80211_notify_new_peer_candidate(wdev_to_ndev(wdev), addr, ie, ie_len, sig_dbm, gfp)
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 0, 0))
+#define rtw_cfg80211_notify_new_peer_candidate(wdev, addr, ie, ie_len, sig_dbm, gfp) cfg80211_notify_new_peer_candidate(wdev_to_ndev(wdev), addr, ie, ie_len, gfp)
 #endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0))

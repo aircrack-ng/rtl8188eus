@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright(c) 2007 - 2017 Realtek Corporation.
+ * Copyright(c) 2007 - 2019 Realtek Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
@@ -401,6 +401,8 @@ struct sta_info {
 	int wpa_pairwise_cipher;
 	int wpa2_pairwise_cipher;
 
+	u32 akm_suite_type;
+
 	u8 bpairwise_key_installed;
 #ifdef CONFIG_RTW_80211R
 	u8 ft_pairwise_key_installed;
@@ -480,6 +482,8 @@ struct sta_info {
 #endif
 
 #ifdef CONFIG_IOCTL_CFG80211
+	u8 *pauth_frame;
+	u32 auth_len;
 	u8 *passoc_req;
 	u32 assoc_req_len;
 #endif
@@ -499,6 +503,14 @@ struct sta_info {
 #ifdef CONFIG_RTS_FULL_BW
 	bool vendor_8812;
 #endif
+
+	/*
+	 * Vaiables for queuing TX pkt a short period of time
+	 * to wait something ready.
+	 */
+	u8 tx_q_enable;
+	struct __queue tx_queue;
+	_workitem tx_q_work;
 };
 
 #ifdef CONFIG_RTW_MESH

@@ -535,7 +535,7 @@ struct beacon_keys {
 	int encryp_protocol;
 	int pairwise_cipher;
 	int group_cipher;
-	int is_8021x;
+	u32 akm;
 };
 #ifdef CONFIG_RTW_80211R
 #define RTW_FT_ACTION_REQ_LMT	4

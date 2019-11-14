@@ -2534,14 +2534,14 @@ int rtw_get_bcn_keys(ADAPTER *Adapter, u8 *pframe, u32 packet_len,
 		recv_beacon->encryp_protocol = ENCRYP_PROTOCOL_WPA2;
 		rtw_parse_wpa2_ie(elems.rsn_ie - 2, elems.rsn_ie_len + 2,
 			&recv_beacon->group_cipher, &recv_beacon->pairwise_cipher,
-				  &recv_beacon->is_8021x, NULL);
+				  &recv_beacon->akm, NULL);
 	}
 	/* checking WPA secon */
 	else if (elems.wpa_ie && elems.wpa_ie_len) {
 		recv_beacon->encryp_protocol = ENCRYP_PROTOCOL_WPA;
 		rtw_parse_wpa_ie(elems.wpa_ie - 2, elems.wpa_ie_len + 2,
 			&recv_beacon->group_cipher, &recv_beacon->pairwise_cipher,
-				 &recv_beacon->is_8021x);
+				 &recv_beacon->akm);
 	} else if (capability & BIT(4))
 		recv_beacon->encryp_protocol = ENCRYP_PROTOCOL_WEP;
 
@@ -2568,9 +2568,9 @@ void rtw_dump_bcn_keys(struct beacon_keys *recv_beacon)
 	RTW_INFO("%s: channel = %d\n", __func__, recv_beacon->bcn_channel);
 	RTW_INFO("%s: ht_cap = 0x%04x\n", __func__,	recv_beacon->ht_cap_info);
 	RTW_INFO("%s: ht_info_infos_0_sco = 0x%02x\n", __func__, recv_beacon->ht_info_infos_0_sco);
-	RTW_INFO("%s: sec=%d, group = %x, pair = %x, 8021X = %x\n", __func__,
+	RTW_INFO("%s: sec=%d, group = %x, pair = %x, akm = %x\n", __func__,
 		 recv_beacon->encryp_protocol, recv_beacon->group_cipher,
-		 recv_beacon->pairwise_cipher, recv_beacon->is_8021x);
+		 recv_beacon->pairwise_cipher, recv_beacon->akm);
 }
 #define DBG_BCN_CNT
 int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)

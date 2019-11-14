@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright(c) 2007 - 2017 Realtek Corporation.
+ * Copyright(c) 2007 - 2019 Realtek Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
@@ -4519,6 +4519,124 @@ fail:
 #endif
 
 /*
+ *
+ * Return _TRUE when frame has been put to queue, otherwise return _FALSE.
+ */
+static u8 xmit_enqueue(struct _ADAPTER *a, struct xmit_frame *frame)
+{
+	struct sta_info *sta = NULL;
+	struct pkt_attrib *attrib = NULL;
+	_irqL irqL;
+	_list *head;
+	u8 ret = _TRUE;
+
+
+	attrib = &frame->attrib;
+	sta = attrib->psta;
+	if (!sta)
+		return _FALSE;
+
+	_enter_critical_bh(&sta->tx_queue.lock, &irqL);
+
+	head = get_list_head(&sta->tx_queue);
+
+	if ((rtw_is_list_empty(head) == _TRUE) && (!sta->tx_q_enable)) {
+		ret = _FALSE;
+		goto exit;
+	}
+
+	rtw_list_insert_tail(&frame->list, head);
+	RTW_INFO(FUNC_ADPT_FMT ": en-queue tx pkt for macid=%d\n",
+		 FUNC_ADPT_ARG(a), sta->cmn.mac_id);
+
+exit:
+	_exit_critical_bh(&sta->tx_queue.lock, &irqL);
+
+	return ret;
+}
+
+static void xmit_dequeue(struct sta_info *sta)
+{
+	struct _ADAPTER *a;
+	_irqL irqL;
+	_list *head, *list;
+	struct xmit_frame *frame;
+
+
+	a = sta->padapter;
+
+	_enter_critical_bh(&sta->tx_queue.lock, &irqL);
+
+	head = get_list_head(&sta->tx_queue);
+
+	do {
+		if (rtw_is_list_empty(head) == _TRUE)
+			break;
+
+		list = get_next(head);
+		rtw_list_delete(list);
+		frame = LIST_CONTAINOR(list, struct xmit_frame, list);
+		RTW_INFO(FUNC_ADPT_FMT ": de-queue tx frame of macid=%d\n",
+			 FUNC_ADPT_ARG(a), sta->cmn.mac_id);
+
+		rtw_hal_xmit(a, frame);
+	} while (1);
+
+	_exit_critical_bh(&sta->tx_queue.lock, &irqL);
+}
+
+void rtw_xmit_dequeue_callback(_workitem *work)
+{
+	struct sta_info *sta;
+
+
+	sta = container_of(work, struct sta_info, tx_q_work);
+	xmit_dequeue(sta);
+}
+
+void rtw_xmit_queue_set(struct sta_info *sta)
+{
+	_irqL irqL;
+
+	_enter_critical_bh(&sta->tx_queue.lock, &irqL);
+
+	if (sta->tx_q_enable) {
+		RTW_WARN(FUNC_ADPT_FMT ": duplicated set!\n",
+			 FUNC_ADPT_ARG(sta->padapter));
+		goto exit;
+	}
+	sta->tx_q_enable = 1;
+	RTW_INFO(FUNC_ADPT_FMT ": enable queue TX for macid=%d\n",
+		 FUNC_ADPT_ARG(sta->padapter), sta->cmn.mac_id);
+
+exit:
+	_exit_critical_bh(&sta->tx_queue.lock, &irqL);
+}
+
+void rtw_xmit_queue_clear(struct sta_info *sta)
+{
+	_irqL irqL;
+
+	_enter_critical_bh(&sta->tx_queue.lock, &irqL);
+
+	if (!sta->tx_q_enable) {
+		RTW_WARN(FUNC_ADPT_FMT ": tx queue for macid=%d "
+			 "not be enabled!\n",
+			 FUNC_ADPT_ARG(sta->padapter), sta->cmn.mac_id);
+		goto exit;
+	}
+
+	sta->tx_q_enable = 0;
+	RTW_INFO(FUNC_ADPT_FMT ": disable queue TX for macid=%d\n",
+		 FUNC_ADPT_ARG(sta->padapter), sta->cmn.mac_id);
+
+	_set_workitem(&sta->tx_q_work);
+
+exit:
+	_exit_critical_bh(&sta->tx_queue.lock, &irqL);
+}
+
+/*
  * The main transmit(tx) entry post handle
  *
  * Return
@@ -4572,6 +4690,9 @@ s32 rtw_xmit_posthandle(_adapter *padapter, struct xmit_frame *pxmitframe, _pkt 
 	}
 	_exit_critical_bh(&pxmitpriv->lock, &irqL0);
 #endif
+
+	if (xmit_enqueue(padapter, pxmitframe) == _TRUE)
+		return 1;
 
 	/* pre_xmitframe */
 	if (rtw_hal_xmit(padapter, pxmitframe) == _FALSE)

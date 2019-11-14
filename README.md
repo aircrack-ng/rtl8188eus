@@ -1,4 +1,4 @@
-## rtl8188eus v5.7.6
+## rtl8188eus v5.7.6.1
 
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
 

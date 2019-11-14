@@ -276,8 +276,8 @@ enum TDLS_option {
 
 #endif /* CONFIG_TDLS */
 
-#ifndef NL80211_AUTHTYPE_SAE
-#define NL80211_AUTHTYPE_SAE 4
+#if (KERNEL_VERSION(3, 8, 0) > LINUX_VERSION_CODE)
+#define NL80211_AUTHTYPE_SAE (__NL80211_AUTHTYPE_NUM + 1)
 #endif
 
 /*
@@ -1118,6 +1118,8 @@ u8 set_csa_hdl(_adapter *padapter, unsigned char *pbuf);	/* Kurt: Handling DFS c
 u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf);
 u8 run_in_thread_hdl(_adapter *padapter, u8 *pbuf);
 u8 rtw_getmacreg_hdl(_adapter *padapter, u8 *pbuf);
+
+int rtw_sae_preprocess(_adapter *adapter, const u8 *buf, u32 len, u8 tx);
 
 #define GEN_DRV_CMD_HANDLER(size, cmd)	{size, &cmd ## _hdl},
 #define GEN_MLME_EXT_HANDLER(size, cmd)	{size, cmd},

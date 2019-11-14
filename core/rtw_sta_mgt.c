@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright(c) 2007 - 2017 Realtek Corporation.
+ * Copyright(c) 2007 - 2019 Realtek Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
@@ -230,12 +230,15 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	pstapriv->padapter = adapter;
 
-	pstapriv->pallocated_stainfo_buf = rtw_zvmalloc(sizeof(struct sta_info) * NUM_STA + 4);
+	pstapriv->pallocated_stainfo_buf = rtw_zvmalloc(
+		sizeof(struct sta_info) * NUM_STA + MEM_ALIGNMENT_OFFSET);
 	if (!pstapriv->pallocated_stainfo_buf)
 		goto exit;
 
-	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf + 4 -
-			 ((SIZE_PTR)(pstapriv->pallocated_stainfo_buf) & 3);
+	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf;
+	if ((SIZE_PTR)pstapriv->pstainfo_buf & MEM_ALIGNMENT_PADDING)
+		pstapriv->pstainfo_buf += MEM_ALIGNMENT_OFFSET -
+			((SIZE_PTR)pstapriv->pstainfo_buf & MEM_ALIGNMENT_PADDING);
 
 	_rtw_init_queue(&pstapriv->free_sta_queue);
 
@@ -321,7 +324,8 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 exit:
 	if (ret != _SUCCESS) {
 		if (pstapriv->pallocated_stainfo_buf)
-			rtw_vmfree(pstapriv->pallocated_stainfo_buf, sizeof(struct sta_info) * NUM_STA + 4);
+			rtw_vmfree(pstapriv->pallocated_stainfo_buf,
+				sizeof(struct sta_info) * NUM_STA + MEM_ALIGNMENT_OFFSET);
 		#ifdef CONFIG_AP_MODE
 		if (pstapriv->sta_aid)
 			rtw_mfree(pstapriv->sta_aid, pstapriv->max_aid * sizeof(struct sta_info *));
@@ -472,7 +476,8 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 #endif
 
 		if (pstapriv->pallocated_stainfo_buf)
-			rtw_vmfree(pstapriv->pallocated_stainfo_buf, sizeof(struct sta_info) * NUM_STA + 4);
+			rtw_vmfree(pstapriv->pallocated_stainfo_buf,
+				sizeof(struct sta_info) * NUM_STA + MEM_ALIGNMENT_OFFSET);
 		#ifdef CONFIG_AP_MODE
 		if (pstapriv->sta_aid)
 			rtw_mfree(pstapriv->sta_aid, pstapriv->max_aid * sizeof(struct sta_info *));
@@ -600,6 +605,9 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, const u8 *hwaddr)
 
 		rtw_alloc_macid(pstapriv->padapter, psta);
 
+		psta->tx_q_enable = 0;
+		_rtw_init_queue(&psta->tx_queue);
+		_init_workitem(&psta->tx_q_work, rtw_xmit_dequeue_callback, NULL);
 	}
 
 exit:
@@ -664,6 +672,9 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 	/* rtw_list_delete(&psta->sleep_list); */
 
 	/* rtw_list_delete(&psta->wakeup_list); */
+
+	rtw_free_xmitframe_queue(pxmitpriv, &psta->tx_queue);
+	_rtw_deinit_queue(&psta->tx_queue);
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
 

@@ -79,9 +79,7 @@ void rtw_hal_update_iqk_fw_offload_cap(_adapter *adapter)
 	RTW_INFO("IQK FW offload:%s\n", hal->RegIQKFWOffload ? "enable" : "disable");
 
 	if (rtw_mi_check_status(adapter, MI_LINKED)) {
-#ifdef CONFIG_LPS
-		LPS_Leave(adapter, "SWITCH_IQK_OFFLOAD");
-#endif
+		//LPS_Leave(adapter, "SWITCH_IQK_OFFLOAD");
 		halrf_iqk_trigger(p_dm_odm, _FALSE);
 	}
 }
