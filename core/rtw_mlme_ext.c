@@ -258,6 +258,7 @@ void rtw_txpwr_init_regd(struct rf_ctl_t *rfctl)
 		);
 		if (rfctl->regd_name)
 			break;
+	// Indentional fallthrough
 	default:
 		rfctl->regd_name = regd_str(TXPWR_LMT_WW);
 		RTW_PRINT("assign %s for default case\n", regd_str(TXPWR_LMT_WW));
