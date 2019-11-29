@@ -16,7 +16,14 @@ This is a pure Realtek release, not from vendor but from all the Realtek multich
 we've seen, this must be the newest, most stable and effective one.
 The performance and code quality has been improved.
 
-# HowTo build/install
+# Supports
+* MESH Support
+* Monitor mode
+* Frame injection
+* Up to kernel v5.3+
+... And a bunch of various wifi chipsets
+
+# Howto build/install
 1. You will need to blacklist another driver in order to use this one instead of the kernel provided.
    We included a "realtek_blacklist.conf" file in the folder:<br>
 2. "cp realtek_blacklist.conf /etc/modprobe.d/"<br>
