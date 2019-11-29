@@ -8,7 +8,7 @@ else
 fi
 
 DRV_DIR=rtl8188eus
-DRV_NAME=8188eus
+DRV_NAME=8188eu
 DRV_VERSION=5.3.9
 
 dkms remove ${DRV_NAME}/${DRV_VERSION} --all
