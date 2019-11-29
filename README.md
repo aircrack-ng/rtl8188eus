@@ -3,7 +3,7 @@
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
 
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
-[![Frame Injection](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
+[![Frame Injection](https://img.shields.io/badge/frame%20injection-supported-brightgreen.svg)](#)
 [![MESH Mode](https://img.shields.io/badge/mesh%20mode-supported-brightgreen.svg)](#)
 [![GitHub issues](https://img.shields.io/github/issues/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/issues)
 [![GitHub forks](https://img.shields.io/github/forks/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/network)
