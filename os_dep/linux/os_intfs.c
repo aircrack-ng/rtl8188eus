@@ -23,7 +23,6 @@
 
 #endif
 
-
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
@@ -33,7 +32,6 @@ MODULE_VERSION(DRIVERVERSION);
 int rtw_chip_version = 0x00;
 int rtw_rfintfs = HWPI;
 int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
-
 
 int rtw_network_mode = Ndis802_11IBSS;/* Ndis802_11Infrastructure; */ /* infra, ad-hoc, auto */
 /* NDIS_802_11_SSID	ssid; */
@@ -72,14 +70,13 @@ int rtw_scan_mode = 1;/* active, passive */
 	int rtw_lps_level = LPS_NORMAL;
 #endif /* CONFIG_POWER_SAVING */
 
-
 module_param(rtw_ips_mode, int, 0644);
 MODULE_PARM_DESC(rtw_ips_mode, "The default IPS mode");
 
 module_param(rtw_lps_level, int, 0644);
 MODULE_PARM_DESC(rtw_lps_level, "The default LPS level");
 
-/* LPS: 
+/* LPS:
  * rtw_smart_ps = 0 => TX: pwr bit = 1, RX: PS_Poll
  * rtw_smart_ps = 1 => TX: pwr bit = 0, RX: PS_Poll
  * rtw_smart_ps = 2 => TX: pwr bit = 0, RX: NullData with pwr bit = 0
@@ -88,8 +85,8 @@ int rtw_smart_ps = 2;
 
 int rtw_max_bss_cnt = 0;
 module_param(rtw_max_bss_cnt, int, 0644);
-#ifdef CONFIG_WMMPS_STA	
-/* WMMPS: 
+#ifdef CONFIG_WMMPS_STA
+/* WMMPS:
  * rtw_smart_ps = 0 => Only for fw test
  * rtw_smart_ps = 1 => Refer to Beacon's TIM Bitmap
  * rtw_smart_ps = 2 => Don't refer to Beacon's TIM Bitmap
@@ -700,7 +697,6 @@ module_param(rtw_dynamic_soml_delay, int, 0644);
 MODULE_PARM_DESC(rtw_dynamic_soml_delay, "SOML training delay");
 #endif
 
-
 int _netdev_open(struct net_device *pnetdev);
 int netdev_open(struct net_device *pnetdev);
 static int netdev_close(struct net_device *pnetdev);
@@ -1287,7 +1283,6 @@ unsigned int rtw_classify8021d(struct sk_buff *skb)
 
 	return dscp >> 5;
 }
-
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 2, 0))
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb,

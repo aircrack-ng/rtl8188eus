@@ -1,6 +1,6 @@
-config RTL8188EU
+config RTL8188EUS
 	tristate "Realtek 8188E USB WiFi"
 	depends on USB
 	---help---
-	  Help message of RTL8188EU
+	  Help message of RTL8188EUS
 

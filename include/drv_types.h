@@ -18,7 +18,6 @@
 
 --------------------------------------------------------------------------------*/
 
-
 #ifndef __DRV_TYPES_H__
 #define __DRV_TYPES_H__
 
@@ -90,7 +89,7 @@ typedef struct _ADAPTER _adapter, ADAPTER, *PADAPTER;
 #include <rtw_sreset.h>
 #include <hal_intf.h>
 #include <hal_com.h>
-#include<hal_com_h2c.h>
+#include <hal_com_h2c.h>
 #include <hal_com_led.h>
 #include "../hal/hal_dm.h"
 #include <rtw_qos.h>
@@ -1038,7 +1037,7 @@ struct dvobj_priv {
 	_timer txbcn_timer;
 #endif
 	_timer dynamic_chk_timer; /* dynamic/periodic check timer */
-	
+
 #ifdef CONFIG_RTW_NAPI_DYNAMIC
 	u8 en_napi_dynamic;
 #endif /* CONFIG_RTW_NAPI_DYNAMIC */
@@ -1435,7 +1434,6 @@ struct _ADAPTER {
 	u8	MCList[MAX_MCAST_LIST_NUM][6];
 	u32	MCAddrCount;
 #endif /* end of PLATFORM_WINDOWS */
-
 
 #ifdef PLATFORM_LINUX
 	_nic_hdl pnetdev;

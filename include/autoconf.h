@@ -25,7 +25,7 @@
  */
 #define AUTOCONF_INCLUDED
 #define RTL871X_MODULE_NAME "88EU"
-#define DRV_NAME "rtl8188eu"
+#define DRV_NAME "8188eu"
 
 #define CONFIG_USB_HCI
 
@@ -55,7 +55,6 @@
 
 #define CONFIG_EMBEDDED_FWIMG
 
-
 #ifdef CONFIG_EMBEDDED_FWIMG
 	#define	LOAD_FW_HEADER_FROM_DRIVER
 #endif
@@ -84,7 +83,6 @@
 	#define CONFIG_LPS
 	#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
 
-
 	/* #define CONFIG_LPS_LCLK */
 	#endif
 
@@ -94,8 +92,6 @@
 #endif /* CONFIG_POWER_SAVING */
 
 	/*#define CONFIG_ANTENNA_DIVERSITY*/
-
-
 
 	/* #define CONFIG_CONCURRENT_MODE */
 	#ifdef CONFIG_CONCURRENT_MODE
@@ -154,7 +150,6 @@
 	/* #define CONFIG_TDLS_CH_SW */	/* Enable this flag only when we confirm that TDLS CH SW is supported in FW */
 #endif
 
-
 #define CONFIG_SKB_COPY	/* for amsdu */
 
 /* #define CONFIG_RTW_LED */
@@ -174,7 +169,6 @@
 	/* #define CONFIG_IOL_IOREG_CFG */
 	/* #define CONFIG_IOL_IOREG_CFG_DBG */
 #endif
-
 
 #define CONFIG_GLOBAL_UI_PID
 
@@ -232,7 +226,6 @@
 
 /* #define CONFIG_USB_SUPPORT_ASYNC_VDN_REQ */
 
-
 /*
  * HAL  Related Config
  */
@@ -241,13 +234,11 @@
 
 #define SUPPORTED_BLOCK_IO
 
-
 /* #define CONFIG_ONLY_ONE_OUT_EP_TO_LOW	0 */
 
 #define CONFIG_OUT_EP_WIFI_MODE	0
 
 #define ENABLE_USB_DROP_INCORRECT_OUT
-
 
 #define DISABLE_BB_RF	0
 
@@ -261,7 +252,6 @@
 #else
 	#define MP_DRIVER 0
 #endif
-
 
 /*
  * Platform  Related Config
@@ -277,7 +267,6 @@
 		#define CONFIG_USE_USB_BUFFER_ALLOC_RX
 	#endif
 #endif
-
 
 #ifdef CONFIG_USB_TX_AGGREGATION
 /* #define	CONFIG_TX_EARLY_MODE */
@@ -322,8 +311,6 @@
 /* #define DBG_RX_SEQ */
 /* #define DBG_RX_SIGNAL_DISPLAY_PROCESSING */
 /* #define DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED "jeff-ap" */
-
-
 
 /* #define DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE */
 /* #define DBG_ROAMING_TEST */
