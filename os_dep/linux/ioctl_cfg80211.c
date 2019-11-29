@@ -4126,6 +4126,7 @@ static int cfg80211_rtw_flush_pmksa(struct wiphy *wiphy,
 #ifdef CONFIG_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
 {
+	u8 ie_offset;
 	s32 freq;
 	int channel;
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
@@ -4138,7 +4139,7 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
 	{
 		struct station_info sinfo;
 		_rtw_memset(&sinfo, 0, sizeof(struct station_info));
-		u8 ie_offset;
+
 		if (get_frame_sub_type(pmgmt_frame) == WIFI_ASSOCREQ)
 			ie_offset = _ASOCREQ_IE_OFFSET_;
 		else /* WIFI_REASSOCREQ */
