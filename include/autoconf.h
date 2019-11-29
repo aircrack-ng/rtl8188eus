@@ -25,7 +25,7 @@
  */
 #define AUTOCONF_INCLUDED
 #define RTL871X_MODULE_NAME "88EU"
-#define DRV_NAME "rtl8188eu"
+#define DRV_NAME "8188eu"
 
 #define CONFIG_USB_HCI
 

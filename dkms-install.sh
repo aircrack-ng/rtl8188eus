@@ -8,7 +8,7 @@ else
 fi
 
 DRV_DIR=rtl8188eus
-DRV_NAME=rtl8188eus
+DRV_NAME=8188eu
 DRV_VERSION=5.7.6.1
 
 cp -r ../${DRV_DIR} /usr/src/${DRV_NAME}-${DRV_VERSION}

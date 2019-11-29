@@ -197,7 +197,6 @@ ifeq ($(CONFIG_PCI_HCI), y)
 HCI_NAME = pci
 endif
 
-
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/linux/os_intfs.o \
 			os_dep/linux/$(HCI_NAME)_intf.o \
@@ -227,7 +226,6 @@ _OS_INTFS_FILES += os_dep/linux/custom_gpio_linux.o
 _OS_INTFS_FILES += os_dep/linux/$(HCI_NAME)_ops_linux.o
 endif
 
-
 _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_com.o \
 			hal/hal_com_phycfg.o \
@@ -241,7 +239,6 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_hci/hal_$(HCI_NAME).o \
 			hal/led/hal_led.o \
 			hal/led/hal_$(HCI_NAME)_led.o
-
 
 EXTRA_CFLAGS += -I$(src)/platform
 _PLATFORM_FILES := platform/platform_ops.o
@@ -306,7 +303,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188E_SDIO.o
 endif
-
 endif
 
 ########### HAL_RTL8192E #################################
@@ -366,7 +362,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8192e1ant.o \
 				hal/btc/halbtc8192e2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8812A_RTL8821A #################################
@@ -454,13 +449,12 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME := 8821as
 endif
-
 endif
 
 EXTRA_CFLAGS += -DCONFIG_RTL8821A
 
 _HAL_INTFS_FILES +=	hal/rtl8812a/hal8821a_fw.o
-		
+
 endif
 
 ifeq ($(CONFIG_BT_COEXIST), y)
@@ -473,7 +467,6 @@ _BTC_FILES += hal/btc/halbtc8821a1ant.o \
 				hal/btc/halbtc8821a2ant.o
 endif
 endif
-
 endif
 
 ########### HAL_RTL8723B #################################
@@ -531,7 +524,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8723b1ant.o \
 				hal/btc/halbtc8723b2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8814A #################################
@@ -648,7 +640,6 @@ endif
 ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8703b1ant.o
 endif
-
 endif
 
 ########### HAL_RTL8723D #################################
@@ -683,7 +674,6 @@ _HAL_INTFS_FILES +=	hal/$(RTL871X)/$(RTL871X)_hal_init.o \
 			hal/$(RTL871X)/hal8723d_fw.o \
 			hal/$(RTL871X)/$(RTL871X)_lps_poff.o
 
-
 _HAL_INTFS_FILES +=	\
 			hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_halinit.o \
 			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_SUB_NAME)_led.o \
@@ -707,7 +697,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8723d1ant.o \
 				hal/btc/halbtc8723d2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8188F #################################
@@ -757,7 +746,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188F_SDIO.o
 endif
-
 endif
 
 ########### HAL_RTL8188GTV #################################
@@ -804,7 +792,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188GTV_SDIO.o
 endif
-
 endif
 
 ########### HAL_RTL8822B #################################
@@ -823,8 +810,8 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME = 88x2bs
 endif
-
 endif
+
 ########### HAL_RTL8821C #################################
 ifeq ($(CONFIG_RTL8821C), y)
 RTL871X := rtl8821c
@@ -837,7 +824,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME = 8821cs
 endif
-
 endif
 
 ########### HAL_RTL8710B #################################
@@ -864,7 +850,6 @@ _HAL_INTFS_FILES +=	hal/$(RTL871X)/$(RTL871X)_hal_init.o \
 			hal/$(RTL871X)/hal8710b_fw.o \
 			hal/$(RTL871X)/$(RTL871X)_lps_poff.o
 
-
 _HAL_INTFS_FILES +=	\
 			hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_halinit.o \
 			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_SUB_NAME)_led.o \
@@ -876,7 +861,6 @@ _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
 ifeq ($(CONFIG_USB_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8710B_USB.o
 endif
-
 endif
 
 ########### HAL_RTL8192F #################################
@@ -917,7 +901,7 @@ _HAL_INTFS_FILES +=	\
 			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_SUB_NAME)_led.o \
 			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_SUB_NAME)_xmit.o \
 			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_SUB_NAME)_recv.o
-			
+
 ifeq ($(CONFIG_PCI_HCI), y)
 _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops_linux.o
 else
@@ -974,7 +958,6 @@ else
 $(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
 endif
 endif
-
 endif
 
 ########### END OF PATH  #################################
@@ -1014,7 +997,6 @@ endif
 ifeq ($(CONFIG_WAPI_SUPPORT), y)
 EXTRA_CFLAGS += -DCONFIG_WAPI_SUPPORT
 endif
-
 
 ifeq ($(CONFIG_EFUSE_CONFIG_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_EFUSE_CONFIG_FILE
@@ -1176,7 +1158,6 @@ EXTRA_CFLAGS += -DCONFIG_BR_EXT
 EXTRA_CFLAGS += '-DCONFIG_BR_EXT_BRNAME="'$(BR_NAME)'"'
 endif
 
-
 ifeq ($(CONFIG_TDLS), y)
 EXTRA_CFLAGS += -DCONFIG_TDLS
 endif
@@ -1307,7 +1288,6 @@ KVER:= 3.4.0
 KSRC := $(KERNEL_BUILD_PATH)
 MODULE_NAME :=wlan
 endif
-
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATM705X), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
@@ -1524,8 +1504,6 @@ ARCH := arm
 CROSS_COMPILE := /home/share/CusEnv/FreeScale/arm-eabi-4.4.3/bin/arm-eabi-
 KSRC ?= /home/share/CusEnv/FreeScale/FS_kernel_env
 endif
-
-
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATJ227X), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ACTIONS_ATJ227X
@@ -1919,7 +1897,6 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := rtl8822bs
 endif
 endif
-
 endif
 
 # Platform setting
@@ -2095,7 +2072,7 @@ ARCH := arm
 CROSS_COMPILE := /home/android_sdk/Telechips/v13.05_r1-tcc-android-4.2.2_tcc893x-evm_build/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
 KSRC := /home/android_sdk/Telechips/v13.05_r1-tcc-android-4.2.2_tcc893x-evm_build/kernel
 MODULE_NAME := wlan
-endif 
+endif
 
 ifeq ($(CONFIG_PLATFORM_RTL8197D), y)
 EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN -DCONFIG_PLATFORM_RTL8197D
@@ -2134,7 +2111,6 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := 8822bs
 endif
 endif
-
 endif
 
 ifeq ($(CONFIG_PLATFORM_ZTE_ZX296716), y)
@@ -2164,7 +2140,6 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := 8822bs
 endif
 endif
-
 endif
 
 ########### CUSTOMER ################################
@@ -2189,8 +2164,6 @@ endif
 ifeq ($(CONFIG_PCI_HCI), y)
 MODULE_NAME := rtw_pci
 endif
-
-
 endif
 
 USER_MODULE_NAME ?=
@@ -2252,7 +2225,7 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_odm.o \
 		core/rtw_rm.o \
 		core/rtw_rm_fsm.o \
-		core/efuse/rtw_efuse.o 
+		core/efuse/rtw_efuse.o
 
 ifeq ($(CONFIG_SDIO_HCI), y)
 rtk_core += core/rtw_sdio.o
@@ -2335,7 +2308,6 @@ config_r:
 	@echo "make config"
 	/bin/bash script/Configure script/config.in
 
-
 .PHONY: modules clean
 
 clean:
@@ -2353,4 +2325,3 @@ clean:
 	rm -fr *.mod.c *.mod *.o .*.cmd *.ko *~
 	rm -fr .tmp_versions
 endif
-
