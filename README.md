@@ -14,14 +14,14 @@
 
 This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
 we've seen, this must be the newest, most stable and effective one.
-The performance and code quality has been improved and thats about time.
+The performance and code quality has been improved.
 
 # HowTo build/install
 1. You will need to blacklist another driver in order to use this one instead of the kernel provided.
    We included a "realtek_blacklist.conf" file in the folder:<br>
 2. "cp realtek_blacklist.conf /etc/modprobe.d/"<br>
 3. "make && make install"<br>
-4. "rmmod 8188eu && insmod 8188eu.ko"
+4. Reboot in order to blacklist and load the new module.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
@@ -61,12 +61,6 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 * Finish up the elimination of the wrapper _rtw_memset.
   I didn't have more time after "rtw_beamforming.c"
 
-* Check code with checkpatch.pl (found in "tools")
-
-* There is a bug in monitor mode related to Network-Manager.
-  This needs priority because it causes interferrence.
-
 * Add more VID/PIDS for all 3 chipsets supported.
-* Remove unused functions
-<br>
-more tba..
+
+
