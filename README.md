@@ -24,11 +24,10 @@ The performance and code quality has been improved.
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
-1. You will need to blacklist another driver in order to use this one.<br>
-<br>
-2. "echo "blacklist 8188eu.ko" > "/etc/modprobe.d/realtek.conf"<br>
+1. You will need to blacklist another driver in order to use this one.
+2. "echo "blacklist 8188eu.ko" > "/etc/modprobe.d/realtek.conf"
 3. "make && make install"<br>
-4. Reboot in order to blacklist and load the new module.
+4. Reboot in order to blacklist and load the new driver/module.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
@@ -38,6 +37,7 @@ ip link set <interface> down
 iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
+(after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
 aireplay -9 <interface>
 ```
