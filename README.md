@@ -1,6 +1,6 @@
 ## rtl8188eus v5.3.9
 
-# Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
+# Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi drivers
 
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
 [![Frame Injection](https://img.shields.io/badge/frame%20injection-supported-brightgreen.svg)](#)
