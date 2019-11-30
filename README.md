@@ -24,9 +24,9 @@ The performance and code quality has been improved.
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
-1. You will need to blacklist another driver in order to use this one instead of the kernel provided.
-   We included a "realtek_blacklist.conf" file in the folder:<br>
-2. "cp realtek_blacklist.conf /etc/modprobe.d/"<br>
+1. You will need to blacklist another driver in order to use this one.<br>
+<br>
+2. "echo "blacklist 8188eu.ko" > "/etc/modprobe.d/realtek.conf"<br>
 3. "make && make install"<br>
 4. Reboot in order to blacklist and load the new module.
 
