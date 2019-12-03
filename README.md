@@ -25,7 +25,7 @@ The performance and code quality has been improved.
 
 # Howto build/install
 1. You will need to blacklist another driver in order to use this one.
-2. "echo "blacklist 8188eu.ko" > "/etc/modprobe.d/realtek.conf"
+2. "echo "blacklist r8188eu.ko" > "/etc/modprobe.d/realtek.conf"
 3. "make && make install"<br>
 4. Reboot in order to blacklist and load the new driver/module.
 
