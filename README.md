@@ -65,7 +65,9 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 # TODO
 * Update the MESH mode
-* Update Android gode
+* Update Android code
 * Fix more missing/wrong statements
+* Lower debug level
+* Cleanup the code
 
 
