@@ -17,6 +17,7 @@ we've seen, this must be the newest, most stable and effective one.
 The performance and code quality has been improved.
 
 # Supports
+* Android 7
 * MESH Support
 * Monitor mode
 * Frame injection
@@ -32,14 +33,14 @@ The performance and code quality has been improved.
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-airmon-ng check-kill
-ip link set <interface> down
-iw dev <interface> set type monitor
+$ sudo airmon-ng check-kill
+$ sudo ip link set <interface> down
+$ sudo iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-aireplay -9 <interface>
+$ aireplay -9 <interface>
 ```
 
 # NetworkManager configuration
@@ -63,11 +64,8 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
 # TODO
-* Implement txpower control
-
-* Finish up the elimination of the wrapper _rtw_memset.
-  I didn't have more time after "rtw_beamforming.c"
-
-* Add more VID/PIDS for all 3 chipsets supported.
+* Update the MESH mode
+* Update Android gode
+* Fix more missing/wrong statements
 
 
