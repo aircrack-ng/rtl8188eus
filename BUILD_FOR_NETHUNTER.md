@@ -36,3 +36,11 @@ make
 
 If there is no error or success you will see a file named 8188eu.ko in this driver directory.
 
+
+## Load the driver (8188eu.ko)
+```
+su
+cd /system/lib/modules
+insmod 8188eu.ko
+```
+
