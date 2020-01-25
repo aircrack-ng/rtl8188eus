@@ -73,11 +73,37 @@ u32 rtw_atoi(u8 *s)
 
 }
 
-inline void *_rtw_zvmalloc(u32 sz)
+inline void *_rtw_vmalloc(u32 sz)
 {
 	void *pbuf;
 #ifdef PLATFORM_LINUX
 	pbuf = vmalloc(sz);
+#endif
+#ifdef PLATFORM_FREEBSD
+	pbuf = malloc(sz, M_DEVBUF, M_NOWAIT);
+#endif
+
+#ifdef PLATFORM_WINDOWS
+	NdisAllocateMemoryWithTag(&pbuf, sz, RT_TAG);
+#endif
+
+#ifdef DBG_MEMORY_LEAK
+#ifdef PLATFORM_LINUX
+	if (pbuf != NULL) {
+		atomic_inc(&_malloc_cnt);
+		atomic_add(sz, &_malloc_size);
+	}
+#endif
+#endif /* DBG_MEMORY_LEAK */
+
+	return pbuf;
+}
+
+inline void *_rtw_zvmalloc(u32 sz)
+{
+	void *pbuf;
+#ifdef PLATFORM_LINUX
+	pbuf = _rtw_vmalloc(sz);
 	if (pbuf != NULL)
 		memset(pbuf, 0, sz);
 #endif
@@ -549,7 +575,7 @@ inline void *dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func,
 	if (match_mstat_sniff_rules(flags, sz))
 		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
-	p = vmalloc((sz));
+	p = _rtw_vmalloc((sz));
 
 	rtw_mstat_update(
 		flags
@@ -1372,6 +1398,19 @@ void	_rtw_spinlock_init(_lock *plock)
 
 }
 
+void	_rtw_spinlock_free(_lock *plock)
+{
+#ifdef PLATFORM_FREEBSD
+	mtx_destroy(plock);
+#endif
+
+#ifdef PLATFORM_WINDOWS
+
+	NdisFreeSpinLock(plock);
+
+#endif
+
+}
 #ifdef PLATFORM_FREEBSD
 extern PADAPTER prtw_lock;
 
@@ -1478,6 +1517,7 @@ void _rtw_init_queue(_queue *pqueue)
 
 void _rtw_deinit_queue(_queue *pqueue)
 {
+	_rtw_spinlock_free(&(pqueue->lock));
 }
 
 u32	  _rtw_queue_empty(_queue	*pqueue)
@@ -1766,6 +1806,20 @@ void rtw_yield_os(void)
 #ifdef PLATFORM_WINDOWS
 	SwitchToThread();
 #endif
+}
+
+bool rtw_macaddr_is_larger(const u8 *a, const u8 *b)
+{
+	u32 va, vb;
+
+	va = be32_to_cpu(*((u32 *)a));
+	vb = be32_to_cpu(*((u32 *)b));
+	if (va > vb)
+		return 1;
+	else if (va < vb)
+		return 0;
+
+	return be16_to_cpu(*((u16 *)(a + 4))) > be16_to_cpu(*((u16 *)(b + 4)));
 }
 
 #define RTW_SUSPEND_LOCK_NAME "rtw_wifi"
@@ -2147,7 +2201,11 @@ static int isFileReadable(const char *path, u32 *sz)
 		ret = PTR_ERR(fp);
 	else {
 		oldfs = get_fs();
+		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
 		set_fs(KERNEL_DS);
+		#else
+		set_fs(get_ds());
+		#endif
 
 		if (1 != readFile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
@@ -2185,7 +2243,11 @@ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
 
 			oldfs = get_fs();
+			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
 			set_fs(KERNEL_DS);
+			#else
+			set_fs(get_ds());
+			#endif
 			ret = readFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
@@ -2220,7 +2282,11 @@ static int storeToFile(const char *path, u8 *buf, u32 sz)
 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
 
 			oldfs = get_fs();
+			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
 			set_fs(KERNEL_DS);
+			#else
+			set_fs(get_ds());
+			#endif
 			ret = writeFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
@@ -2272,6 +2338,25 @@ int rtw_is_file_readable_with_size(const char *path, u32 *sz)
 	/* Todo... */
 	return _FALSE;
 #endif
+}
+
+/*
+* Test if the specifi @param path is a readable file with valid size.
+* If readable, @param sz is got
+* @param path the path of the file to test
+* @return _TRUE or _FALSE
+*/
+int rtw_readable_file_sz_chk(const char *path, u32 sz)
+{
+	u32 fsz;
+
+	if (rtw_is_file_readable_with_size(path, &fsz) == _FALSE)
+		return _FALSE;
+
+	if (fsz > sz)
+		return _FALSE;
+	
+	return _TRUE;
 }
 
 /*
@@ -2831,7 +2916,6 @@ int rtw_blacklist_add(_queue *blist, const u8 *addr, u32 timeout_ms)
 
 	exit_critical_bh(&blist->lock);
 
-exit:
 	return (exist == _TRUE && timeout == _FALSE) ? RTW_ALREADY : (ent ? _SUCCESS : _FAIL);
 }
 
@@ -2863,7 +2947,6 @@ int rtw_blacklist_del(_queue *blist, const u8 *addr)
 
 	exit_critical_bh(&blist->lock);
 
-exit:
 	return exist == _TRUE ? _SUCCESS : RTW_ALREADY;
 }
 
@@ -2897,7 +2980,6 @@ int rtw_blacklist_search(_queue *blist, const u8 *addr)
 
 	exit_critical_bh(&blist->lock);
 
-exit:
 	return exist;
 }
 

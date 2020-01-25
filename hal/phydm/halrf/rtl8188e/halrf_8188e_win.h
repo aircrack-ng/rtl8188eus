@@ -13,8 +13,8 @@
  *
  *****************************************************************************/
 
-#ifndef __HAL_PHY_RF_8188E_H__
-#define __HAL_PHY_RF_8188E_H__
+#ifndef __HALRF_8188E_H__
+#define __HALRF_8188E_H__
 
 /*--------------------------Define Parameters-------------------------------*/
 #define	IQK_DELAY_TIME_88E		15		/* ms */
@@ -23,11 +23,7 @@
 #define	index_mapping_NUM_88E	15
 #define AVG_THERMAL_NUM_88E	4
 
-#if RT_PLATFORM == PLATFORM_MACOSX
-    #include "halphyrf_win.h"
-#else
 #include "halrf/halphyrf_win.h"
-#endif
 
 void configure_txpower_track_8188e(
 	struct txpwrtrack_cfg	*config
@@ -134,7 +130,7 @@ void phy_set_rf_path_switch_8188e(
 void
 halrf_rf_lna_setting_8188e(
 	struct dm_struct	*dm,
-	enum phydm_lna_set type
+	enum halrf_lna_set type
 );
 
-#endif	/*  #ifndef __HAL_PHY_RF_8188E_H__ */
+#endif	/*#ifndef __HALRF_8188E_H__*/

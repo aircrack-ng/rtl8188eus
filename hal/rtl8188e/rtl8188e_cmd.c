@@ -174,22 +174,6 @@ u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter , u8 bfwpoll, u16 period)
 }
 #endif /* CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED */
 #endif
-u8 rtl8188e_set_rssi_cmd(_adapter *padapter, u8 *param)
-{
-	u8	res = _SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-
-	if (pHalData->fw_ractrl == _FALSE) {
-		RTW_INFO("==>%s fw dont support RA\n", __FUNCTION__);
-		return _FAIL;
-	}
-
-	*((u32 *) param) = cpu_to_le32(*((u32 *) param));
-	FillH2CCmd_88E(padapter, H2C_RSSI_REPORT, 3, param);
-
-
-	return res;
-}
 
 void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 {
@@ -245,29 +229,6 @@ void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 
 }
 
-void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
-{
-	u8 u1H2CRsvdPageParm[H2C_RSVDPAGE_LOC_LEN] = {0};
-	u8 u1H2CAoacRsvdPageParm[H2C_AOAC_RSVDPAGE_LOC_LEN] = {0};
-
-	/* RTW_INFO("8188RsvdPageLoc: PsPoll=%d Null=%d QoSNull=%d\n",  */
-	/*	rsvdpageloc->LocPsPoll, rsvdpageloc->LocNullData, rsvdpageloc->LocQosNull); */
-
-	SET_H2CCMD_RSVDPAGE_LOC_PSPOLL(u1H2CRsvdPageParm, rsvdpageloc->LocPsPoll);
-	SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocNullData);
-	SET_H2CCMD_RSVDPAGE_LOC_QOS_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocQosNull);
-
-	FillH2CCmd_88E(padapter, H2C_COM_RSVD_PAGE, H2C_RSVDPAGE_LOC_LEN, u1H2CRsvdPageParm);
-
-#ifdef CONFIG_WOWLAN
-	/* RTW_INFO("8188E_AOACRsvdPageLoc: RWC=%d ArpRsp=%d\n", rsvdpageloc->LocRemoteCtrlInfo, rsvdpageloc->LocArpRsp); */
-	SET_H2CCMD_AOAC_RSVDPAGE_LOC_REMOTE_WAKE_CTRL_INFO(u1H2CAoacRsvdPageParm, rsvdpageloc->LocRemoteCtrlInfo);
-	SET_H2CCMD_AOAC_RSVDPAGE_LOC_ARP_RSP(u1H2CAoacRsvdPageParm, rsvdpageloc->LocArpRsp);
-
-	FillH2CCmd_88E(padapter, H2C_COM_AOAC_RSVD_PAGE, H2C_AOAC_RSVDPAGE_LOC_LEN, u1H2CAoacRsvdPageParm);
-#endif
-}
-
 /*
  * Description: Get the reserved page number in Tx packet buffer.
  * Retrun value: the page number.
@@ -307,11 +268,11 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 	RTW_INFO("%s mstatus(%x)\n", __FUNCTION__, mstatus);
 
 	if (mstatus == 1) {
+		u8 bcn_ctrl = rtw_read8(padapter, REG_BCN_CTRL);
+
 		/* We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C. */
 		/* Suggested by filen. Added by tynli. */
 		rtw_write16(padapter, REG_BCN_PSR_RPT, (0xC000 | pmlmeinfo->aid));
-		/* Do not set TSF again here or vWiFi beacon DMA INT will not work. */
-		/* correct_TSF(padapter, pmlmeext); */
 		/* Hw sequende enable by dedault. 2010.06.23. by tynli. */
 		/* rtw_write16(padapter, REG_NQOS_SEQ, ((pmlmeext->mgnt_seq+100)&0xFFF)); */
 		/* rtw_write8(padapter, REG_HWSEQ_CTRL, 0xFF); */
@@ -323,12 +284,9 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 		/* Disable Hw protection for a time which revserd for Hw sending beacon. */
 		/* Fix download reserved page packet fail that access collision with the protection time. */
 		/* 2010.05.11. Added by tynli. */
-		/* SetBcnCtrlReg(padapter, 0, BIT3); */
-		/* SetBcnCtrlReg(padapter, BIT4, 0); */
-		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL) & (~BIT(3)));
-		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL) | BIT(4));
-		RegFwHwTxQCtrl = rtw_read8(padapter, REG_FWHW_TXQ_CTRL + 2);
+		rtw_write8(padapter, REG_BCN_CTRL, (bcn_ctrl & (~EN_BCN_FUNCTION)) | DIS_TSF_UDT);
 
+		RegFwHwTxQCtrl = rtw_read8(padapter, REG_FWHW_TXQ_CTRL + 2);
 		if (RegFwHwTxQCtrl & BIT6) {
 			RTW_INFO("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
 			bSendBeacon = _TRUE;
@@ -360,20 +318,19 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 		if (RTW_CANNOT_RUN(padapter))
 			;
 		else if (!bcn_valid)
-			RTW_INFO(ADPT_FMT": 1 DL RSVD page failed! DLBcnCount:%u, poll:%u\n",
+			RTW_ERR(ADPT_FMT": 1 DL RSVD page failed! DLBcnCount:%u, poll:%u\n",
 				 ADPT_ARG(padapter) , DLBcnCount, poll);
 		else {
 			struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(padapter);
+
 			pwrctl->fw_psmode_iface_id = padapter->iface_id;
+			rtw_hal_set_fw_rsvd_page(padapter, _TRUE);
 			RTW_INFO(ADPT_FMT": 1 DL RSVD page success! DLBcnCount:%u, poll:%u\n",
 				 ADPT_ARG(padapter), DLBcnCount, poll);
 		}
 
-		/* Enable Bcn */
-		/* SetBcnCtrlReg(padapter, BIT3, 0); */
-		/* SetBcnCtrlReg(padapter, 0, BIT4); */
-		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL) | BIT(3));
-		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL) & (~BIT(4)));
+		/* restore bcn_ctrl */
+		rtw_write8(padapter, REG_BCN_CTRL, bcn_ctrl);
 
 		/* To make sure that if there exists an adapter which would like to send beacon. */
 		/* If exists, the origianl value of 0x422[6] will be 1, we should check this to */
@@ -396,11 +353,13 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 
 		/* Do not enable HW DMA BCN or it will cause Pcie interface hang by timing issue. 2011.11.24. by tynli. */
 		/* if(!padapter->bEnterPnpSleep) */
+#ifndef CONFIG_PCI_HCI
 		{
 			/* Clear CR[8] or beacon packet will not be send to TxBuf anymore. */
 			rtw_write8(padapter,  REG_CR + 1,
 				rtw_read8(padapter,  REG_CR + 1) & (~BIT0));
 		}
+#endif /* !CONFIG_PCI_HCI */
 	}
 }
 

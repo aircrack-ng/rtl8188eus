@@ -1,14 +1,14 @@
-## rtl8188eus v5.3.9
+## rtl8188eus v5.7.6.1
 
-# Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi drivers
+# Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi driver
 
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
 [![Frame Injection](https://img.shields.io/badge/frame%20injection-supported-brightgreen.svg)](#)
 [![MESH Mode](https://img.shields.io/badge/mesh%20mode-supported-brightgreen.svg)](#)
-[![GitHub issues](https://img.shields.io/github/issues/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/issues)
-[![GitHub forks](https://img.shields.io/github/forks/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/network)
-[![GitHub stars](https://img.shields.io/github/stars/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/stargazers)
-[![GitHub license](https://img.shields.io/github/license/kimocoder/rtl8812au.svg)](https://github.com/kimocoder/rtl8188eus/blob/master/LICENSE)<br>
+[![GitHub issues](https://img.shields.io/github/issues/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/issues)
+[![GitHub forks](https://img.shields.io/github/forks/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/network)
+[![GitHub stars](https://img.shields.io/github/stars/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/stargazers)
+[![GitHub license](https://img.shields.io/github/license/aircrack-ng/rtl8812au.svg)](https://github.com/aircrack-ng/rtl8188eus/blob/master/LICENSE)<br>
 [![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
 [![aircrack-ng](https://img.shields.io/badge/aircrack--ng-supported-blue.svg)](#)
 
@@ -17,18 +17,20 @@ we've seen, this must be the newest, most stable and effective one.
 The performance and code quality has been improved.
 
 # Supports
-* Android 7
+* Android 9
+* WPA3-SAE
 * MESH Support
 * Monitor mode
 * Frame injection
-* Up to kernel v5.3+
+* Supported up to kernel v5.4+
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
-1. You will need to blacklist another driver in order to use this one.
-2. "echo "blacklist r8188eu.ko" > "/etc/modprobe.d/realtek.conf"
-3. "make && make install"<br>
-4. Reboot in order to blacklist and load the new driver/module.
+1. You will need to blacklist another driver in order to use this one instead of the one provided with kernel.
+   Simply follow instructions below:<br>
+2. "echo "blacklist r8188eu" > /etc/modprobe.d/realtek-wifi.conf"<br>
+3. Then run "make && make install"<br>
+4. And reboot in order to blacklist the module and load this module instead.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
@@ -38,7 +40,6 @@ $ sudo ip link set <interface> down
 $ sudo iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
-(after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
 $ aireplay -9 <interface>
 ```
@@ -64,10 +65,9 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
 # TODO
-* Update the MESH mode
-* Update Android code
-* Fix more missing/wrong statements
-* Lower debug level
-* Cleanup the code
+* Turn down log level / DEBUG
+  (we want it now for some months just to see)
 
+* Implement txpower control
 
+* Remove Windows (NDIS) code

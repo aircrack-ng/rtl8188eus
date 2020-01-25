@@ -23,33 +23,36 @@
 
 #if (RTL8188E_SUPPORT == 1)
 
-void
-odm_dig_lower_bound_88e(
-	struct dm_struct		*dm
-)
+s8 phydm_cck_rssi_8188e(struct dm_struct *dm, u16 lna_idx, u8 vga_idx)
 {
-	struct phydm_dig_struct		*dig_t = &dm->dm_dig_table;
-
-	if (dm->ant_div_type == CG_TRX_HW_ANTDIV) {
-		dig_t->rx_gain_range_min = (u8) dig_t->ant_div_rssi_max;
-		PHYDM_DBG(dm, DBG_ANT_DIV, "odm_dig_lower_bound_88e(): dig_t->ant_div_rssi_max=%d\n", dig_t->ant_div_rssi_max);
+	s8 rx_pwr_all = 0;
+	s8 lna_gain = 0;
+	/*only use lna0/1/2/3/7*/
+	s8 lna_gain_table_0[8] = {17, -1, -13, -29, -32, -35, -38, -41};
+	/*only use lna3 /7*/
+	s8 lna_gain_table_1[8] = {29, 20, 12, 3, -6, -15, -24, -33};
+	/*only use lna1/3/5/7*/
+	s8 lna_gain_table_2[8] = {17, -1, -13, -17, -32, -43, -38, -47};
+	
+	if (dm->cut_version >= ODM_CUT_I) { /*SMIC*/
+		if (dm->ext_lna == 0x1) {
+			switch (dm->type_glna) {
+				case 0x2:	/*eLNA 14dB*/
+					lna_gain = lna_gain_table_2[lna_idx];
+					break;
+				default:
+					lna_gain = lna_gain_table_0[lna_idx];
+					break;
+			}
+		} else {
+			lna_gain = lna_gain_table_0[lna_idx];
+		}		
+	} else { /*TSMC*/
+		lna_gain = lna_gain_table_1[lna_idx];
 	}
-	/* If only one Entry connected */
+	
+	rx_pwr_all = lna_gain - (2 * vga_idx);
+
+	return rx_pwr_all;
 }
-
-/*=============================================================
-*  AntDiv Before Link
-===============================================================*/
-void
-odm_sw_ant_div_reset_before_link(
-	struct dm_struct		*dm
-)
-{
-
-	struct sw_antenna_switch		*dm_swat_table = &dm->dm_swat_table;
-
-	dm_swat_table->swas_no_link_state = 0;
-
-}
-
 #endif

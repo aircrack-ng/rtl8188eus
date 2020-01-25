@@ -119,12 +119,12 @@ struct EMInfo {
 void
 InsertEMContent_8188E(
 	struct EMInfo *pEMInfo,
-	IN pu1Byte	VirtualAddress)
+	u8 *VirtualAddress)
 {
 
 #if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
-	u1Byte index = 0;
-	u4Byte	dwtmp = 0;
+	u8 index = 0;
+	u32	dwtmp = 0;
 #endif
 
 	_rtw_memset(VirtualAddress, 0, EARLY_MODE_INFO_SIZE);

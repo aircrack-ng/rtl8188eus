@@ -80,6 +80,7 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	return status;
 }
 
+#ifdef CONFIG_IOL_LLT
 static s32 iol_InitLLTTable(
 	PADAPTER padapter,
 	u8 txpktbuf_bndy
@@ -93,8 +94,9 @@ static s32 iol_InitLLTTable(
 	iol_mode_enable(padapter, 0);
 	return rst;
 }
+#endif /*CONFIG_IOL_LLT*/
 
-static VOID
+static void
 efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 {
 	u8	*efuseTbl = NULL;
@@ -198,7 +200,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 					/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				 */
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -239,7 +241,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 	/* 5. Calculate Efuse utilization. */
 	/*  */
-	efuse_usage = (u1Byte)((efuse_utilized * 100) / EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((efuse_utilized * 100) / EFUSE_REAL_CONTENT_LEN_88E);
 	/* rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&efuse_utilized); */
 
 exit:
@@ -535,10 +537,10 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter, int data_len)
 #endif /* defined(CONFIG_IOL) */
 
 
-static VOID
+static void
 _FWDownloadEnable_8188E(
-	IN	PADAPTER		padapter,
-	IN	BOOLEAN			enable
+		PADAPTER		padapter,
+		BOOLEAN			enable
 )
 {
 	u8	tmp;
@@ -564,9 +566,9 @@ _FWDownloadEnable_8188E(
 #define MAX_REG_BOLCK_SIZE	196
 static int
 _BlockWrite(
-	IN		PADAPTER		padapter,
-	IN		PVOID		buffer,
-	IN		u32			buffSize
+			PADAPTER	padapter,
+			void			*buffer,
+			u32			buffSize
 )
 {
 	int ret = _SUCCESS;
@@ -663,10 +665,10 @@ exit:
 
 static int
 _PageWrite(
-	IN		PADAPTER	padapter,
-	IN		u32			page,
-	IN		PVOID		buffer,
-	IN		u32			size
+			PADAPTER	padapter,
+			u32			page,
+			void			*buffer,
+			u32			size
 )
 {
 	u8 value8;
@@ -677,8 +679,9 @@ _PageWrite(
 
 	return _BlockWrite(padapter, buffer, size);
 }
-
-static VOID
+/*
+#ifdef CONFIG_PCI_HCI
+static void
 _FillDummy(
 	u8		*pFwBuf,
 	u32	*pFwLen
@@ -696,12 +699,13 @@ _FillDummy(
 
 	*pFwLen = FwLen;
 }
-
+#endif
+*/
 static int
 _WriteFW(
-	IN		PADAPTER		padapter,
-	IN		PVOID			buffer,
-	IN		u32			size
+			PADAPTER	padapter,
+			void			*buffer,
+			u32			size
 )
 {
 	/* Since we need dynamic decide method of dwonload fw, so we call this function to get chip version. */
@@ -1056,31 +1060,31 @@ enum {
 
 static BOOLEAN
 hal_EfusePgPacketWrite2ByteHeader(
-	IN	PADAPTER		pAdapter,
-	IN	u8				efuseType,
-	IN	u16				*pAddr,
-	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
+		PADAPTER		pAdapter,
+		u8				efuseType,
+		u16				*pAddr,
+		PPGPKT_STRUCT	pTargetPkt,
+		BOOLEAN			bPseudoTest);
 static BOOLEAN
 hal_EfusePgPacketWrite1ByteHeader(
-	IN	PADAPTER		pAdapter,
-	IN	u8				efuseType,
-	IN	u16				*pAddr,
-	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
+		PADAPTER		pAdapter,
+		u8				efuseType,
+		u16				*pAddr,
+		PPGPKT_STRUCT	pTargetPkt,
+		BOOLEAN			bPseudoTest);
 static BOOLEAN
 hal_EfusePgPacketWriteData(
-	IN	PADAPTER		pAdapter,
-	IN	u8				efuseType,
-	IN	u16				*pAddr,
-	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
+		PADAPTER		pAdapter,
+		u8				efuseType,
+		u16				*pAddr,
+		PPGPKT_STRUCT	pTargetPkt,
+		BOOLEAN			bPseudoTest);
 
-static VOID
+static void
 hal_EfusePowerSwitch_RTL8188E(
-	IN	PADAPTER	pAdapter,
-	IN	u8		bWrite,
-	IN	u8		PwrState)
+		PADAPTER	pAdapter,
+		u8		bWrite,
+		u8		PwrState)
 {
 	u8	tempval;
 	u16	tmpV16;
@@ -1132,61 +1136,22 @@ hal_EfusePowerSwitch_RTL8188E(
 	}
 }
 
-static VOID
+static void
 rtl8188e_EfusePowerSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	u8		bWrite,
-	IN	u8		PwrState)
+		PADAPTER	pAdapter,
+		u8		bWrite,
+		u8		PwrState)
 {
 	hal_EfusePowerSwitch_RTL8188E(pAdapter, bWrite, PwrState);
 }
 
-
-
-static bool efuse_read_phymap(
-	PADAPTER	Adapter,
-	u8			*pbuf,	/* buffer to store efuse physical map */
-	u16			*size	/* the max byte to read. will update to byte read */
-)
-{
-	u8 *pos = pbuf;
-	u16 limit = *size;
-	u16 addr = 0;
-	bool reach_end = _FALSE;
-
-	/*  */
-	/* Refresh efuse init map as all 0xFF. */
-	/*  */
-	_rtw_memset(pbuf, 0xFF, limit);
-
-
-	/*  */
-	/* Read physical efuse content. */
-	/*  */
-	while (addr < limit) {
-		ReadEFuseByte(Adapter, addr, pos, _FALSE);
-		if (*pos != 0xFF) {
-			pos++;
-			addr++;
-		} else {
-			reach_end = _TRUE;
-			break;
-		}
-	}
-
-	*size = addr;
-
-	return reach_end;
-
-}
-
-static VOID
+static void
 Hal_EfuseReadEFuse88E(
 	PADAPTER		Adapter,
 	u16			_offset,
 	u16			_size_byte,
 	u8		*pbuf,
-	IN	BOOLEAN	bPseudoTest
+		BOOLEAN	bPseudoTest
 )
 {
 	/* u8	efuseTbl[EFUSE_MAP_LEN_88E]; */
@@ -1300,7 +1265,7 @@ Hal_EfuseReadEFuse88E(
 					/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				 */
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)*rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)*rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -1355,7 +1320,7 @@ Hal_EfuseReadEFuse88E(
 	/*  */
 	/* 5. Calculate Efuse utilization. */
 	/*  */
-	efuse_usage = (u1Byte)((eFuse_Addr * 100) / EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((eFuse_Addr * 100) / EFUSE_REAL_CONTENT_LEN_88E);
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&eFuse_Addr);
 
 exit:
@@ -1366,36 +1331,14 @@ exit:
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 }
 
-
-static BOOLEAN
-Hal_EfuseSwitchToBank(
-	IN		PADAPTER	pAdapter,
-	IN		u8			bank,
-	IN		BOOLEAN		bPseudoTest
-)
-{
-	BOOLEAN		bRet = _FALSE;
-	u32		value32 = 0;
-
-	/* RTPRINT(FEEPROM, EFUSE_PG, ("Efuse switch bank to %d\n", bank)); */
-	if (bPseudoTest) {
-		fakeEfuseBank = bank;
-		bRet = _TRUE;
-	} else
-		bRet = _TRUE;
-	return bRet;
-}
-
-
-
-static VOID
+static void
 ReadEFuseByIC(
 	PADAPTER	Adapter,
 	u8		efuseType,
 	u16		 _offset,
 	u16		_size_byte,
 	u8	*pbuf,
-	IN BOOLEAN	bPseudoTest
+	BOOLEAN	bPseudoTest
 )
 {
 	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(Adapter);
@@ -1404,7 +1347,7 @@ ReadEFuseByIC(
 #endif
 
 #ifdef CONFIG_IOL_READ_EFUSE_MAP
-	if (!bPseudoTest) { /* && rtw_IOL_applied(Adapter)) */
+	if (!bPseudoTest && Adapter->registrypriv.mp_mode == 0) { /* && rtw_IOL_applied(Adapter)) */
 		int ret = _FAIL;
 		if (rtw_IOL_applied(Adapter)) {
 			rtw_hal_power_on(Adapter);
@@ -1444,27 +1387,27 @@ exit:
 	return;
 }
 
-static VOID
+static void
 ReadEFuse_Pseudo(
 	PADAPTER	Adapter,
 	u8		efuseType,
 	u16		 _offset,
 	u16		_size_byte,
 	u8	*pbuf,
-	IN BOOLEAN	bPseudoTest
+	BOOLEAN	bPseudoTest
 )
 {
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
 }
 
-static VOID
+static void
 rtl8188e_ReadEFuse(
 	PADAPTER	Adapter,
 	u8		efuseType,
 	u16		_offset,
 	u16		_size_byte,
 	u8	*pbuf,
-	IN	BOOLEAN	bPseudoTest
+	BOOLEAN	bPseudoTest
 )
 {
 	if (bPseudoTest)
@@ -1474,12 +1417,12 @@ rtl8188e_ReadEFuse(
 }
 
 /* Do not support BT */
-VOID
+void
 Hal_EFUSEGetEfuseDefinition88E(
-	IN		PADAPTER	pAdapter,
-	IN		u1Byte		efuseType,
-	IN		u1Byte		type,
-	OUT		PVOID		pOut
+			PADAPTER	pAdapter,
+			u8		efuseType,
+			u8		type,
+			void		*pOut
 )
 {
 	switch (type) {
@@ -1533,49 +1476,49 @@ Hal_EFUSEGetEfuseDefinition88E(
 	break;
 	}
 }
-VOID
+void
 Hal_EFUSEGetEfuseDefinition_Pseudo88E(
-	IN		PADAPTER	pAdapter,
-	IN		u8			efuseType,
-	IN		u8			type,
-	OUT		PVOID		pOut
+			PADAPTER	pAdapter,
+			u8			efuseType,
+			u8			type,
+			void			*pOut
 )
 {
 	switch (type) {
 	case TYPE_EFUSE_MAX_SECTION: {
 		u8		*pMax_section;
-		pMax_section = (pu1Byte)pOut;
+		pMax_section = (u8 *)pOut;
 		*pMax_section = EFUSE_MAX_SECTION_88E;
 	}
 	break;
 	case TYPE_EFUSE_REAL_CONTENT_LEN: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
+		pu2Tmp = (u16 *)pOut;
 		*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 	}
 	break;
 	case TYPE_EFUSE_CONTENT_LEN_BANK: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
+		pu2Tmp = (u16 *)pOut;
 		*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 	}
 	break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_BANK: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 	}
 	break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 	}
 	break;
 	case TYPE_EFUSE_MAP_LEN: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)EFUSE_MAP_LEN_88E;
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
 	}
 	break;
 	case TYPE_EFUSE_PROTECT_BYTES_BANK: {
@@ -1594,13 +1537,13 @@ Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 }
 
 
-static VOID
+static void
 rtl8188e_EFUSE_GetEfuseDefinition(
-	IN		PADAPTER	pAdapter,
-	IN		u8		efuseType,
-	IN		u8		type,
-	OUT		void		*pOut,
-	IN		BOOLEAN		bPseudoTest
+			PADAPTER	pAdapter,
+			u8		efuseType,
+			u8		type,
+			void		*pOut,
+			BOOLEAN		bPseudoTest
 )
 {
 	if (bPseudoTest)
@@ -1610,18 +1553,18 @@ rtl8188e_EFUSE_GetEfuseDefinition(
 }
 
 static u8
-Hal_EfuseWordEnableDataWrite(IN	PADAPTER	pAdapter,
-			     IN	u16		efuse_addr,
-			     IN	u8		word_en,
-			     IN	u8		*data,
-			     IN	BOOLEAN		bPseudoTest)
+Hal_EfuseWordEnableDataWrite(PADAPTER	pAdapter,
+					u16		efuse_addr,
+					u8		word_en,
+					u8		*data,
+					BOOLEAN		bPseudoTest)
 {
 	u16	tmpaddr = 0;
 	u16	start_addr = efuse_addr;
 	u8	badworden = 0x0F;
 	u8	tmpdata[8];
 
-	_rtw_memset((PVOID)tmpdata, 0xff, PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
 
 	if (!(word_en & BIT0)) {
 		tmpaddr = start_addr;
@@ -1679,11 +1622,11 @@ Hal_EfuseWordEnableDataWrite(IN	PADAPTER	pAdapter,
 }
 
 static u8
-Hal_EfuseWordEnableDataWrite_Pseudo(IN	PADAPTER	pAdapter,
-				    IN	u16		efuse_addr,
-				    IN	u8		word_en,
-				    IN	u8		*data,
-				    IN	BOOLEAN		bPseudoTest)
+Hal_EfuseWordEnableDataWrite_Pseudo(PADAPTER	pAdapter,
+						u16		efuse_addr,
+						u8		word_en,
+						u8		*data,
+						BOOLEAN		bPseudoTest)
 {
 	u8	ret = 0;
 
@@ -1693,11 +1636,11 @@ Hal_EfuseWordEnableDataWrite_Pseudo(IN	PADAPTER	pAdapter,
 }
 
 static u8
-rtl8188e_Efuse_WordEnableDataWrite(IN	PADAPTER	pAdapter,
-				   IN	u16		efuse_addr,
-				   IN	u8		word_en,
-				   IN	u8		*data,
-				   IN	BOOLEAN		bPseudoTest)
+rtl8188e_Efuse_WordEnableDataWrite(PADAPTER	pAdapter,
+					u16		efuse_addr,
+					u8		word_en,
+					u8		*data,
+					BOOLEAN		bPseudoTest)
 {
 	u8	ret = 0;
 
@@ -1711,8 +1654,8 @@ rtl8188e_Efuse_WordEnableDataWrite(IN	PADAPTER	pAdapter,
 
 
 static u16
-hal_EfuseGetCurrentSize_8188e(IN	PADAPTER	pAdapter,
-			      IN		BOOLEAN			bPseudoTest)
+hal_EfuseGetCurrentSize_8188e(PADAPTER	pAdapter,
+						BOOLEAN			bPseudoTest)
 {
 	int	bContinual = _TRUE;
 
@@ -1764,8 +1707,8 @@ hal_EfuseGetCurrentSize_8188e(IN	PADAPTER	pAdapter,
 }
 
 static u16
-Hal_EfuseGetCurrentSize_Pseudo(IN	PADAPTER	pAdapter,
-			       IN		BOOLEAN			bPseudoTest)
+Hal_EfuseGetCurrentSize_Pseudo(PADAPTER	pAdapter,
+						BOOLEAN			bPseudoTest)
 {
 	u16	ret = 0;
 
@@ -1777,9 +1720,9 @@ Hal_EfuseGetCurrentSize_Pseudo(IN	PADAPTER	pAdapter,
 
 static u16
 rtl8188e_EfuseGetCurrentSize(
-	IN	PADAPTER	pAdapter,
-	IN	u8			efuseType,
-	IN	BOOLEAN		bPseudoTest)
+		PADAPTER	pAdapter,
+		u8			efuseType,
+		BOOLEAN		bPseudoTest)
 {
 	u16	ret = 0;
 
@@ -1795,10 +1738,10 @@ rtl8188e_EfuseGetCurrentSize(
 
 static int
 hal_EfusePgPacketRead_8188e(
-	IN	PADAPTER	pAdapter,
-	IN	u8			offset,
-	IN	u8			*data,
-	IN	BOOLEAN		bPseudoTest)
+		PADAPTER	pAdapter,
+		u8			offset,
+		u8			*data,
+		BOOLEAN		bPseudoTest)
 {
 	u8	ReadState = PG_STATE_HEADER;
 
@@ -1813,15 +1756,15 @@ hal_EfusePgPacketRead_8188e(
 	u8	max_section = 0;
 	u8	tmp_header = 0;
 
-	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAX_SECTION, (PVOID)&max_section, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAX_SECTION, (void *)&max_section, bPseudoTest);
 
 	if (data == NULL)
 		return _FALSE;
 	if (offset > max_section)
 		return _FALSE;
 
-	_rtw_memset((PVOID)data, 0xff, sizeof(u8) * PGPKT_DATA_SIZE);
-	_rtw_memset((PVOID)tmpdata, 0xff, sizeof(u8) * PGPKT_DATA_SIZE);
+	_rtw_memset((void *)data, 0xff, sizeof(u8) * PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, sizeof(u8) * PGPKT_DATA_SIZE);
 
 
 	/*  */
@@ -1892,10 +1835,10 @@ hal_EfusePgPacketRead_8188e(
 }
 
 static int
-Hal_EfusePgPacketRead(IN	PADAPTER	pAdapter,
-		      IN	u8			offset,
-		      IN	u8			*data,
-		      IN	BOOLEAN			bPseudoTest)
+Hal_EfusePgPacketRead(PADAPTER	pAdapter,
+				u8			offset,
+				u8			*data,
+				BOOLEAN			bPseudoTest)
 {
 	int	ret = 0;
 
@@ -1906,10 +1849,10 @@ Hal_EfusePgPacketRead(IN	PADAPTER	pAdapter,
 }
 
 static int
-Hal_EfusePgPacketRead_Pseudo(IN	PADAPTER	pAdapter,
-			     IN	u8			offset,
-			     IN	u8			*data,
-			     IN	BOOLEAN		bPseudoTest)
+Hal_EfusePgPacketRead_Pseudo(PADAPTER	pAdapter,
+					u8			offset,
+					u8			*data,
+					BOOLEAN		bPseudoTest)
 {
 	int	ret = 0;
 
@@ -1919,10 +1862,10 @@ Hal_EfusePgPacketRead_Pseudo(IN	PADAPTER	pAdapter,
 }
 
 static int
-rtl8188e_Efuse_PgPacketRead(IN	PADAPTER	pAdapter,
-			    IN	u8			offset,
-			    IN	u8			*data,
-			    IN	BOOLEAN		bPseudoTest)
+rtl8188e_Efuse_PgPacketRead(PADAPTER	pAdapter,
+					u8			offset,
+					u8			*data,
+					BOOLEAN		bPseudoTest)
 {
 	int	ret = 0;
 
@@ -1936,18 +1879,18 @@ rtl8188e_Efuse_PgPacketRead(IN	PADAPTER	pAdapter,
 
 static BOOLEAN
 hal_EfuseFixHeaderProcess(
-	IN		PADAPTER			pAdapter,
-	IN		u8					efuseType,
-	IN		PPGPKT_STRUCT		pFixPkt,
-	IN		u16					*pAddr,
-	IN		BOOLEAN				bPseudoTest
+			PADAPTER			pAdapter,
+			u8					efuseType,
+			PPGPKT_STRUCT		pFixPkt,
+			u16					*pAddr,
+			BOOLEAN				bPseudoTest
 )
 {
 	u8	originaldata[8], badworden = 0;
 	u16	efuse_addr = *pAddr;
 	u32	PgWriteSuccess = 0;
 
-	_rtw_memset((PVOID)originaldata, 0xff, 8);
+	_rtw_memset((void *)originaldata, 0xff, 8);
 
 	if (Efuse_PgPacketRead(pAdapter, pFixPkt->offset, originaldata, bPseudoTest)) {
 		/* check if data exist */
@@ -1970,11 +1913,11 @@ hal_EfuseFixHeaderProcess(
 
 static BOOLEAN
 hal_EfusePgPacketWrite2ByteHeader(
-	IN			PADAPTER		pAdapter,
-	IN			u8				efuseType,
-	IN			u16				*pAddr,
-	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+				PADAPTER		pAdapter,
+				u8				efuseType,
+				u16				*pAddr,
+				PPGPKT_STRUCT	pTargetPkt,
+				BOOLEAN			bPseudoTest)
 {
 	BOOLEAN		bRet = _FALSE, bContinual = _TRUE;
 	u16	efuse_addr = *pAddr, efuse_max_available_len = 0;
@@ -1982,7 +1925,7 @@ hal_EfusePgPacketWrite2ByteHeader(
 	u8	repeatcnt = 0;
 
 	/* RTPRINT(FEEPROM, EFUSE_PG, ("Wirte 2byte header\n")); */
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (PVOID)&efuse_max_available_len, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
 
 	while (efuse_addr < efuse_max_available_len) {
 		pg_header = ((pTargetPkt->offset & 0x07) << 5) | 0x0F;
@@ -2053,11 +1996,11 @@ hal_EfusePgPacketWrite2ByteHeader(
 
 static BOOLEAN
 hal_EfusePgPacketWrite1ByteHeader(
-	IN			PADAPTER		pAdapter,
-	IN			u8				efuseType,
-	IN			u16				*pAddr,
-	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+				PADAPTER		pAdapter,
+				u8				efuseType,
+				u16				*pAddr,
+				PPGPKT_STRUCT	pTargetPkt,
+				BOOLEAN			bPseudoTest)
 {
 	BOOLEAN		bRet = _FALSE;
 	u8	pg_header = 0, tmp_header = 0;
@@ -2099,11 +2042,11 @@ hal_EfusePgPacketWrite1ByteHeader(
 
 static BOOLEAN
 hal_EfusePgPacketWriteData(
-	IN			PADAPTER		pAdapter,
-	IN			u8				efuseType,
-	IN			u16				*pAddr,
-	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+				PADAPTER		pAdapter,
+				u8				efuseType,
+				u16				*pAddr,
+				PPGPKT_STRUCT	pTargetPkt,
+				BOOLEAN			bPseudoTest)
 {
 	BOOLEAN	bRet = _FALSE;
 	u16	efuse_addr = *pAddr;
@@ -2133,11 +2076,11 @@ hal_EfusePgPacketWriteData(
 
 static BOOLEAN
 hal_EfusePgPacketWriteHeader(
-	IN			PADAPTER		pAdapter,
-	IN			u8				efuseType,
-	IN			u16				*pAddr,
-	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+				PADAPTER		pAdapter,
+				u8				efuseType,
+				u16				*pAddr,
+				PPGPKT_STRUCT	pTargetPkt,
+				BOOLEAN			bPseudoTest)
 {
 	BOOLEAN		bRet = _FALSE;
 
@@ -2151,9 +2094,9 @@ hal_EfusePgPacketWriteHeader(
 
 static BOOLEAN
 wordEnMatched(
-	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	PPGPKT_STRUCT	pCurPkt,
-	IN	u8				*pWden
+		PPGPKT_STRUCT	pTargetPkt,
+		PPGPKT_STRUCT	pCurPkt,
+		u8				*pWden
 )
 {
 	u8	match_word_en = 0x0F;	/* default all words are disabled */
@@ -2187,10 +2130,10 @@ wordEnMatched(
 
 static BOOLEAN
 hal_EfuseCheckIfDatafollowed(
-	IN		PADAPTER		pAdapter,
-	IN		u8				word_cnts,
-	IN		u16				startAddr,
-	IN		BOOLEAN			bPseudoTest
+			PADAPTER		pAdapter,
+			u8				word_cnts,
+			u16				startAddr,
+			BOOLEAN			bPseudoTest
 )
 {
 	BOOLEAN		bRet = _FALSE;
@@ -2206,11 +2149,11 @@ hal_EfuseCheckIfDatafollowed(
 
 static BOOLEAN
 hal_EfusePartialWriteCheck(
-	IN	PADAPTER		pAdapter,
-	IN	u8				efuseType,
-	IN	u16				*pAddr,
-	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest
+		PADAPTER		pAdapter,
+		u8				efuseType,
+		u16				*pAddr,
+		PPGPKT_STRUCT	pTargetPkt,
+		BOOLEAN			bPseudoTest
 )
 {
 	BOOLEAN		bRet = _FALSE;
@@ -2219,8 +2162,8 @@ hal_EfusePartialWriteCheck(
 	u16	startAddr = 0, efuse_max_available_len = 0, efuse_max = 0;
 	PGPKT_STRUCT	curPkt;
 
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (PVOID)&efuse_max_available_len, bPseudoTest);
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_REAL_CONTENT_LEN, (PVOID)&efuse_max, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&efuse_max, bPseudoTest);
 
 	if (efuseType == EFUSE_WIFI) {
 		if (bPseudoTest)
@@ -2305,17 +2248,17 @@ hal_EfusePartialWriteCheck(
 
 static BOOLEAN
 hal_EfusePgCheckAvailableAddr(
-	IN	PADAPTER	pAdapter,
-	IN	u8			efuseType,
-	IN	BOOLEAN		bPseudoTest
+		PADAPTER	pAdapter,
+		u8			efuseType,
+		BOOLEAN		bPseudoTest
 )
 {
 	u16	efuse_max_available_len = 0;
 
 	/* Change to check TYPE_EFUSE_MAP_LEN ,beacuse 8188E raw 256,logic map over 256. */
-	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&efuse_max_available_len, _FALSE);
+	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&efuse_max_available_len, _FALSE);
 
-	/* EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&efuse_max_available_len, bPseudoTest); */
+	/* EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&efuse_max_available_len, bPseudoTest); */
 	/* RTPRINT(FEEPROM, EFUSE_PG, ("efuse_max_available_len = %d\n", efuse_max_available_len)); */
 
 	if (Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest) >= efuse_max_available_len) {
@@ -2325,16 +2268,16 @@ hal_EfusePgCheckAvailableAddr(
 	return _TRUE;
 }
 
-static VOID
+static void
 hal_EfuseConstructPGPkt(
-	IN	u8				offset,
-	IN	u8				word_en,
-	IN	u8				*pData,
-	IN	PPGPKT_STRUCT	pTargetPkt
+		u8				offset,
+		u8				word_en,
+		u8				*pData,
+		PPGPKT_STRUCT	pTargetPkt
 
 )
 {
-	_rtw_memset((PVOID)pTargetPkt->data, 0xFF, sizeof(u8) * 8);
+	_rtw_memset((void *)pTargetPkt->data, 0xFF, sizeof(u8) * 8);
 	pTargetPkt->offset = offset;
 	pTargetPkt->word_en = word_en;
 	efuse_WordEnableDataRead(word_en, pData, pTargetPkt->data);
@@ -2343,43 +2286,15 @@ hal_EfuseConstructPGPkt(
 	/* RTPRINT(FEEPROM, EFUSE_PG, ("hal_EfuseConstructPGPkt(), targetPkt, offset=%d, word_en=0x%x, word_cnts=%d\n", pTargetPkt->offset, pTargetPkt->word_en, pTargetPkt->word_cnts)); */
 }
 
-static BOOLEAN
-hal_EfusePgPacketWrite_BT(
-	IN	PADAPTER	pAdapter,
-	IN	u8			offset,
-	IN	u8			word_en,
-	IN	u8			*pData,
-	IN	BOOLEAN		bPseudoTest
-)
-{
-	PGPKT_STRUCT	targetPkt;
-	u16	startAddr = 0;
-	u8	efuseType = EFUSE_BT;
 
-	if (!hal_EfusePgCheckAvailableAddr(pAdapter, efuseType, bPseudoTest))
-		return _FALSE;
-
-	hal_EfuseConstructPGPkt(offset, word_en, pData, &targetPkt);
-
-	if (!hal_EfusePartialWriteCheck(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return _FALSE;
-
-	if (!hal_EfusePgPacketWriteHeader(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return _FALSE;
-
-	if (!hal_EfusePgPacketWriteData(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return _FALSE;
-
-	return _TRUE;
-}
 
 static BOOLEAN
 hal_EfusePgPacketWrite_8188e(
-	IN	PADAPTER		pAdapter,
-	IN	u8			offset,
-	IN	u8			word_en,
-	IN	u8			*pData,
-	IN	BOOLEAN		bPseudoTest
+		PADAPTER		pAdapter,
+		u8			offset,
+		u8			word_en,
+		u8			*pData,
+		BOOLEAN		bPseudoTest
 )
 {
 	PGPKT_STRUCT	targetPkt;
@@ -2405,11 +2320,11 @@ hal_EfusePgPacketWrite_8188e(
 
 
 static int
-Hal_EfusePgPacketWrite_Pseudo(IN	PADAPTER	pAdapter,
-			      IN	u8			offset,
-			      IN	u8			word_en,
-			      IN	u8			*data,
-			      IN	BOOLEAN		bPseudoTest)
+Hal_EfusePgPacketWrite_Pseudo(PADAPTER	pAdapter,
+					u8			offset,
+					u8			word_en,
+					u8			*data,
+					BOOLEAN		bPseudoTest)
 {
 	int ret;
 
@@ -2419,11 +2334,11 @@ Hal_EfusePgPacketWrite_Pseudo(IN	PADAPTER	pAdapter,
 }
 
 static int
-Hal_EfusePgPacketWrite(IN	PADAPTER	pAdapter,
-		       IN	u8			offset,
-		       IN	u8			word_en,
-		       IN	u8			*data,
-		       IN	BOOLEAN		bPseudoTest)
+Hal_EfusePgPacketWrite(PADAPTER	pAdapter,
+				u8			offset,
+				u8			word_en,
+				u8			*data,
+				BOOLEAN		bPseudoTest)
 {
 	int	ret = 0;
 	ret = hal_EfusePgPacketWrite_8188e(pAdapter, offset, word_en, data, bPseudoTest);
@@ -2433,11 +2348,11 @@ Hal_EfusePgPacketWrite(IN	PADAPTER	pAdapter,
 }
 
 static int
-rtl8188e_Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
-			     IN	u8			offset,
-			     IN	u8			word_en,
-			     IN	u8			*data,
-			     IN	BOOLEAN		bPseudoTest)
+rtl8188e_Efuse_PgPacketWrite(PADAPTER	pAdapter,
+					u8			offset,
+					u8			word_en,
+					u8			*data,
+					BOOLEAN		bPseudoTest)
 {
 	int	ret;
 
@@ -2531,6 +2446,8 @@ void init_hal_spec_8188e(_adapter *adapter)
 	hal_spec->sec_cap = 0;
 	hal_spec->rfpath_num_2g = 1;
 	hal_spec->rfpath_num_5g = 0;
+	hal_spec->txgi_max = 63;
+	hal_spec->txgi_pdbm = 2;
 	hal_spec->max_tx_cnt = 1;
 	hal_spec->tx_nss_num = 1;
 	hal_spec->rx_nss_num = 1;
@@ -2544,7 +2461,12 @@ void init_hal_spec_8188e(_adapter *adapter)
 			    | WL_FUNC_TDLS
 			    ;
 
+#if CONFIG_TX_AC_LIFETIME
+	hal_spec->tx_aclt_unit_factor = 1;
+#endif
+
 	hal_spec->pg_txpwr_saddr = 0x10;
+	hal_spec->pg_txgi_diff_factor = 1;
 
 	rtw_macid_ctl_init_sleep_reg(adapter_to_macidctl(adapter)
 		, REG_MACID_PAUSE_0
@@ -2575,18 +2497,12 @@ bool rtl8188e_gpio_radio_on_off_check(_adapter *adapter, u8 *valid)
 }
 #endif
 
-void rtl8188e_init_default_value(_adapter *adapter)
-{
-	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
-
-	adapter->registrypriv.wireless_mode = WIRELESS_11BG_24N;
-}
 
 void InitBeaconParameters_8188e(_adapter *adapter)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 
-	rtw_write16(adapter, REG_BCN_CTRL, 0x1010);
+	rtw_write16(adapter, REG_BCN_CTRL, (DIS_TSF_UDT << 8) | DIS_TSF_UDT);
 
 	/* TBTT setup time */
 	rtw_write8(adapter, REG_TBTT_PROHIBIT, TBTT_PROHIBIT_SETUP_TIME);
@@ -2601,18 +2517,18 @@ void InitBeaconParameters_8188e(_adapter *adapter)
 
 	/* Suggested by designer timchen. Change beacon AIFS to the largest number */
 	/* beacause test chip does not contension before sending beacon. by tynli. 2009.11.03 */
-	rtw_write16(adapter, REG_BCNTCFG, 0x660F);
+	rtw_write16(adapter, REG_BCNTCFG, 0x4413);
 
 }
 
-static VOID
+static void
 _BeaconFunctionEnable(
-	IN	PADAPTER		padapter,
-	IN	BOOLEAN			Enable,
-	IN	BOOLEAN			Linked
+		PADAPTER		padapter,
+		BOOLEAN			Enable,
+		BOOLEAN			Linked
 )
 {
-	rtw_write8(padapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
+	rtw_write8(padapter, REG_BCN_CTRL, (DIS_TSF_UDT | EN_BCN_FUNCTION | DIS_BCNQ_SUB));
 
 	rtw_write8(padapter, REG_RD_CTRL + 1, 0x6F);
 }
@@ -2626,7 +2542,7 @@ void SetBeaconRelatedRegisters8188E(PADAPTER padapter)
 	u32 bcn_ctrl_reg		= REG_BCN_CTRL;
 	/* reset TSF, enable update TSF, correcting TSF On Beacon */
 
-	/* REG_BCN_INTERVAL */
+	/* REG_MBSSID_BCN_SPACE */
 	/* REG_BCNDMATIM */
 	/* REG_ATIMWND */
 	/* REG_TBTT_PROHIBIT */
@@ -2649,7 +2565,7 @@ void SetBeaconRelatedRegisters8188E(PADAPTER padapter)
 	/*  */
 	/* Beacon interval (in unit of TU). */
 	/*  */
-	rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
+	rtw_hal_set_hwreg(padapter, HW_VAR_BEACON_INTERVAL, (u8 *)&pmlmeinfo->bcn_interval);
 
 	InitBeaconParameters_8188e(padapter);
 
@@ -2680,7 +2596,7 @@ void SetBeaconRelatedRegisters8188E(PADAPTER padapter)
 	_BeaconFunctionEnable(padapter, _TRUE, _TRUE);
 
 	ResumeTxBeacon(padapter);
-	rtw_write8(padapter, bcn_ctrl_reg, rtw_read8(padapter, bcn_ctrl_reg) | BIT(1));
+	rtw_write8(padapter, bcn_ctrl_reg, rtw_read8(padapter, bcn_ctrl_reg) | DIS_BCNQ_SUB);
 }
 
 void rtl8188e_read_wmmedca_reg(PADAPTER adapter, u16 *vo_params, u16 *vi_params, u16 *be_params, u16 *bk_params)
@@ -2735,8 +2651,6 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->set_chnl_bw_handler = &PHY_SetSwChnlBWMode8188E;
 
 	pHalFunc->set_tx_power_level_handler = &PHY_SetTxPowerLevel8188E;
-	pHalFunc->get_tx_power_level_handler = &PHY_GetTxPowerLevel8188E;
-
 	pHalFunc->set_tx_power_index_handler = PHY_SetTxPowerIndex_8188E;
 	pHalFunc->get_tx_power_index_handler = &PHY_GetTxPowerIndex_8188E;
 
@@ -2914,7 +2828,7 @@ Hal_InitPGData88E(PADAPTER	padapter)
 		if (is_boot_from_eeprom(padapter)) {
 			/* Read all Content from EEPROM or EFUSE. */
 			for (i = 0; i < HWSET_MAX_SIZE; i += 2) {
-				/*				value16 = EF2Byte(ReadEEprom(pAdapter, (u2Byte) (i>>1)));
+				/*				value16 = EF2Byte(ReadEEprom(pAdapter, (u16) (i>>1)));
 				 *				*((u16*)(&PROMContent[i])) = value16; */
 			}
 		} else {
@@ -2939,8 +2853,8 @@ Hal_InitPGData88E(PADAPTER	padapter)
 
 void
 Hal_EfuseParseIDCode88E(
-	IN	PADAPTER	padapter,
-	IN	u8			*hwinfo
+		PADAPTER	padapter,
+		u8			*hwinfo
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -2960,8 +2874,8 @@ Hal_EfuseParseIDCode88E(
 
 void Hal_ReadPowerSavingMode88E(
 	PADAPTER		padapter,
-	IN	u8			*hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+		u8			*hwinfo,
+		BOOLEAN			AutoLoadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -2997,9 +2911,9 @@ void Hal_ReadPowerSavingMode88E(
 
 void
 Hal_ReadTxPowerInfo88E(
-	IN	PADAPTER		padapter,
-	IN	u8				*PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		padapter,
+		u8				*PROMContent,
+		BOOLEAN			AutoLoadFail
 )
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
@@ -3023,11 +2937,11 @@ Hal_ReadTxPowerInfo88E(
 }
 
 
-VOID
+void
 Hal_EfuseParseXtal_8188E(
-	IN	PADAPTER		pAdapter,
-	IN	u8			*hwinfo,
-	IN	BOOLEAN		AutoLoadFail
+		PADAPTER		pAdapter,
+		u8			*hwinfo,
+		BOOLEAN		AutoLoadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3041,11 +2955,11 @@ Hal_EfuseParseXtal_8188E(
 	RTW_INFO("crystal_cap: 0x%2x\n", pHalData->crystal_cap);
 }
 
-VOID
+void
 Hal_ReadPAType_8188E(
-	IN	PADAPTER	Adapter,
-	IN	u8			*PROMContent,
-	IN	BOOLEAN		AutoloadFail
+		PADAPTER	Adapter,
+		u8			*PROMContent,
+		BOOLEAN		AutoloadFail
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -3119,11 +3033,11 @@ Hal_ReadPAType_8188E(
 	RTW_INFO("pHalData->ExternalPA_2G = %d , pHalData->ExternalLNA_2G = %d\n",  pHalData->ExternalPA_2G, pHalData->ExternalLNA_2G);
 }
 
-VOID
+void
 Hal_ReadAmplifierType_8188E(
-	IN	PADAPTER	Adapter,
-	IN	pu1Byte		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+		PADAPTER	Adapter,
+		u8			*PROMContent,
+		BOOLEAN		AutoloadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3157,11 +3071,11 @@ Hal_ReadAmplifierType_8188E(
 	RTW_INFO("pHalData->TypeGLNA is 0x%x\n", pHalData->TypeGLNA);
 }
 
-VOID
+void
 Hal_ReadRFEType_8188E(
-	IN	PADAPTER	Adapter,
-	IN	pu1Byte		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+		PADAPTER	Adapter,
+		u8			*PROMContent,
+		BOOLEAN		AutoloadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3205,9 +3119,9 @@ Hal_ReadRFEType_8188E(
 
 void
 Hal_EfuseParseBoardType88E(
-	IN	PADAPTER		pAdapter,
-	IN	u8				*hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		pAdapter,
+		u8				*hwinfo,
+		BOOLEAN			AutoLoadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3223,9 +3137,9 @@ Hal_EfuseParseBoardType88E(
 
 void
 Hal_EfuseParseEEPROMVer88E(
-	IN	PADAPTER		padapter,
-	IN	u8			*hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		padapter,
+		u8			*hwinfo,
+		BOOLEAN			AutoLoadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3240,9 +3154,9 @@ Hal_EfuseParseEEPROMVer88E(
 
 void
 rtl8188e_EfuseParseChnlPlan(
-	IN	PADAPTER		padapter,
-	IN	u8			*hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		padapter,
+		u8			*hwinfo,
+		BOOLEAN			AutoLoadFail
 )
 {
 	hal_com_config_channel_plan(
@@ -3258,9 +3172,9 @@ rtl8188e_EfuseParseChnlPlan(
 
 void
 Hal_EfuseParseCustomerID88E(
-	IN	PADAPTER		padapter,
-	IN	u8			*hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		padapter,
+		u8			*hwinfo,
+		BOOLEAN			AutoLoadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3279,11 +3193,12 @@ Hal_EfuseParseCustomerID88E(
 
 void
 Hal_ReadAntennaDiversity88E(
-	IN	PADAPTER		pAdapter,
-	IN	u8				*PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+		PADAPTER		pAdapter,
+		u8				*PROMContent,
+		BOOLEAN			AutoLoadFail
 )
 {
+#ifdef CONFIG_ANTENNA_DIVERSITY
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct registry_priv	*registry_par = &pAdapter->registrypriv;
 
@@ -3310,19 +3225,18 @@ Hal_ReadAntennaDiversity88E(
 		pHalData->AntDivCfg = 0;
 
 	RTW_INFO("EEPROM : AntDivCfg = %x, TRxAntDivType = %x\n", pHalData->AntDivCfg, pHalData->TRxAntDivType);
-
-
+#endif
 }
 
 void
 Hal_ReadThermalMeter_88E(
-	IN	PADAPTER	Adapter,
-	IN	u8			*PROMContent,
-	IN	BOOLEAN	AutoloadFail
+		PADAPTER	Adapter,
+		u8			*PROMContent,
+		BOOLEAN	AutoloadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte			tempval;
+	u8			tempval;
 
 	/*  */
 	/* ThermalMeter from EEPROM */
@@ -3345,9 +3259,9 @@ Hal_ReadThermalMeter_88E(
 
 #ifdef CONFIG_RF_POWER_TRIM
 void Hal_ReadRFGainOffset(
-	IN		PADAPTER	Adapter,
-	IN		u8		*PROMContent,
-	IN		BOOLEAN		AutoloadFail)
+			PADAPTER	Adapter,
+			u8		*PROMContent,
+			BOOLEAN		AutoloadFail)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8 thermal_offset = 0;
@@ -3431,38 +3345,6 @@ void Hal_DetectWoWMode(PADAPTER pAdapter)
 }
 #endif
 
-/* ************************************************************************************
- *
- * 20100209 Joseph:
- * This function is used only for 92C to set REG_BCN_CTRL(0x550) register.
- * We just reserve the value of the register in variable pHalData->RegBcnCtrlVal and then operate
- * the value of the register via atomic operation.
- * This prevents from race condition when setting this register.
- * The value of pHalData->RegBcnCtrlVal is initialized in HwConfigureRTL8192CE() function.
- *   */
-void SetBcnCtrlReg(
-	PADAPTER	padapter,
-	u8		SetBits,
-	u8		ClearBits)
-{
-	PHAL_DATA_TYPE pHalData;
-	u8 RegBcnCtrlVal = 0;
-
-	pHalData = GET_HAL_DATA(padapter);
-	RegBcnCtrlVal = rtw_read8(padapter, REG_BCN_CTRL);
-
-	RegBcnCtrlVal |= SetBits;
-	RegBcnCtrlVal &= ~ClearBits;
-
-#if 0
-	/* #ifdef CONFIG_SDIO_HCI */
-	if (pHalData->sdio_himr & (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK))
-		RegBcnCtrlVal |= EN_TXBCN_RPT;
-#endif
-
-	rtw_write8(padapter, REG_BCN_CTRL, RegBcnCtrlVal);
-}
-
 void _InitTransferPageSize(PADAPTER padapter)
 {
 	/* Tx page size is always 128. */
@@ -3481,13 +3363,15 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 	struct mlme_priv *pmlmepriv = &(Adapter->mlmepriv);
 
 	if (*((u8 *)val) == _HW_STATE_MONITOR_) {
-
+#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
+		rcr_bits = RCR_AAP | RCR_APM | RCR_AM | RCR_AB | RCR_APWRMGT | RCR_ADF | RCR_AMF | RCR_APP_PHYST_RXFF;
+#else
 		/* Receive all type */
 		rcr_bits = RCR_AAP | RCR_APM | RCR_AM | RCR_AB | RCR_APWRMGT | RCR_ADF | RCR_ACF | RCR_AMF | RCR_APP_PHYST_RXFF;
 
 		/* Append FCS */
 		rcr_bits |= RCR_APPFCS;
-
+#endif
 #if 0
 		/*
 		   CRC and ICV packet will drop in recvbuf2recvframe()
@@ -3545,7 +3429,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 #ifdef CONFIG_CONCURRENT_MODE
 	if (Adapter->hw_port == HW_PORT1) {
 		/* disable Port1 TSF update */
-		rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) | BIT(4));
+		rtw_iface_disable_tsf_update(Adapter);
 
 		/* set net_type		 */
 		Set_MSR(Adapter, mode);
@@ -3580,14 +3464,14 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 #endif
 			}
 
-			rtw_write8(Adapter, REG_BCN_CTRL_1, 0x11); /* disable atim wnd and disable beacon function */
-			/* rtw_write8(Adapter,REG_BCN_CTRL_1, 0x18); */
+			rtw_write8(Adapter, REG_BCN_CTRL_1, DIS_TSF_UDT | DIS_ATIM); /* disable atim wnd and disable beacon function */
+			/* rtw_write8(Adapter,REG_BCN_CTRL_1, DIS_TSF_UDT | EN_BCN_FUNCTION); */
 		} else if (mode == _HW_STATE_ADHOC_) {
 			/* Beacon is polled to TXBUF */
 			rtw_write32(Adapter, REG_CR, rtw_read32(Adapter, REG_CR) | BIT(8));
 
 			ResumeTxBeacon(Adapter);
-			rtw_write8(Adapter, REG_BCN_CTRL_1, 0x1a);
+			rtw_write8(Adapter, REG_BCN_CTRL_1, DIS_TSF_UDT | EN_BCN_FUNCTION | DIS_BCNQ_SUB);
 			/* BIT4 - If set 0, hw will clr bcnq when tx becon ok/fail or port 1 */
 			rtw_write8(Adapter, REG_MBID_NUM, rtw_read8(Adapter, REG_MBID_NUM) | BIT(3) | BIT(4));
 		} else if (mode == _HW_STATE_AP_) {
@@ -3610,9 +3494,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 
-			ResumeTxBeacon(Adapter);
-
-			rtw_write8(Adapter, REG_BCN_CTRL_1, 0x12);
+			rtw_write8(Adapter, REG_BCN_CTRL_1, DIS_TSF_UDT | DIS_BCNQ_SUB);
 
 			/* Beacon is polled to TXBUF */
 			rtw_write32(Adapter, REG_CR, rtw_read32(Adapter, REG_CR) | BIT(8));
@@ -3627,7 +3509,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 			rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* 5ms */
 			/* rtw_write8(Adapter, REG_BCN_MAX_ERR, 0xFF); */
 			rtw_write8(Adapter, REG_ATIMWND_1, 0x0c); /* 13ms for port1 */
-			rtw_write16(Adapter, REG_BCNTCFG, 0x00);
 
 			rtw_write16(Adapter, REG_TSFTR_SYN_OFFSET, 0x7fff);/* +32767 (~32ms) */
 
@@ -3639,9 +3520,9 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 			rtw_write8(Adapter, REG_MBID_NUM, rtw_read8(Adapter, REG_MBID_NUM) | BIT(3) | BIT(4));
 			/* enable BCN1 Function for if2 */
 			/* don't enable update TSF1 for if2 (due to TSF update when beacon/probe rsp are received) */
-			rtw_write8(Adapter, REG_BCN_CTRL_1, (DIS_TSF_UDT0_NORMAL_CHIP | EN_BCN_FUNCTION | EN_TXBCN_RPT | BIT(1)));
+			rtw_write8(Adapter, REG_BCN_CTRL_1, (DIS_TSF_UDT| EN_BCN_FUNCTION | EN_TXBCN_RPT | DIS_BCNQ_SUB));
 
-			if (!rtw_mi_buddy_check_fwstate(Adapter, WIFI_FW_ASSOC_SUCCESS))
+			if (!rtw_mi_buddy_check_mlmeinfo_state(Adapter, WIFI_FW_ASSOC_SUCCESS))
 				rtw_write8(Adapter, REG_BCN_CTRL,
 					rtw_read8(Adapter, REG_BCN_CTRL) & ~EN_BCN_FUNCTION);
 
@@ -3650,11 +3531,11 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 			/* rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(3)); */
 
 			/* dis BCN0 ATIM  WND if if1 is station */
-			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(0));
+			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | DIS_ATIM);
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 			/* Reset TSF for STA+AP concurrent mode */
-			if (rtw_mi_buddy_check_fwstate(Adapter, (WIFI_STATION_STATE | WIFI_ASOC_STATE))) {
+			if (DEV_STA_LD_NUM(adapter_to_dvobj(Adapter))) {
 				if (rtw_hal_reset_tsf(Adapter, HW_PORT1) == _FAIL)
 					RTW_INFO("ERROR! %s()-%d: Reset port1 TSF fail\n",
 						 __FUNCTION__, __LINE__);
@@ -3671,7 +3552,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 		hw_var_set_opmode_mbid(Adapter, mode);
 #else
 		/* disable Port0 TSF update */
-		rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(4));
+		rtw_iface_disable_tsf_update(Adapter);
 
 		/* set net_type */
 		Set_MSR(Adapter, mode);
@@ -3706,14 +3587,14 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 #endif
 			}
 
-			rtw_write8(Adapter, REG_BCN_CTRL, 0x19); /* disable atim wnd */
-			/* rtw_write8(Adapter,REG_BCN_CTRL, 0x18); */
+			rtw_write8(Adapter, REG_BCN_CTRL, DIS_TSF_UDT | EN_BCN_FUNCTION | DIS_ATIM); /* disable atim wnd */
+			/* rtw_write8(Adapter,REG_BCN_CTRL, DIS_TSF_UDT | EN_BCN_FUNCTION); */
 		} else if (mode == _HW_STATE_ADHOC_) {
 			/* Beacon is polled to TXBUF */
 			rtw_write16(Adapter, REG_CR, rtw_read16(Adapter, REG_CR) | BIT(8));
 
 			ResumeTxBeacon(Adapter);
-			rtw_write8(Adapter, REG_BCN_CTRL, 0x1a);
+			rtw_write8(Adapter, REG_BCN_CTRL, DIS_TSF_UDT | EN_BCN_FUNCTION | DIS_BCNQ_SUB);
 			/* BIT3 - If set 0, hw will clr bcnq when tx becon ok/fail or port 0 */
 			rtw_write8(Adapter, REG_MBID_NUM, rtw_read8(Adapter, REG_MBID_NUM) | BIT(3) | BIT(4));
 		} else if (mode == _HW_STATE_AP_) {
@@ -3736,9 +3617,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 
-			ResumeTxBeacon(Adapter);
-
-			rtw_write8(Adapter, REG_BCN_CTRL, 0x12);
+			rtw_write8(Adapter, REG_BCN_CTRL, DIS_TSF_UDT | DIS_BCNQ_SUB);
 
 			/* Beacon is polled to TXBUF */
 			rtw_write32(Adapter, REG_CR, rtw_read32(Adapter, REG_CR) | BIT(8));
@@ -3753,7 +3632,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 			rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* 5ms */
 			/* rtw_write8(Adapter, REG_BCN_MAX_ERR, 0xFF); */
 			rtw_write8(Adapter, REG_ATIMWND, 0x0c); /* 13ms */
-			rtw_write16(Adapter, REG_BCNTCFG, 0x00);
 
 			rtw_write16(Adapter, REG_TSFTR_SYN_OFFSET, 0x7fff);/* +32767 (~32ms) */
 
@@ -3766,22 +3644,22 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 			/* enable BCN0 Function for if1 */
 			/* don't enable update TSF0 for if1 (due to TSF update when beacon/probe rsp are received) */
 #if defined(CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR)
-			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP | EN_BCN_FUNCTION | EN_TXBCN_RPT | BIT(1)));
+			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT| EN_BCN_FUNCTION | EN_TXBCN_RPT | DIS_BCNQ_SUB));
 #else
-			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP | EN_BCN_FUNCTION | BIT(1)));
+			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT | EN_BCN_FUNCTION | DIS_BCNQ_SUB));
 #endif
 
 #ifdef CONFIG_CONCURRENT_MODE
-			if (!rtw_mi_buddy_check_fwstate(Adapter, WIFI_FW_ASSOC_SUCCESS))
+			if (!rtw_mi_buddy_check_mlmeinfo_state(Adapter, WIFI_FW_ASSOC_SUCCESS))
 				rtw_write8(Adapter, REG_BCN_CTRL_1,
 					rtw_read8(Adapter, REG_BCN_CTRL_1) & ~EN_BCN_FUNCTION);
 #endif
 
 			/* dis BCN1 ATIM  WND if if2 is station */
-			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) | BIT(0));
+			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) | DIS_ATIM);
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 			/* Reset TSF for STA+AP concurrent mode */
-			if (rtw_mi_buddy_check_fwstate(Adapter, (WIFI_STATION_STATE | WIFI_ASOC_STATE))) {
+			if (DEV_STA_LD_NUM(adapter_to_dvobj(Adapter))) {
 				if (rtw_hal_reset_tsf(Adapter, HW_PORT0) == _FAIL)
 					RTW_INFO("ERROR! %s()-%d: Reset port0 TSF fail\n",
 						 __FUNCTION__, __LINE__);
@@ -3795,121 +3673,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 	}
 }
 
-static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8 *val)
-{
-	u32 bcn_ctrl_reg;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (Adapter->hw_port == HW_PORT1)
-		bcn_ctrl_reg = REG_BCN_CTRL_1;
-	else
-#endif
-		bcn_ctrl_reg = REG_BCN_CTRL;
-
-
-	if (*((u8 *)val))
-		rtw_write8(Adapter, bcn_ctrl_reg, (EN_BCN_FUNCTION | EN_TXBCN_RPT));
-	else
-		rtw_write8(Adapter, bcn_ctrl_reg, rtw_read8(Adapter, bcn_ctrl_reg) & (~(EN_BCN_FUNCTION | EN_TXBCN_RPT)));
-
-
-}
-
-static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8 *val)
-{
-	/* reject all data frames */
-#ifdef CONFIG_CONCURRENT_MODE
-	if (rtw_mi_check_status(Adapter, MI_LINKED) == _FALSE)
-#endif
-		rtw_write16(Adapter, REG_RXFLTMAP2, 0x00);
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (Adapter->hw_port == HW_PORT1) {
-		/*reset TSF1*/
-		rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(1));
-
-		/*disable update TSF1*/
-		rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) | DIS_TSF_UDT);
-
-		/* disable Port1's beacon function*/
-		rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) & (~BIT(3)));
-	} else
-#endif
-	{
-		/*reset TSF*/
-		rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(0));
-
-		/*disable update TSF*/
-		rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | DIS_TSF_UDT);
-	}
-
-}
-
-static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8 *val)
-{
-#ifdef CONFIG_CONCURRENT_MODE
-	u8	RetryLimit = RL_VAL_STA;
-	u8	type = *((u8 *)val);
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
-
-	if (type == 0) { /* prepare to join */
-		if (rtw_mi_get_ap_num(Adapter) || rtw_mi_get_mesh_num(Adapter))
-			StopTxBeacon(Adapter);
-
-		/* enable to rx data frame.Accept all data frame */
-		rtw_write16(Adapter, REG_RXFLTMAP2, 0xFFFF);
-
-		if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)
-			RetryLimit = (pHalData->CustomerID == RT_CID_CCX) ? RL_VAL_AP : RL_VAL_STA;
-		else /* Ad-hoc Mode */
-			RetryLimit = RL_VAL_AP;
-	} else if (type == 1) { /* joinbss_event call back when join res < 0 */
-		if (rtw_mi_check_status(Adapter, MI_LINKED) == _FALSE)
-			rtw_write16(Adapter, REG_RXFLTMAP2, 0x00);
-
-		if (rtw_mi_get_ap_num(Adapter) || rtw_mi_get_mesh_num(Adapter)) {
-			ResumeTxBeacon(Adapter);
-
-			/* reset TSF 1/2 after ResumeTxBeacon */
-			rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(1) | BIT(0));
-
-		}
-	} else if (type == 2) { /* sta add event call back */
-#ifdef CONFIG_MI_WITH_MBSSID_CAM
-		/*if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && (rtw_mi_get_assoced_sta_num(Adapter) == 1))
-			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL)&(~DIS_TSF_UDT));*/
-#else
-		/* enable update TSF */
-		if (Adapter->hw_port == HW_PORT1)
-			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) & (~DIS_TSF_UDT));
-		else
-			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) & (~DIS_TSF_UDT));
-
-#endif
-		if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE | WIFI_ADHOC_MASTER_STATE)) {
-			/* fixed beacon issue for 8191su........... */
-			rtw_write8(Adapter, 0x542 , 0x02);
-			RetryLimit = RL_VAL_AP;
-		}
-
-
-		if (rtw_mi_get_ap_num(Adapter) || rtw_mi_get_mesh_num(Adapter)) {
-			ResumeTxBeacon(Adapter);
-
-			/* reset TSF 1/2 after ResumeTxBeacon */
-			rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(1) | BIT(0));
-		}
-
-	}
-
-	rtw_write16(Adapter, REG_RL, RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT);
-
-#endif
-}
-
-
-
 u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
@@ -3921,104 +3684,13 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 	case HW_VAR_SET_OPMODE:
 		hw_var_set_opmode(adapter, variable, val);
 		break;
-	case HW_VAR_BASIC_RATE: {
-		struct mlme_ext_info *mlmext_info = &adapter->mlmeextpriv.mlmext_info;
-		u16 input_b = 0, masked = 0, ioted = 0, BrateCfg = 0;
-		u16 rrsr_2g_force_mask = RRSR_CCK_RATES;
-		u16 rrsr_2g_allow_mask = (RRSR_24M | RRSR_12M | RRSR_6M | RRSR_CCK_RATES);
-
-		HalSetBrateCfg(adapter, val, &BrateCfg);
-		input_b = BrateCfg;
-
-		/* apply force and allow mask */
-		BrateCfg |= rrsr_2g_force_mask;
-		BrateCfg &= rrsr_2g_allow_mask;
-		masked = BrateCfg;
-
-		/* IOT consideration */
-		if (mlmext_info->assoc_AP_vendor == HT_IOT_PEER_CISCO) {
-			/* if peer is cisco and didn't use ofdm rate, we enable 6M ack */
-			if ((BrateCfg & (RRSR_24M | RRSR_12M | RRSR_6M)) == 0)
-				BrateCfg |= RRSR_6M;
-		}
-		ioted = BrateCfg;
-
-		pHalData->BasicRateSet = BrateCfg;
-
-		RTW_INFO("HW_VAR_BASIC_RATE: %#x->%#x->%#x\n", input_b, masked, ioted);
-
-		/* Set RRSR rate table. */
-		rtw_write16(adapter, REG_RRSR, BrateCfg);
-		rtw_write8(adapter, REG_RRSR + 2, rtw_read8(adapter, REG_RRSR + 2) & 0xf0);
-
-		rtw_hal_set_hwreg(adapter, HW_VAR_INIT_RTS_RATE, (u8 *)&BrateCfg);
-	}
+	case HW_VAR_BASIC_RATE: 
+		rtw_var_set_basic_rate(adapter, val);
 	break;
 	case HW_VAR_TXPAUSE:
 		rtw_write8(adapter, REG_TXPAUSE, *((u8 *)val));
 		break;
-	case HW_VAR_BCN_FUNC:
-		hw_var_set_bcn_func(adapter, variable, val);
-		break;
 
-	case HW_VAR_MLME_DISCONNECT:
-		hw_var_set_mlme_disconnect(adapter, variable, val);
-		break;
-
-	case HW_VAR_MLME_JOIN:
-#ifdef CONFIG_CONCURRENT_MODE
-		hw_var_set_mlme_join(adapter, variable,  val);
-#else
-		{
-			u8	RetryLimit = RL_VAL_STA;
-			u8	type = *((u8 *)val);
-			struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-
-			if (type == 0) { /* prepare to join */
-				/* enable to rx data frame.Accept all data frame */
-				rtw_write16(adapter, REG_RXFLTMAP2, 0xFFFF);
-
-				if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)
-					RetryLimit = (pHalData->CustomerID == RT_CID_CCX) ? RL_VAL_AP : RL_VAL_STA;
-				else /* Ad-hoc Mode */
-					RetryLimit = RL_VAL_AP;
-			} else if (type == 1) /* joinbss_event call back when join res < 0 */
-				rtw_write16(adapter, REG_RXFLTMAP2, 0x00);
-			else if (type == 2) { /* sta add event call back */
-				/* enable update TSF */
-				rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL) & (~BIT(4)));
-
-				if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE | WIFI_ADHOC_MASTER_STATE))
-					RetryLimit = RL_VAL_AP;
-			}
-
-			rtw_write16(adapter, REG_RL, RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT);
-		}
-#endif
-		break;
-
-	case HW_VAR_BEACON_INTERVAL:
-		{
-			u16 bcn_interval = *((u16 *)val);
-
-			#ifdef CONFIG_SWTIMER_BASED_TXBCN
-			bcn_interval = rtw_hal_bcn_interval_adjust(adapter, bcn_interval);
-			#endif
-
-			rtw_write16(adapter, REG_BCN_INTERVAL, bcn_interval);
-			#ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			{
-				struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
-				struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
-				if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
-					RTW_INFO("%s==> bcn_interval:%d, eraly_int:%d\n", __func__, bcn_interval, bcn_interval >> 1);
-					rtw_write8(adapter, REG_DRVERLYINT, bcn_interval >> 1);
-				}
-			}
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-		}
-		break;
 	case HW_VAR_SLOT_TIME: {
 		rtw_write8(adapter, REG_SLOT, val[0]);
 	}
@@ -4038,31 +3710,8 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 		rtw_write8(adapter, REG_WMAC_TRXPTCL_CTL + 2, regTmp);
 	}
 	break;
-	case HW_VAR_CAM_EMPTY_ENTRY: {
-		u8	ucIndex = *((u8 *)val);
-		u8	i;
-		u32	ulCommand = 0;
-		u32	ulContent = 0;
-		u32	ulEncAlgo = CAM_AES;
-
-		for (i = 0; i < CAM_CONTENT_COUNT; i++) {
-			/* filled id in CAM config 2 byte */
-			if (i == 0) {
-				ulContent |= (ucIndex & 0x03) | ((u16)(ulEncAlgo) << 2);
-				/* ulContent |= CAM_VALID; */
-			} else
-				ulContent = 0;
-			/* polling bit, and No Write enable, and address */
-			ulCommand = CAM_CONTENT_COUNT * ucIndex + i;
-			ulCommand = ulCommand | CAM_POLLINIG | CAM_WRITE;
-			/* write content 0 is equall to mark invalid */
-			rtw_write32(adapter, WCAMI, ulContent);  /* delay_ms(40); */
-			rtw_write32(adapter, RWCAM, ulCommand);  /* delay_ms(40); */
-		}
-	}
-	break;
 	case HW_VAR_CAM_INVALID_ALL:
-		rtw_write32(adapter, RWCAM, BIT(31) | BIT(30));
+		rtw_write32(adapter, REG_CAMCMD, BIT(31) | BIT(30));
 		break;
 	case HW_VAR_AC_PARAM_VO:
 		rtw_write32(adapter, REG_EDCA_VO_PARAM, ((u32 *)(val))[0]);
@@ -4103,6 +3752,7 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 		rtw_write8(adapter, REG_ACMHWCTRL, AcmCtrl);
 	}
 	break;
+#ifdef CONFIG_80211N_HT
 	case HW_VAR_AMPDU_FACTOR: {
 		u8	RegToSet_Normal[4] = {0x41, 0xa8, 0x72, 0xb9};
 		u8	RegToSet_BT[4] = {0x31, 0x74, 0x42, 0x97};
@@ -4137,6 +3787,7 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 		}
 	}
 	break;
+#endif /* CONFIG_80211N_HT */
 	case HW_VAR_H2C_FW_PWRMODE: {
 		u8	psmode = (*(u8 *)val);
 
@@ -4239,8 +3890,8 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 
 		retry_limit = 0x01;
 
-		val16 = retry_limit << RETRY_LIMIT_SHORT_SHIFT | retry_limit << RETRY_LIMIT_LONG_SHIFT;
-		rtw_write16(adapter, REG_RL, val16);
+		val16 = BIT_SRL(retry_limit) | BIT_LRL(retry_limit);
+		rtw_write16(adapter, REG_RETRY_LIMIT, val16);
 
 		while (rtw_get_passing_time_ms(start) < 2000
 		       && !RTW_CANNOT_RUN(adapter)
@@ -4274,8 +3925,8 @@ u8 SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 			RTW_INFO("%s:(HW_VAR_CHECK_TXBUF)TXBUF Empty(%d) in %d ms\n", __FUNCTION__, i, pass_ms);
 
 		retry_limit = RL_VAL_STA;
-		val16 = retry_limit << RETRY_LIMIT_SHORT_SHIFT | retry_limit << RETRY_LIMIT_LONG_SHIFT;
-		rtw_write16(adapter, REG_RL, val16);
+		val16 = BIT_SRL(retry_limit) | BIT_LRL(retry_limit);
+		rtw_write16(adapter, REG_RETRY_LIMIT, val16);
 	}
 	break;
 	case HW_VAR_RESP_SIFS: {
@@ -4563,8 +4214,8 @@ void hal_ra_info_dump(_adapter *padapter , void *sel)
 #if (RATE_ADAPTIVE_SUPPORT == 1)
 					RTW_PRINT_SEL(sel , "Mac_id:%d ,RSSI:%d(%%)\n", mac_id, pHalData->odmpriv.ra_info[mac_id].rssi_sta_ra);
 
-					RTW_PRINT_SEL(sel , "rate_sgi = %d, decision_rate = %s\n", pHalData->odmpriv.ra_info[mac_id].rate_sgi,
-						HDATA_RATE(pHalData->odmpriv.ra_info[mac_id].decision_rate));
+					RTW_PRINT_SEL(sel , "rate_sgi = %d, decision_rate = %s\n", rtw_get_current_tx_sgi(padapter, macid_ctl->sta[mac_id]),
+						HDATA_RATE(rtw_get_current_tx_rate(padapter, macid_ctl->sta[mac_id])));
 
 					RTW_PRINT_SEL(sel , "pt_stage = %d\n", pHalData->odmpriv.ra_info[mac_id].pt_stage);
 
@@ -4572,11 +4223,17 @@ void hal_ra_info_dump(_adapter *padapter , void *sel)
 
 #endif /* (RATE_ADAPTIVE_SUPPORT == 1)*/
 				} else {
-					u8 cur_rate = rtw_read8(padapter, REG_ADAPTIVE_DATA_RATE_0 + mac_id);
-					u8 sgi = (cur_rate & BIT7) ? _TRUE : _FALSE;
-
-					cur_rate &= 0x7f;
-
+					u8 cur_rate = 0;
+					u8 sgi = 0;
+					
+					if (padapter->fix_rate == 0xff) {
+						cur_rate = rtw_read8(padapter, REG_ADAPTIVE_DATA_RATE_0 + mac_id) & 0x7f;
+						sgi = (cur_rate & BIT7) ? _TRUE : _FALSE;
+					} else {
+						cur_rate = padapter->fix_rate & 0x7f;
+						sgi = ((padapter->fix_rate) & 0x80) >> 7;
+					}
+						
 					RTW_PRINT_SEL(sel , "Mac_id:%d ,SGI:%d ,Rate:%s\n", mac_id, sgi, HDATA_RATE(cur_rate));
 				}
 			}
@@ -4586,9 +4243,9 @@ void hal_ra_info_dump(_adapter *padapter , void *sel)
 
 u8
 GetHalDefVar8188E(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+		PADAPTER				Adapter,
+		HAL_DEF_VARIABLE		eVariable,
+		void						*pValue
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

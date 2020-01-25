@@ -55,6 +55,7 @@
 
 #define CONFIG_EMBEDDED_FWIMG
 
+
 #ifdef CONFIG_EMBEDDED_FWIMG
 	#define	LOAD_FW_HEADER_FROM_DRIVER
 #endif
@@ -83,20 +84,23 @@
 	#define CONFIG_LPS
 	#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
 
+
 	/* #define CONFIG_LPS_LCLK */
 	#endif
 
 	#ifdef CONFIG_LPS_LCLK
-	#define CONFIG_XMIT_THREAD_MODE
+	/* #define CONFIG_XMIT_THREAD_MODE */
 	#endif
 #endif /* CONFIG_POWER_SAVING */
 
 	/*#define CONFIG_ANTENNA_DIVERSITY*/
 
-	//#define CONFIG_CONCURRENT_MODE
+
+
+	/* #define CONFIG_CONCURRENT_MODE */
 	#ifdef CONFIG_CONCURRENT_MODE
 		#define CONFIG_RUNTIME_PORT_SWITCH
-                #define CONFIG_SCAN_BACKOP
+
 		#define CONFIG_TSF_RESET_OFFLOAD			/* For 2 PORT TSF SYNC. */
 	#endif
 
@@ -150,6 +154,7 @@
 	/* #define CONFIG_TDLS_CH_SW */	/* Enable this flag only when we confirm that TDLS CH SW is supported in FW */
 #endif
 
+
 #define CONFIG_SKB_COPY	/* for amsdu */
 
 /* #define CONFIG_RTW_LED */
@@ -170,6 +175,7 @@
 	/* #define CONFIG_IOL_IOREG_CFG_DBG */
 #endif
 
+
 #define CONFIG_GLOBAL_UI_PID
 
 #define CONFIG_LAYER2_ROAMING
@@ -184,9 +190,6 @@
 /* #define CONFIG_BACKGROUND_NOISE_MONITOR */
 #endif
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
-
-#define CONFIG_TX_MCAST2UNI		/* Support IP multicast->unicast */
-/* #define CONFIG_CHECK_AC_LIFETIME */	/* Check packet lifetime of 4 ACs. */
 
 /*
  * Interface  Related Config
@@ -226,6 +229,7 @@
 
 /* #define CONFIG_USB_SUPPORT_ASYNC_VDN_REQ */
 
+
 /*
  * HAL  Related Config
  */
@@ -234,11 +238,13 @@
 
 #define SUPPORTED_BLOCK_IO
 
+
 /* #define CONFIG_ONLY_ONE_OUT_EP_TO_LOW	0 */
 
 #define CONFIG_OUT_EP_WIFI_MODE	0
 
 #define ENABLE_USB_DROP_INCORRECT_OUT
+
 
 #define DISABLE_BB_RF	0
 
@@ -252,6 +258,7 @@
 #else
 	#define MP_DRIVER 0
 #endif
+
 
 /*
  * Platform  Related Config
@@ -268,6 +275,7 @@
 	#endif
 #endif
 
+
 #ifdef CONFIG_USB_TX_AGGREGATION
 /* #define	CONFIG_TX_EARLY_MODE */
 #endif
@@ -283,8 +291,6 @@
 		#define WAKEUP_GPIO_IDX 7
 	#endif
 #endif
-
-#define CONFIG_ATTEMPT_TO_FIX_AP_BEACON_ERROR
 
 /*
  * Debug Related Config
@@ -311,6 +317,8 @@
 /* #define DBG_RX_SEQ */
 /* #define DBG_RX_SIGNAL_DISPLAY_PROCESSING */
 /* #define DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED "jeff-ap" */
+
+
 
 /* #define DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE */
 /* #define DBG_ROAMING_TEST */

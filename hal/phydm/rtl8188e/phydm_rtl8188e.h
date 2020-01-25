@@ -12,22 +12,10 @@
  * more details.
  *
  *****************************************************************************/
-#ifndef	__ODM_RTL8188E_H__
+#ifndef __ODM_RTL8188E_H__
 #define __ODM_RTL8188E_H__
 
 #if (RTL8188E_SUPPORT == 1)
-
-void
-odm_dig_lower_bound_88e(
-	struct dm_struct		*dm
-);
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-
-#define sw_ant_div_reset_before_link		odm_sw_ant_div_reset_before_link
-
-void odm_sw_ant_div_reset_before_link(struct dm_struct	*dm);
-
-#endif
+s8 phydm_cck_rssi_8188e(struct dm_struct *dm, u16 lna_idx, u8 vga_idx);
 #endif
 #endif

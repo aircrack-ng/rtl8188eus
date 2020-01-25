@@ -13,8 +13,8 @@
  *
  *****************************************************************************/
 
-#ifndef __HAL_PHY_RF_8188E_H__
-#define __HAL_PHY_RF_8188E_H__
+#ifndef __HALRF_8188E_H__
+#define __HALRF_8188E_H__
 
 /*--------------------------Define Parameters-------------------------------*/
 #define	IQK_DELAY_TIME_88E		10		/* ms */
@@ -98,7 +98,7 @@ _phy_path_a_stand_by(
 void
 halrf_rf_lna_setting_8188e(
 	struct dm_struct	*dm,
-	enum phydm_lna_set type
+	enum halrf_lna_set type
 );
 
-#endif	/*  #ifndef __HAL_PHY_RF_8188E_H__ */
+#endif	/*#ifndef __HALRF_8188E_H__*/

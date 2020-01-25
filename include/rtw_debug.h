@@ -28,6 +28,24 @@ enum {
 
 #define DRIVER_PREFIX "RTW: "
 
+#ifdef PLATFORM_OS_CE
+extern void rtl871x_cedbg(const char *fmt, ...);
+#endif
+
+#ifdef PLATFORM_WINDOWS
+	#define RTW_PRINT do {} while (0)
+	#define RTW_ERR do {} while (0)
+	#define RTW_WARN do {} while (0)
+	#define RTW_INFO do {} while (0)
+	#define RTW_DBG do {} while (0)
+	#define RTW_PRINT_SEL do {} while (0)
+	#define _RTW_PRINT do {} while (0)
+	#define _RTW_ERR do {} while (0)
+	#define _RTW_WARN do {} while (0)
+	#define _RTW_INFO do {} while (0)
+	#define _RTW_DBG do {} while (0)
+	#define _RTW_PRINT_SEL do {} while (0)
+#else
 	#define RTW_PRINT(x, ...) do {} while (0)
 	#define RTW_ERR(x, ...) do {} while (0)
 	#define RTW_WARN(x,...) do {} while (0)
@@ -40,6 +58,7 @@ enum {
 	#define _RTW_INFO(x,...) do {} while (0)
 	#define _RTW_DBG(x,...) do {} while (0)
 	#define _RTW_PRINT_SEL(x,...) do {} while (0)
+#endif
 
 #define RTW_INFO_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
 #define RTW_DBG_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
@@ -49,14 +68,32 @@ enum {
 
 #define RTW_DBGDUMP 0 /* 'stream' for _dbgdump */
 
+
+
 #undef _dbgdump
 #undef _seqdump
 
+#if defined(PLATFORM_WINDOWS) && defined(PLATFORM_OS_XP)
+	#define _dbgdump DbgPrint
+	#define KERN_CONT
+	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
+#elif defined(PLATFORM_WINDOWS) && defined(PLATFORM_OS_CE)
+	#define _dbgdump rtl871x_cedbg
+	#define KERN_CONT
+	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
+#elif defined PLATFORM_LINUX
 	#define _dbgdump printk
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
 	#define KERN_CONT
 	#endif
 	#define _seqdump seq_printf
+#elif defined PLATFORM_FREEBSD
+	#define _dbgdump printf
+	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
+	#define KERN_CONT
+	#endif
+	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
+#endif
 
 void RTW_BUF_DUMP_SEL(uint _loglevel, void *sel, u8 *_titlestring,
 								bool _idx_show, const u8 *_hexdata, int _hexdatalen);
@@ -276,6 +313,9 @@ ssize_t proc_set_rson_data(struct file *file, const char __user *buffer, size_t 
 int proc_get_survey_info(struct seq_file *m, void *v);
 ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 int proc_get_ap_info(struct seq_file *m, void *v);
+#ifdef ROKU_PRIVATE
+int proc_get_infra_ap(struct seq_file *m, void *v);
+#endif /* ROKU_PRIVATE */
 ssize_t proc_reset_trx_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 int proc_get_trx_info(struct seq_file *m, void *v);
 ssize_t proc_set_tx_power_offset(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
@@ -309,6 +349,11 @@ void rtw_sta_linking_test_set_start(void);
 bool rtw_sta_linking_test_wait_done(void);
 bool rtw_sta_linking_test_force_fail(void);
 ssize_t proc_set_sta_linking_test(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+#ifdef CONFIG_AP_MODE
+u16 rtw_ap_linking_test_force_auth_fail(void);
+u16 rtw_ap_linking_test_force_asoc_fail(void);
+ssize_t proc_set_ap_linking_test(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+#endif
 
 int proc_get_rx_stat(struct seq_file *m, void *v);
 int proc_get_tx_stat(struct seq_file *m, void *v);
@@ -327,10 +372,15 @@ ssize_t proc_set_best_channel(struct file *file, const char __user *buffer, size
 
 int proc_get_trx_info_debug(struct seq_file *m, void *v);
 
+#ifdef CONFIG_HUAWEI_PROC
+int proc_get_huawei_trx_info(struct seq_file *m, void *v);
+#endif
+
 int proc_get_rx_signal(struct seq_file *m, void *v);
 ssize_t proc_set_rx_signal(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 int proc_get_hw_status(struct seq_file *m, void *v);
 ssize_t proc_set_hw_status(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_mac_rptbuf(struct seq_file *m, void *v);
 
 #ifdef CONFIG_80211N_HT
 int proc_get_ht_enable(struct seq_file *m, void *v);
@@ -341,8 +391,6 @@ ssize_t proc_set_bw_mode(struct file *file, const char __user *buffer, size_t co
 
 int proc_get_ampdu_enable(struct seq_file *m, void *v);
 ssize_t proc_set_ampdu_enable(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
-
-int proc_get_mac_rptbuf(struct seq_file *m, void *v);
 
 void dump_regsty_rx_ampdu_size_limit(void *sel, _adapter *adapter);
 int proc_get_rx_ampdu(struct seq_file *m, void *v);
@@ -419,6 +467,13 @@ int proc_get_int_logs(struct seq_file *m, void *v);
 int proc_get_rx_ring(struct seq_file *m, void *v);
 int proc_get_tx_ring(struct seq_file *m, void *v);
 int proc_get_pci_aspm(struct seq_file *m, void *v);
+int proc_get_pci_conf_space(struct seq_file *m, void *v);
+ssize_t proc_set_pci_conf_space(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+
+int proc_get_pci_bridge_conf_space(struct seq_file *m, void *v);
+ssize_t proc_set_pci_bridge_conf_space(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+
+
 #ifdef DBG_TXBD_DESC_DUMP
 int proc_get_tx_ring_ext(struct seq_file *m, void *v);
 ssize_t proc_set_tx_ring_ext(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
@@ -450,6 +505,7 @@ ssize_t proc_set_new_bcn_max(struct file *file, const char __user *buffer, size_
 
 #ifdef CONFIG_POWER_SAVING
 int proc_get_ps_info(struct seq_file *m, void *v);
+ssize_t proc_set_ps_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 #ifdef CONFIG_WMMPS_STA	
 int proc_get_wmmps_info(struct seq_file *m, void *v);
 ssize_t proc_set_wmmps_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
@@ -488,10 +544,18 @@ int proc_get_tx_auth(struct seq_file *m, void *v);
 int proc_get_efuse_map(struct seq_file *m, void *v);
 ssize_t proc_set_efuse_map(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 
+#ifdef CONFIG_CUSTOMER01_SMART_ANTENNA
+int proc_get_pathb_phase(struct seq_file *m, void *v);
+ssize_t proc_set_pathb_phase(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+#endif
+
 #ifdef CONFIG_MCC_MODE
 int proc_get_mcc_info(struct seq_file *m, void *v);
 ssize_t proc_set_mcc_enable(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 ssize_t proc_set_mcc_duration(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+#ifdef CONFIG_MCC_PHYDM_OFFLOAD
+ssize_t proc_set_mcc_phydm_offload_enable(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+#endif
 ssize_t proc_set_mcc_single_tx_criteria(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 ssize_t proc_set_mcc_ap_bw20_target_tp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 ssize_t proc_set_mcc_ap_bw40_target_tp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
@@ -508,12 +572,36 @@ ssize_t proc_set_ack_timeout(struct file *file, const char __user *buffer, size_
 int proc_get_fw_offload(struct seq_file *m, void *v);
 ssize_t proc_set_fw_offload(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 
+#ifdef CONFIG_FW_HANDLE_TXBCN
+ssize_t proc_set_fw_tbtt_rpt(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_fw_tbtt_rpt(struct seq_file *m, void *v);
+#endif
+
 #ifdef CONFIG_DBG_RF_CAL
 int proc_get_iqk_info(struct seq_file *m, void *v);
 ssize_t proc_set_iqk(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 int proc_get_lck_info(struct seq_file *m, void *v);
 ssize_t proc_set_lck(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 #endif /*CONFIG_DBG_RF_CAL*/
+
+#ifdef CONFIG_CTRL_TXSS_BY_TP
+ssize_t proc_set_txss_tp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_txss_tp(struct seq_file *m, void *v);
+#ifdef DBG_CTRL_TXSS
+ssize_t proc_set_txss_ctrl(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_txss_ctrl(struct seq_file *m, void *v);
+#endif
+#endif
+
+#ifdef CONFIG_LPS_CHK_BY_TP
+ssize_t proc_set_lps_chk_tp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_lps_chk_tp(struct seq_file *m, void *v);
+#endif
+
+#ifdef CONFIG_SUPPORT_STATIC_SMPS
+ssize_t proc_set_smps(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_smps(struct seq_file *m, void *v);
+#endif
 
 #define _drv_always_		1
 #define _drv_emerg_			2
