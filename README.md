@@ -12,9 +12,6 @@
 [![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
 [![aircrack-ng](https://img.shields.io/badge/aircrack--ng-supported-blue.svg)](#)
 
-This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
-we've seen, this must be the newest, most stable and effective one.
-The performance and code quality has been improved.
 
 # Supports
 * Android 9
