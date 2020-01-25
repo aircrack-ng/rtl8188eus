@@ -5,16 +5,13 @@
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
 [![Frame Injection](https://img.shields.io/badge/frame%20injection-supported-brightgreen.svg)](#)
 [![MESH Mode](https://img.shields.io/badge/mesh%20mode-supported-brightgreen.svg)](#)
-[![GitHub issues](https://img.shields.io/github/issues/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/issues)
-[![GitHub forks](https://img.shields.io/github/forks/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/network)
-[![GitHub stars](https://img.shields.io/github/stars/kimocoder/rtl8188eus.svg)](https://github.com/kimocoder/rtl8188eus/stargazers)
-[![GitHub license](https://img.shields.io/github/license/kimocoder/rtl8812au.svg)](https://github.com/kimocoder/rtl8188eus/blob/master/LICENSE)<br>
+[![GitHub issues](https://img.shields.io/github/issues/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/issues)
+[![GitHub forks](https://img.shields.io/github/forks/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/network)
+[![GitHub stars](https://img.shields.io/github/stars/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/stargazers)
+[![GitHub license](https://img.shields.io/github/license/aircrack-ng/rtl8812au.svg)](https://github.com/aircrack-ng/rtl8188eus/blob/master/LICENSE)<br>
 [![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
 [![aircrack-ng](https://img.shields.io/badge/aircrack--ng-supported-blue.svg)](#)
 
-This is a pure Realtek release, not from vendor but from all the Realtek multichip "bases"
-we've seen, this must be the newest, most stable and effective one.
-The performance and code quality has been improved.
 
 # Supports
 * Android 7
@@ -63,11 +60,9 @@ plugins=keyfile
 unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
-# TODO
-* Update the MESH mode
-* Update Android code
-* Fix more missing/wrong statements
-* Lower debug level
-* Cleanup the code
+# Credits
+Realtek       - https://www.realtek.com
+Alfa Networks - https://www.alfa.com.tw
+aircrack-ng.  - https://www.aircrack-ng.org
 
-
+And all those who may be using or contributing to it of anykind. Thanks!
