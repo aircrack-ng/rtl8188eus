@@ -34,10 +34,15 @@
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-$ sudo airmon-ng check-kill
-$ sudo ip link set <interface> down
-$ sudo iw dev <interface> set type monitor
+$ airmon-ng check-kill
+$ ip link set <interface> down
+$ iw dev <interface> set type monitor
 ```
+To set txpower to a higher level.
+```
+$ iw <interface> set txpower fixed 3000
+```
+
 Frame injection test may be performed with
 ```
 $ aireplay -9 <interface>
