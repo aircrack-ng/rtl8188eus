@@ -16,6 +16,8 @@
 # Supports
 * Android 9
 * WPA3-SAE
+* P2P Mode
+* WiFi Direct
 * MESH Support
 * Monitor mode
 * Frame injection
