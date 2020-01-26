@@ -67,6 +67,8 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 * Turn down log level / DEBUG
   (we want it now for some months just to see)
 
+* Unlock all channels and check the DFS setting
+
 * Implement txpower control
 
 * Remove Windows (NDIS) code
