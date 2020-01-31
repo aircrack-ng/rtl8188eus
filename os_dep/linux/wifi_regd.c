@@ -265,7 +265,7 @@ void rtw_regd_apply_flags(struct wiphy *wiphy)
 	u16 channel;
 	u32 freq;
 
-	/* all channels disable */
+	/* all channels enable */
 	for (i = 0; i < NUM_NL80211_BANDS; i++) {
 		sband = wiphy->bands[i];
 
@@ -274,7 +274,9 @@ void rtw_regd_apply_flags(struct wiphy *wiphy)
 				ch = &sband->channels[j];
 
 				if (ch)
-					ch->flags = IEEE80211_CHAN_DISABLED;
+					ch->flags &= ~(IEEE80211_CHAN_DISABLED|IEEE80211_CHAN_NO_HT40PLUS|
+						IEEE80211_CHAN_NO_HT40MINUS|IEEE80211_CHAN_NO_80MHZ|
+						IEEE80211_CHAN_NO_160MHZ|IEEE80211_CHAN_NO_IR);
 			}
 		}
 	}
