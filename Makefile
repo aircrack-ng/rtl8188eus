@@ -2322,6 +2322,7 @@ strip:
 install:
 	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
+	@echo "blacklist r8188eu" > /etc/modprobe.d/realtek.conf
 
 uninstall:
 	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
