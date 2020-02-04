@@ -25,10 +25,12 @@
 ... And a bunch of various wifi chipsets
 
 # Howto download/build/install
+```sh
 1. Clone the repo with "git clone https://github.com/aircrack-ng/rtl8188eus -b v5.7.6.1"<br>
 2. Enter the folder with "cd rtl8188eus"<br>
 2. Then run "make && make install"<br>
 3. And reboot in order to blacklist the module and load this module instead.
+```
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
@@ -50,7 +52,7 @@ $ aireplay -9 <interface>
 # NetworkManager configuration
 Add these lines below to "NetworkManager.conf" and ADD YOUR ADAPTER MAC below [keyfile]
 This will make the Network-Manager ignore the device, and therefor don't cause problems.
-```
+```sh
 [device]
 wifi.scan-rand-mac-address=no
 
