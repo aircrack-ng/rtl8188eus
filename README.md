@@ -24,12 +24,11 @@
 * Supported up to kernel v5.4+
 ... And a bunch of various wifi chipsets
 
-# Howto build/install
-1. You will need to blacklist another driver in order to use this one instead of the one provided with kernel.
-   Simply follow instructions below:<br>
-2. "echo "blacklist r8188eu" > /etc/modprobe.d/realtek-wifi.conf"<br>
-3. Then run "make && make install"<br>
-4. And reboot in order to blacklist the module and load this module instead.
+# Howto download/build/install
+1. Clone the repo with "git clone https://github.com/aircrack-ng/rtl8188eus -b v5.7.6.1"<br>
+2. Enter the folder with "cd rtl8188eus"<br>
+2. Then run "make && make install"<br>
+3. And reboot in order to blacklist the module and load this module instead.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
