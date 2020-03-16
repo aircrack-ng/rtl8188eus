@@ -41,7 +41,7 @@ inline void rtw_st_ctl_init(struct st_ctl_t *st_ctl)
 	_rtw_init_queue(&st_ctl->tracker_q);
 }
 
-inline void rtw_st_ctl_clear_tracker_q(struct st_ctl_t *st_ctl)
+static inline void rtw_st_ctl_clear_tracker_q(struct st_ctl_t *st_ctl)
 {
 	_irqL irqL;
 	_list *plist, *phead;

@@ -817,7 +817,7 @@ void rtw_regsty_load_target_tx_power(struct registry_priv *regsty)
 #endif /* CONFIG_IEEE80211_BAND_5GHZ */
 }
 
-inline void rtw_regsty_load_excl_chs(struct registry_priv *regsty)
+static inline void rtw_regsty_load_excl_chs(struct registry_priv *regsty)
 {
 	int i;
 	int ch_num = 0;
@@ -831,7 +831,7 @@ inline void rtw_regsty_load_excl_chs(struct registry_priv *regsty)
 }
 
 #ifdef CONFIG_80211N_HT
-inline void rtw_regsty_init_rx_ampdu_sz_limit(struct registry_priv *regsty)
+static inline void rtw_regsty_init_rx_ampdu_sz_limit(struct registry_priv *regsty)
 {
 	int i, j;
 	uint *sz_limit;

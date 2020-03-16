@@ -286,7 +286,7 @@ inline struct sk_buff *_rtw_skb_clone(struct sk_buff *skb)
 	return skb_clone(skb);
 #endif /* PLATFORM_FREEBSD */
 }
-inline struct sk_buff *_rtw_pskb_copy(struct sk_buff *skb)
+static inline struct sk_buff *_rtw_pskb_copy(struct sk_buff *skb)
 {
 #ifdef PLATFORM_LINUX
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36))

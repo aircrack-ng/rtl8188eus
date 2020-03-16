@@ -1038,7 +1038,7 @@ exit:
 	return ret;
 }
 
-inline bool rtw_sec_camid_is_used(struct cam_ctl_t *cam_ctl, u8 id)
+static inline bool rtw_sec_camid_is_used(struct cam_ctl_t *cam_ctl, u8 id)
 {
 	_irqL irqL;
 	bool ret;
