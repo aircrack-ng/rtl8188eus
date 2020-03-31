@@ -1,3 +1,5 @@
+## Driver version 5.3.9
+
 ## Some Important Points
 
 Do not change your kernel name or version in any manner while preparing the module or else it will not work and you will get errors like insmod 8188.ko >> fatal error exec format failed. This happens when you use build script from kali site and on the other hand you build your modules manually.
@@ -50,7 +52,7 @@ make headers_install CROSS_COMPILE=$path-your-cross-compiler ARCH=arm SUBARCH=ar
 
 ```
 cd ../
-git clone https://github.com/aircrack-ng/rtl8188eus -b v5.3.9
+git clone -b v5.3.9 https://github.com/aircrack-ng/rtl8188eus.git
 cd rtl8188eus
 
 
@@ -61,10 +63,10 @@ Now enter rtl8188eus directory using your file manager and edit the â€œmakefileâ
 Line number 94-95
 
 CONFIG_PLATFORM_I386_PC = n
-
+CONFIG_PLATFORM_ANDROID_ARM64 = n (for arm64 make this y)
 CONFIG_PLATFORM_ARM_RPI = y
 
-------------------For ARM ToolChain use Hardware FLOATING line number 1044-1053-------------------
+------------------For ARM ToolChain use Hardware FLOATING line number 1056-1165-------------------
 (Again for armhf/arm do the following but for arm64 first find your respective section then do the
  editing.)
 
@@ -98,9 +100,11 @@ Done enjoy your 8188eu.ko inside this same directory. Transfer it to your nethun
 kernel after including it inside /lib/modules/(uname -r)/. 
 
 ## Load the driver (8188eu.ko)
-```
+
 su
+
 cd /system/lib/modules
+
 insmod 8188eu.ko
-```
+
 ENJOY........
