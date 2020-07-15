@@ -26,9 +26,9 @@
 
 # Howto download/build/install
 ```sh
-1. Clone the repo with "git clone https://github.com/aircrack-ng/rtl8188eus -b v5.7.6.1"<br>
-2. Enter the folder with "cd rtl8188eus"<br>
-2. Then run "make && make install"<br>
+1. Clone the repo with "git clone https://github.com/aircrack-ng/rtl8188eus -b v5.7.6.1"
+2. Enter the folder with "cd rtl8188eus"
+2. Then run "make && make install"
 3. And reboot in order to blacklist the module and load this module instead.
 ```
 
