@@ -18,7 +18,7 @@
 * MESH Support
 * Monitor mode
 * Frame injection
-* Up to kernel v5.3+
+* Up to kernel v5.8+
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
