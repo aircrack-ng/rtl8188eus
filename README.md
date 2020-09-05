@@ -35,7 +35,7 @@
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```sh
-$ airmon-ng check-kill
+$ airmon-ng check kill
 $ ip link set <interface> down
 $ iw dev <interface> set type monitor
 ```
@@ -46,7 +46,7 @@ $ iw <interface> set txpower fixed 3000
 
 Frame injection test may be performed with
 ```sh
-$ aireplay -9 <interface>
+$ aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration
