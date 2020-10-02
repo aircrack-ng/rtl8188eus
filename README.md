@@ -60,7 +60,7 @@ plugins=keyfile
 unmanaged-devices=mac:A7:A7:A7:A7:A7
 ```
 
-#For Zero Errors You've to install some linux-headers :
+# For Zero Errors You've to install some linux-headers :
 
 1.Open Folder and then Open Terminal there.
 2.Now Copy and Paste These Commands One by One -
@@ -75,7 +75,7 @@ dpkg -i linux-headers-5.5.0-kali2-amd64_5.5.17-1kali1_amd64.deb
 4. *For Monitor Mode
 Type "iw dev <your_wifi> set type monitor.
 
-#HAPPY HACKING.
+**HAPPY HACKING.
 
 # Credits
 Realtek       - https://www.realtek.com<br>
