@@ -64,11 +64,11 @@ unmanaged-devices=mac:A7:A7:A7:A7:A7
 
 1.Open Folder and then Open Terminal there.
 2.Now Copy and Paste These Commands One by One -
-...
+```
 $ dpkg -i linux-kbuild-5.5_5.5.17-1kali1_amd64.deb
 $ dpkg -i linux-headers-5.5.0-kali2-common_5.5.17-1kali1_all.deb
 $ dpkg -i linux-headers-5.5.0-kali2-amd64_5.5.17-1kali1_amd64.deb
-...
+```
 3.Now Run ./dkms-install.sh
 *Bingo You've Successfully Installed.
 
