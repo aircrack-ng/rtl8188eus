@@ -72,9 +72,11 @@ $ dpkg -i linux-headers-5.5.0-kali2-amd64_5.5.17-1kali1_amd64.deb
 3.Now Run ./dkms-install.sh
 *Bingo You've Successfully Installed.
 
-4. *For Monitor Mode
-Type "iw dev <your_wifi> set type monitor.
-
+4.For Monitor Mode
+Type 
+```
+$ iw dev <your_wifi> set type monitor
+```
 **HAPPY HACKING.
 
 # Credits
