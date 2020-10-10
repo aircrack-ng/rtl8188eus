@@ -23,14 +23,14 @@
 
 # Howto build/install
 1. You will need to blacklist another driver in order to use this one.
-2. "echo "blacklist r8188eu" > "/etc/modprobe.d/realtek.conf"
-3. "make && make install"<br>
+2. `echo "blacklist r8188eu" >> "/etc/modprobe.d/realtek.conf"`
+3. `make && make install`
 4. Reboot in order to blacklist and load the new driver/module.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-$ sudo airmon-ng check-kill
+$ sudo airmon-ng check kill
 $ sudo ip link set <interface> down
 $ sudo iw dev <interface> set type monitor
 ```
@@ -42,7 +42,7 @@ $ aireplay -9 <interface>
 
 # NetworkManager configuration
 Add these lines below to "NetworkManager.conf" and ADD YOUR ADAPTER MAC below [keyfile]
-This will make the Network-Manager ignore the device, and therefor don't cause problems.
+This will make the Network-Manager ignore the device, and therefore don't cause problems.
 ```
 [device]
 wifi.scan-rand-mac-address=no
