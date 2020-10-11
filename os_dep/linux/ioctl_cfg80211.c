@@ -9801,5 +9801,3 @@ void rtw_cfg80211_dev_res_unregister(struct dvobj_priv *dvobj)
 	rtw_wiphy_unregister(dvobj_to_wiphy(dvobj));
 #endif
 }
-
-#endif /* CONFIG_IOCTL_CFG80211 */
