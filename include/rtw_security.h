@@ -41,7 +41,7 @@ const char *security_type_str(u8 value);
 #define _WPA_IE_ID_	0xdd
 #define _WPA2_IE_ID_	0x30
 
-#define SHA256_MAC_LEN 32
+#define RTW_SHA256_MAC_LEN 32
 #define AES_BLOCK_SIZE 16
 #define AES_PRIV_SIZE (4 * 44)
 
@@ -249,7 +249,7 @@ struct security_priv {
 #define SEC_IS_BIP_KEY_INSTALLED(sec) _FALSE
 #endif
 
-struct sha256_state {
+struct rtw_sha256_state {
 	u64 length;
 	u32 state[8], curlen;
 	u8 buf[64];
