@@ -1073,7 +1073,7 @@ SwLedBlink9(
 			if (adapter_to_pwrctl(Adapter)->rf_pwrstate != rf_on && adapter_to_pwrctl(Adapter)->rfoff_reason > RF_CHANGE_BY_PS)
 				SwLedOff(Adapter, pLed);
 			else {
-				if (IS_HARDWARE_TYPE_8812AU(Adapter)) {
+				if (IS_HARDWARE_TYPE_8188E(Adapter)) {
 					pLed->BlinkingLedState = RTW_LED_ON;
 					pLed->CurrLedState = LED_BLINK_ALWAYS_ON;
 				} else {
@@ -1091,7 +1091,7 @@ SwLedBlink9(
 			if (adapter_to_pwrctl(Adapter)->rf_pwrstate != rf_on && adapter_to_pwrctl(Adapter)->rfoff_reason > RF_CHANGE_BY_PS) {
 				SwLedOff(Adapter, pLed);
 			} else {
-				if (IS_HARDWARE_TYPE_8812AU(Adapter))
+				if (IS_HARDWARE_TYPE_8188E(Adapter))
 					pLed->BlinkingLedState = RTW_LED_ON;
 				else {
 					if (pLed->bLedOn)
@@ -1273,7 +1273,7 @@ SwLedBlink10(
 			if (adapter_to_pwrctl(Adapter)->rf_pwrstate != rf_on && adapter_to_pwrctl(Adapter)->rfoff_reason > RF_CHANGE_BY_PS)
 				SwLedOff(Adapter, pLed);
 			else {
-				if (IS_HARDWARE_TYPE_8812AU(Adapter)) {
+				if (IS_HARDWARE_TYPE_8188E(Adapter)) {
 					pLed->BlinkingLedState = RTW_LED_ON;
 					pLed->CurrLedState = LED_BLINK_ALWAYS_ON;
 				} else {
@@ -1291,7 +1291,7 @@ SwLedBlink10(
 			if (adapter_to_pwrctl(Adapter)->rf_pwrstate != rf_on && adapter_to_pwrctl(Adapter)->rfoff_reason > RF_CHANGE_BY_PS) {
 				SwLedOff(Adapter, pLed);
 			} else {
-				if (IS_HARDWARE_TYPE_8812AU(Adapter))
+				if (IS_HARDWARE_TYPE_8188E(Adapter))
 					pLed->BlinkingLedState = RTW_LED_ON;
 				else {
 					if (pLed->bLedOn)
@@ -1574,13 +1574,13 @@ SwLedBlink14(
 			else {
 				if (pLed->bLedOn) {
 					pLed->BlinkingLedState = RTW_LED_OFF;
-					if (IS_HARDWARE_TYPE_8812AU(Adapter))
+					if (IS_HARDWARE_TYPE_8188E(Adapter))
 						_set_timer(&(pLed->BlinkTimer), LED_BLINK_LINK_INTERVAL_ALPHA);
 					else
 						_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
 				} else {
 					pLed->BlinkingLedState = RTW_LED_ON;
-					if (IS_HARDWARE_TYPE_8812AU(Adapter))
+					if (IS_HARDWARE_TYPE_8188E(Adapter))
 						_set_timer(&(pLed->BlinkTimer), LED_BLINK_NORMAL_INTERVAL);
 					else
 						_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
@@ -3171,7 +3171,7 @@ SwLedControlMode9(
 			}
 
 			pLed->bLedNoLinkBlinkInProgress = _TRUE;
-			if (IS_HARDWARE_TYPE_8812AU(Adapter)) {
+			if (IS_HARDWARE_TYPE_8188E(Adapter)) {
 				if (LedAction == LED_CTL_LINK) {
 					pLed->BlinkingLedState = RTW_LED_ON;
 					pLed->CurrLedState = LED_BLINK_SLOWLY;
@@ -3936,7 +3936,7 @@ SwLedControlMode14(
 
 	case LED_CTL_LINK:
 	case LED_CTL_NO_LINK:
-		if (IS_HARDWARE_TYPE_8812AU(Adapter))
+		if (IS_HARDWARE_TYPE_8188E(Adapter))
 			SwLedOn(Adapter, pLed);
 		break;
 
@@ -3948,13 +3948,13 @@ SwLedControlMode14(
 			pLed->BlinkTimes = 2;
 			if (pLed->bLedOn) {
 				pLed->BlinkingLedState = RTW_LED_OFF;
-				if (IS_HARDWARE_TYPE_8812AU(Adapter))
+				if (IS_HARDWARE_TYPE_8188E(Adapter))
 					_set_timer(&(pLed->BlinkTimer), LED_BLINK_LINK_INTERVAL_ALPHA);
 				else
 					_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
 			} else {
 				pLed->BlinkingLedState = RTW_LED_ON;
-				if (IS_HARDWARE_TYPE_8812AU(Adapter))
+				if (IS_HARDWARE_TYPE_8188E(Adapter))
 					_set_timer(&(pLed->BlinkTimer), LED_BLINK_NORMAL_INTERVAL);
 				else
 					_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);

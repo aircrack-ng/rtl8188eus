@@ -119,19 +119,7 @@
 #endif
 
 #ifdef CONFIG_WIFI_MONITOR
-	/*	#define CONFIG_MONITOR_MODE_XMIT	*/
-#endif
-
-#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
-	#ifndef CONFIG_WIFI_MONITOR
-		#define CONFIG_WIFI_MONITOR
-	#endif
-	#ifndef CONFIG_MONITOR_MODE_XMIT
 		#define CONFIG_MONITOR_MODE_XMIT
-	#endif
-	#ifdef CONFIG_POWER_SAVING
-		#undef CONFIG_POWER_SAVING
-	#endif
 #endif
 
 #ifdef CONFIG_CUSTOMER01_SMART_ANTENNA
@@ -144,6 +132,7 @@
 #endif
 
 #ifdef CONFIG_AP_MODE
+	/* #define CONFIG_LIMITED_AP_NUM 1 */
 	#define CONFIG_TX_MCAST2UNI /* AP mode support IP multicast->unicast */
 #endif
 

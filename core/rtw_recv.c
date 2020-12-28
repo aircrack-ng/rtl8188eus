@@ -45,9 +45,7 @@ static u8 SNAP_ETH_TYPE_APPLETALK_AARP[2] = {0x80, 0xf3};
 static u8 SNAP_ETH_TYPE_TDLS[2] = {0x89, 0x0d};
 #endif
 
-#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
 int recv_frame_monitor(_adapter *padapter, union recv_frame *rframe);
-#endif
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
 
@@ -1395,14 +1393,12 @@ sint ap2sta_data_frame(
 			RTW_INFO("DBG_RX_DROP_FRAME "FUNC_ADPT_FMT" BSSID="MAC_FMT", mybssid="MAC_FMT"\n"
 				, FUNC_ADPT_ARG(adapter), MAC_ARG(pattrib->bssid), MAC_ARG(mybssid));
 			#endif
-#ifndef CONFIG_CUSTOMER_ALIBABA_GENERAL
 			if (!bmcast
 				&& !IS_RADAR_DETECTED(adapter_to_rfctl(adapter))
 			) {
 				RTW_INFO(ADPT_FMT" -issue_deauth to the nonassociated ap=" MAC_FMT " for the reason(7)\n", ADPT_ARG(adapter), MAC_ARG(pattrib->bssid));
 				issue_deauth(adapter, pattrib->bssid, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
 			}
-#endif
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1509,10 +1505,8 @@ sint sta2ap_data_frame(
 		*psta = rtw_get_stainfo(pstapriv, pattrib->ta);
 		if (*psta == NULL) {
 			if (!IS_RADAR_DETECTED(adapter_to_rfctl(adapter))) {
-#ifndef CONFIG_CUSTOMER_ALIBABA_GENERAL
 				RTW_INFO("issue_deauth to sta=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->src));
 				issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
-#endif
 			}
 
 			ret = RTW_RX_HANDLED;
@@ -1556,10 +1550,8 @@ sint sta2ap_data_frame(
 			ret = RTW_RX_HANDLED;
 			goto exit;
 		}
-#ifndef CONFIG_CUSTOMER_ALIBABA_GENERAL
 		RTW_INFO("issue_deauth to sta=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->src));
 		issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
-#endif
 		ret = RTW_RX_HANDLED;
 		goto exit;
 	}
@@ -4112,14 +4104,13 @@ int recv_frame_monitor(_adapter *padapter, union recv_frame *rframe)
 	pskb->data = rframe->u.hdr.rx_data;
 	skb_set_tail_pointer(pskb, rframe->u.hdr.len);
 
-#ifndef CONFIG_CUSTOMER_ALIBABA_GENERAL
 	/* fill radiotap header */
 	if (fill_radiotap_hdr(padapter, rframe, (u8 *)pskb) == _FAIL) {
 		ret = _FAIL;
 		rtw_free_recvframe(rframe, pfree_recv_queue); /* free this recv_frame */
 		goto exit;
 	}
-#endif
+
 	/* write skb information to recv frame */
 	skb_reset_mac_header(pskb);
 	rframe->u.hdr.len = pskb->len;
@@ -4298,10 +4289,8 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
 	struct recv_priv *recvpriv = &padapter->recvpriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
 	u8 type;
 	u8 *ptr = rframe->u.hdr.rx_data;
-#endif
 	if (check_fwstate(mlmepriv, WIFI_MONITOR_STATE)) {
 		/* monitor mode */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
@@ -4311,7 +4300,6 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
 		goto exit;
 	} else
 		{}
-#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
 	type = GetFrameType(ptr);
 	if ((type == WIFI_DATA_TYPE)&& check_fwstate(mlmepriv, WIFI_STATION_STATE)) {
 		struct wlan_network *cur_network = &(mlmepriv->cur_network);
@@ -4321,7 +4309,6 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
 			goto exit;
 		}
 	}
-#endif
 		/* check if need to handle uc_swdec_pending_queue*/
 		if (check_fwstate(mlmepriv, WIFI_STATION_STATE) && psecuritypriv->busetkipkey) {
 			union recv_frame *pending_frame;

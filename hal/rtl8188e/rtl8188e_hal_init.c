@@ -3363,15 +3363,14 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 	struct mlme_priv *pmlmepriv = &(Adapter->mlmepriv);
 
 	if (*((u8 *)val) == _HW_STATE_MONITOR_) {
-#ifdef CONFIG_CUSTOMER_ALIBABA_GENERAL
 		rcr_bits = RCR_AAP | RCR_APM | RCR_AM | RCR_AB | RCR_APWRMGT | RCR_ADF | RCR_AMF | RCR_APP_PHYST_RXFF;
-#else
+
 		/* Receive all type */
 		rcr_bits = RCR_AAP | RCR_APM | RCR_AM | RCR_AB | RCR_APWRMGT | RCR_ADF | RCR_ACF | RCR_AMF | RCR_APP_PHYST_RXFF;
 
 		/* Append FCS */
 		rcr_bits |= RCR_APPFCS;
-#endif
+
 #if 0
 		/*
 		   CRC and ICV packet will drop in recvbuf2recvframe()
