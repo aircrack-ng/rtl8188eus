@@ -2290,7 +2290,7 @@ static int storeToFile(const char *path, u8 *buf, u32 sz)
 			oldfs = get_fs();
 			set_fs(KERNEL_DS);
 			#else
-			set_fs(get_ds());
+			#set_fs(get_ds());
 			#endif
 			ret = writeFile(fp, buf, sz);
 			#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
