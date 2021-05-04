@@ -623,6 +623,46 @@ union recv_frame *decryptor(_adapter *padapter, union recv_frame *precv_frame)
 			res = rtw_tkip_decrypt(padapter, (u8 *)precv_frame);
 			break;
 		case _AES_:
+#ifdef CONFIG_WIFI_DATA_AES_SW_DECRYPTION_DISABLED
+                        if (GetFrameType(get_recvframe_data(precv_frame)) == WIFI_DATA) {
+#ifdef CONFIG_RTW_DEBUG
+                          if (prxattrib->seq_num % 100 == 0) {
+                            struct sta_info *stainfo;
+                            u8 *prwskey;
+
+                            stainfo = rtw_get_stainfo(&padapter->stapriv , &prxattrib->ta[0]);
+                            prwskey = &stainfo->dot118021x_UncstKey.skey[0];
+
+                            if(stainfo != NULL) {
+                              RTW_INFO("[%s:%d]: dropping encrypted data frame: key="KEY_FMT" busetkipkey=%d seq_num=%d src="MAC_FMT" dst="MAC_FMT" ta="MAC_FMT" ra="MAC_FMT"\n",
+                                  __FUNCTION__,
+                                  __LINE__,
+                                  KEY_ARG(prwskey),
+                                  psecuritypriv->busetkipkey,
+                                  prxattrib->seq_num,
+                                  MAC_ARG(prxattrib->src),
+                                  MAC_ARG(prxattrib->dst),
+                                  MAC_ARG(prxattrib->ta),
+                                  MAC_ARG(prxattrib->ra)
+                              );
+                            } else {
+                              RTW_INFO("[%s:%d]: dropping encrypted data frame: stainfo==NULL busetkipkey=%d seq_num=%d src="MAC_FMT" dst="MAC_FMT" ta="MAC_FMT" ra="MAC_FMT"\n",
+                                  __FUNCTION__,
+                                  __LINE__,
+                                  psecuritypriv->busetkipkey,
+                                  prxattrib->seq_num,
+                                  MAC_ARG(prxattrib->src),
+                                  MAC_ARG(prxattrib->dst),
+                                  MAC_ARG(prxattrib->ta),
+                                  MAC_ARG(prxattrib->ra)
+                              );
+                            }
+                          }
+#endif // CONFIG_RTW_DEBUG
+                          res = _FAIL;
+                          break;
+                        }
+#endif // CONFIG_WIFI_DATA_AES_SW_DECRYPTION_DISABLED
 			DBG_COUNTER(padapter->rx_logs.core_rx_post_decrypt_aes);
 			res = rtw_aes_decrypt(padapter, (u8 *)precv_frame);
 			break;
