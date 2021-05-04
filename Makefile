@@ -1,11 +1,11 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS) -fno-pie
-EXTRA_CFLAGS += -O1
-#EXTRA_CFLAGS += -O3
-EXTRA_CFLAGS += -Wno-unused-variable
-EXTRA_CFLAGS += -Wno-unused-value
-EXTRA_CFLAGS += -Wno-unused-label
-EXTRA_CFLAGS += -Wno-unused-parameter
-EXTRA_CFLAGS += -Wno-unused-function
+#EXTRA_CFLAGS += -O1
+EXTRA_CFLAGS += -O3
+#EXTRA_CFLAGS += -Wno-unused-variable
+#EXTRA_CFLAGS += -Wno-unused-value
+#EXTRA_CFLAGS += -Wno-unused-label
+#EXTRA_CFLAGS += -Wno-unused-parameter
+#EXTRA_CFLAGS += -Wno-unused-function
 EXTRA_CFLAGS += -Wno-unused
 EXTRA_CFLAGS += -Wno-vla
 EXTRA_CFLAGS += -Wno-date-time
@@ -21,11 +21,9 @@ EXTRA_CFLAGS += -Wno-date-time	# Fix compile error && warning on gcc 4.9 and lat
 endif
 
 EXTRA_CFLAGS += -I$(src)/include
-
 EXTRA_LDFLAGS += --strip-debug
 
 CONFIG_AUTOCFG_CP = n
-
 ########################## WIFI IC ############################
 CONFIG_MULTIDRV = n
 CONFIG_RTL8188E = y
@@ -164,9 +162,7 @@ CONFIG_PLATFORM_ARM_ODROIDC2 = n
 CONFIG_PLATFORM_PPC = n
 CONFIG_PLATFORM_PPC64LE = n
 ###############################################################
-
 CONFIG_DRVEXT_MODULE = n
-
 ########### COMMON  #################################
 ifeq ($(CONFIG_GSPI_HCI), y)
 HCI_NAME = gspi
@@ -183,7 +179,6 @@ endif
 ifeq ($(CONFIG_PCI_HCI), y)
 HCI_NAME = pci
 endif
-
 
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/linux/os_intfs.o \
@@ -213,7 +208,6 @@ ifeq ($(CONFIG_GSPI_HCI), y)
 _OS_INTFS_FILES += os_dep/linux/custom_gpio_linux.o
 _OS_INTFS_FILES += os_dep/linux/$(HCI_NAME)_ops_linux.o
 endif
-
 
 _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_com.o \
@@ -293,7 +287,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188E_SDIO.o
 endif
-
 endif
 
 ########### HAL_RTL8192E #################################
@@ -353,7 +346,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8192e1ant.o \
 				hal/btc/halbtc8192e2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8812A_RTL8821A #################################
@@ -441,13 +433,11 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME := 8821as
 endif
-
 endif
 
 EXTRA_CFLAGS += -DCONFIG_RTL8821A
 
-_HAL_INTFS_FILES +=	hal/rtl8812a/hal8821a_fw.o
-		
+_HAL_INTFS_FILES +=	hal/rtl8812a/hal8821a_fw.o	
 endif
 
 ifeq ($(CONFIG_BT_COEXIST), y)
@@ -460,7 +450,6 @@ _BTC_FILES += hal/btc/halbtc8821a1ant.o \
 				hal/btc/halbtc8821a2ant.o
 endif
 endif
-
 endif
 
 ########### HAL_RTL8723B #################################
@@ -518,7 +507,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8723b1ant.o \
 				hal/btc/halbtc8723b2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8814A #################################
@@ -576,7 +564,6 @@ endif
 ifeq ($(CONFIG_PCI_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8814A_PCIE.o
 endif
-
 endif
 
 ########### HAL_RTL8723C #################################
@@ -632,7 +619,6 @@ endif
 ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8703b1ant.o
 endif
-
 endif
 
 ########### HAL_RTL8723D #################################
@@ -691,7 +677,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 _BTC_FILES += hal/btc/halbtc8723d1ant.o \
 				hal/btc/halbtc8723d2ant.o
 endif
-
 endif
 
 ########### HAL_RTL8188F #################################
@@ -741,7 +726,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 _HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188F_SDIO.o
 endif
-
 endif
 
 ########### HAL_RTL8822B #################################
@@ -760,7 +744,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME = 88x2bs
 endif
-
 endif
 ########### HAL_RTL8821C #################################
 ifeq ($(CONFIG_RTL8821C), y)
@@ -774,7 +757,6 @@ endif
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME = 8821cs
 endif
-
 endif
 ########### AUTO_CFG  #################################
 
@@ -793,7 +775,6 @@ else
 $(shell cp autoconf_$(RTL871X)_$(HCI_NAME)_linux.h include/autoconf.h)
 endif
 endif
-
 endif
 
 ########### END OF PATH  #################################
@@ -856,7 +837,6 @@ EXTRA_CFLAGS += -DWIFIMAC_PATH=\"$(USER_WIFIMAC_PATH)\"
 else
 EXTRA_CFLAGS += -DWIFIMAC_PATH=\"/data/wifimac.txt\"
 endif
-
 endif
 
 ifeq ($(CONFIG_EXT_CLK), y)
@@ -970,7 +950,6 @@ BR_NAME = br0
 EXTRA_CFLAGS += -DCONFIG_BR_EXT
 EXTRA_CFLAGS += '-DCONFIG_BR_EXT_BRNAME="'$(BR_NAME)'"'
 endif
-
 
 ifeq ($(CONFIG_TDLS), y)
 EXTRA_CFLAGS += -DCONFIG_TDLS
@@ -1131,7 +1110,6 @@ EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 ARCH ?= arm
-
 CROSS_COMPILE ?=
 KVER := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
@@ -1150,7 +1128,6 @@ KVER:= 3.4.0
 KSRC := $(KERNEL_BUILD_PATH)
 MODULE_NAME :=wlan
 endif
-
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATM705X), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
@@ -1367,8 +1344,6 @@ ARCH := arm
 CROSS_COMPILE := /home/share/CusEnv/FreeScale/arm-eabi-4.4.3/bin/arm-eabi-
 KSRC ?= /home/share/CusEnv/FreeScale/FS_kernel_env
 endif
-
-
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATJ227X), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ACTIONS_ATJ227X
@@ -1733,7 +1708,6 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := rtl8822bs
 endif
 endif
-
 endif
 
 # Platform setting
@@ -1804,7 +1778,6 @@ _PLATFORM_FILES += platform/platform_ARM_SUNnI_sdio.o
 endif
 
 ARCH := arm
-
 # ==== Cross compile setting for Android 4.4 SDK =====
 #CROSS_COMPILE := arm-linux-gnueabihf-
 KVER  := 3.10.24
@@ -1812,7 +1785,6 @@ KVER  := 3.10.24
 CROSS_COMPILE := /home/realtek/software_phoenix/phoenix/toolchain/usr/local/arm-2013.11/bin/arm-linux-gnueabihf-
 KSRC := /home/realtek/software_phoenix/linux-kernel
 MODULE_NAME := 8192eu
-
 endif
 
 ifeq ($(CONFIG_PLATFORM_RTK129X), y)
@@ -1841,7 +1813,6 @@ EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
 endif
 
 ARCH := arm64
-
 # ==== Cross compile setting for Android 4.4 SDK =====
 #CROSS_COMPILE := arm-linux-gnueabihf-
 #KVER  := 4.1.10
@@ -1861,10 +1832,8 @@ EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
 endif
 
 ARCH:=rlx
-
 CROSS_COMPILE:=mips-linux-
 KSRC:= /home/realtek/share/Develop/IPCAM_SDK/RealSil/rts3901_sdk_v1.2_vanilla/linux-3.10
-
 endif
 
 ifeq ($(CONFIG_PLATFORM_NOVATEK_NT72668), y)
@@ -1929,7 +1898,6 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := 8822bs
 endif
 endif
-
 endif
 
 ifeq ($(CONFIG_PLATFORM_ZTE_ZX296716), y)
@@ -1959,11 +1927,9 @@ CONFIG_RTL8822BS ?= m
 USER_MODULE_NAME := 8822bs
 endif
 endif
-
 endif
 
 ifeq ($(CONFIG_MULTIDRV), y)
-
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME := rtw_sdio
 endif
@@ -1975,8 +1941,6 @@ endif
 ifeq ($(CONFIG_PCI_HCI), y)
 MODULE_NAME := rtw_pci
 endif
-
-
 endif
 
 USER_MODULE_NAME ?=
