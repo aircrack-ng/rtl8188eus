@@ -10113,15 +10113,15 @@ static int rtw_priv_mp_get(struct net_device *dev,
 		RTW_INFO("mp_get EFUSE_MASK\n");
 		rtw_efuse_mask_file(dev, info, wdata, extra);
 		break;
-	case  EFUSE_FILE:
+	case EFUSE_FILE:
 		RTW_INFO("mp_get EFUSE_FILE\n");
 		rtw_efuse_file_map(dev, info, wdata, extra);
 		break;
-	case  MP_TX:
+	case MP_TX:
 		RTW_INFO("mp_get MP_TX\n");
 		rtw_mp_tx(dev, info, wdata, extra);
 		break;
-	case  MP_RX:
+	case MP_RX:
 		RTW_INFO("mp_get MP_RX\n");
 		rtw_mp_rx(dev, info, wdata, extra);
 		break;
@@ -10143,11 +10143,11 @@ static int rtw_priv_mp_get(struct net_device *dev,
 		RTW_INFO("mp_get MP_SETPWRBYRATE\n");
 		rtw_mp_pwrbyrate(dev, info, wdata, extra);
 		break;
-	case  BT_EFUSE_FILE:
+	case BT_EFUSE_FILE:
 		RTW_INFO("mp_get BT EFUSE_FILE\n");
 		rtw_bt_efuse_file_map(dev, info, wdata, extra);
 		break;
-	case  MP_SWRFPath:
+	case MP_SWRFPath:
 		RTW_INFO("mp_get MP_SWRFPath\n");
 		rtw_mp_switch_rf_path(dev, info, wrqu, extra);
 		break;
@@ -10158,7 +10158,6 @@ static int rtw_priv_mp_get(struct net_device *dev,
 	return 0;
 }
 #endif /*#if defined(CONFIG_MP_INCLUDED)*/
-
 
 #ifdef CONFIG_SDIO_INDIRECT_ACCESS
 #define DBG_MP_SDIO_INDIRECT_ACCESS 1
