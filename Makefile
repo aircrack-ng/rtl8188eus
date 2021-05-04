@@ -164,8 +164,6 @@ CONFIG_PLATFORM_PPC64LE = n
 
 CONFIG_DRVEXT_MODULE = n
 
-export TopDIR ?= $(shell pwd)
-
 ########### COMMON  #################################
 ifeq ($(CONFIG_GSPI_HCI), y)
 HCI_NAME = gspi
@@ -780,16 +778,16 @@ endif
 ifeq ($(CONFIG_AUTOCFG_CP), y)
 
 ifeq ($(CONFIG_MULTIDRV), y)
-$(shell cp $(TopDIR)/autoconf_multidrv_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+$(shell cp autoconf_multidrv_$(HCI_NAME)_linux.h include/autoconf.h)
 else
 ifeq ($(CONFIG_RTL8188E)$(CONFIG_SDIO_HCI),yy)
-$(shell cp $(TopDIR)/autoconf_rtl8189e_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+$(shell cp autoconf_rtl8189e_$(HCI_NAME)_linux.h include/autoconf.h)
 else ifeq ($(CONFIG_RTL8188F)$(CONFIG_SDIO_HCI),yy)
-$(shell cp $(TopDIR)/autoconf_rtl8189f_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+$(shell cp autoconf_rtl8189f_$(HCI_NAME)_linux.h include/autoconf.h)
 else ifeq ($(CONFIG_RTL8723C),y)
-$(shell cp $(TopDIR)/autoconf_rtl8723c_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+$(shell cp autoconf_rtl8723c_$(HCI_NAME)_linux.h include/autoconf.h)
 else
-$(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+$(shell cp autoconf_$(RTL871X)_$(HCI_NAME)_linux.h include/autoconf.h)
 endif
 endif
 
