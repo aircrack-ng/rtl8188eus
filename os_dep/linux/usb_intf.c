@@ -160,6 +160,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x2001, 0x3311), .driver_info = RTL8188E}, /* DLink GO-USB-N150 REV B1 */ 
 	{USB_DEVICE(0x2001, 0x331B), .driver_info = RTL8188E}, /* DLink DWA-121 REV B1 */ 
 	{USB_DEVICE(0x056E, 0x4008), .driver_info = RTL8188E}, /* Elecom WDC-150SU2M */ 	
+	{USB_DEVICE(0x0B05, 0x18F0), .driver_info = RTL8188E}, /* ASUS USB-N10 Nano */ 	
 #endif
 
 #ifdef CONFIG_RTL8812A
