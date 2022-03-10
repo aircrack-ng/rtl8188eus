@@ -27,8 +27,10 @@ as CentOS Kernel 3.10 contains many code from 4.x
 # Howto build/install
 1. You will need to blacklist another driver in order to use this one.
 2. `echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'`
-3. `make && sudo make install`
-4. Reboot in order to blacklist and load the new driver/module.
+3. Reboot
+4. cd rtl8188eus
+5. `make && sudo make install`
+6. Reboot in order to blacklist and load the new driver/module.
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
