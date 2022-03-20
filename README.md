@@ -10,7 +10,7 @@ If you are are taking "Learn Ethical Hacking From Scratch | Udemy" by Zaid Sabih
 8. sudo apt-get install libelf-dev
 10. sudo apt install dkms
 11. sudo rmmod r8188eu.ko 
-12. git https://github.com/drygdryg/rtl8188eus (This works for me 😂)
+12. git https://github.com/aircrack-ng/rtl8188eus (This works for me 😂)
 13. cd rtl8188eus
 14. sudo -i
 15. echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'
