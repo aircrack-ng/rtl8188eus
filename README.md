@@ -77,7 +77,7 @@ plugins=keyfile
 unmanaged-devices=A0:B1:C2:D3:E4:F5 #Your device's MAC address here
 ```
 
-# Zabid Sabih lesson tips
+# Zaid Sabih lesson tips
 
 If you are are taking "Learn Ethical Hacking From Scratch | Udemy" by Zaid Sabih and using Kali 2022 x64 Customized by zSecurity 1.0.7 and TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS], you might find this helpful.
 
