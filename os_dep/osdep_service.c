@@ -1273,6 +1273,7 @@ inline void thread_exit(_completion *comp)
 #else
 	kthread_complete_and_exit(comp, 0);
 #endif
+#endif
 
 #ifdef PLATFORM_FREEBSD
 	printf("%s", "RTKTHREAD_exit");
