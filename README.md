@@ -31,19 +31,19 @@ You will need to blacklist another driver in order to use this one.
 - curl:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
 ```
 
 - wget:
 
 ```bash
-sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
 ```
 
 - fetch:
 
 ```bash
-sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
+sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
 ```
 
 ##### Without the automated script:
