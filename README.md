@@ -31,19 +31,19 @@ You will need to blacklist another driver in order to use this one.
 - curl:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/master/build.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
 ```
 
 - wget:
 
 ```bash
-sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/master/build.sh)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
 ```
 
 - fetch:
 
 ```bash
-sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/master/build.sh)"
+sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/master/build.sh)"
 ```
 
 ##### Without the automated script:
@@ -58,7 +58,7 @@ As you wish to do all by yourself, the dependency list is right under:
 - zenity
 
 ```bash
-git clone --recursive https://github.com/KanuX-14/rtl8188eus.git
+git clone --recursive https://github.com/aircrack-ng/rtl8188eus.git
 cd rtl8188eus
 printf "blacklist r8188eu\n" | sudo tee "/etc/modprobe.d/realtek.conf"
 sudo rmmod r8188eu

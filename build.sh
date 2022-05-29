@@ -6,7 +6,7 @@ IS_NOT_BLACKLISTED=$(cat /etc/modprobe.d/realtek.conf | grep "blacklist r8188eu"
 INSTALLATION_PATH_DOES_NOT_EXIST=$(printf $PATH | grep /usr/local/sbin)
 
 # Clone the repository first
-git clone --recursive https://github.com/KanuX-14/rtl8188eus.git
+git clone --recursive https://github.com/aircrack-ng/rtl8188eus.git
 cd rtl8188eus
 
 # Check if the device is already blacklisted.
