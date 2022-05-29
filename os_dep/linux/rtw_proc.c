@@ -39,6 +39,10 @@ inline struct proc_dir_entry *get_rtw_drv_proc(void)
 #define proc_get_parent_data(inode) PDE((inode))->parent->data
 #endif
 
+#if(LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
+#define PDE_DATA(inode) pde_data(inode)
+#endif
+
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
 #define get_proc_net proc_net
 #else

@@ -1267,8 +1267,13 @@ u32 _rtw_down_sema(_sema *sema)
 
 inline void thread_exit(_completion *comp)
 {
+
 #ifdef PLATFORM_LINUX
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0))
 	complete_and_exit(comp, 0);
+#else
+	kthread_complete_and_exit(comp, 0);
+#endif
 #endif
 
 #ifdef PLATFORM_FREEBSD
