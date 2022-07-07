@@ -15,6 +15,7 @@
 #ifndef __IEEE80211_H
 #define __IEEE80211_H
 
+#include <linux/version.h>
 
 #ifndef CONFIG_RTL8711FW
 
@@ -1530,7 +1531,25 @@ enum ieee80211_state {
 				     (((Addr[5]) & 0xff) == 0xff))
 #else
 
-// I don't know what happened. I think the compiler just got crazy after kernel 5.18+. Normally it have a 'extern' at the beginning.
+// I don't know what happened. I think the compiler just got crazy after kernel 5.18+.
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0))
+extern __inline int is_multicast_mac_addr(const u8 *addr)
+{
+	return (addr[0] != 0xff) && (0x01 & addr[0]);
+}
+
+extern __inline int is_broadcast_mac_addr(const u8 *addr)
+{
+	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
+		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
+}
+
+extern __inline int is_zero_mac_addr(const u8 *addr)
+{
+	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
+		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
+}
+#else
 __inline int is_multicast_mac_addr(const u8 *addr)
 {
 	return (addr[0] != 0xff) && (0x01 & addr[0]);
@@ -1547,6 +1566,7 @@ __inline int is_zero_mac_addr(const u8 *addr)
 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
 }
+#endif
 #endif /* PLATFORM_FREEBSD */
 
 #define CFG_IEEE80211_RESERVE_FCS (1<<0)
