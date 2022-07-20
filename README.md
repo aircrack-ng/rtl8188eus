@@ -30,20 +30,35 @@ You will need to blacklist another driver in order to use this one.
 
 - curl:
 
+<<<<<<< HEAD
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
+=======
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+>>>>>>> v5.3.9
 ```
 
 - wget:
 
+<<<<<<< HEAD
 ```bash
 sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
+=======
+```sh
+sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+>>>>>>> v5.3.9
 ```
 
 - fetch:
 
+<<<<<<< HEAD
 ```bash
 sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
+=======
+```sh
+sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+>>>>>>> v5.3.9
 ```
 
 ##### Without the automated script:
@@ -52,13 +67,24 @@ Keep in mind that the script checks your system and install the dependencies.<br
 It also checks whether the file have or not have a variable inside.<br>
 As you wish to do all by yourself, the dependency list is right under:
 
-- gcc
-- make
+- [bc](https://ftp.gnu.org/gnu/bc/)
+- [gawk](https://ftp.gnu.org/gnu/gawk/)
+- [gcc](https://ftp.gnu.org/gnu/gcc/)
+- [git](https://github.com/git/git)
+- [make](https://ftp.gnu.org/gnu/make/)
+- [net-tools](https://sourceforge.net/projects/net-tools/)
 - Kernel Headers -> Each distribution have a different package.
-- zenity
+- [zenity](https://gitlab.gnome.org/GNOME/zenity)
 
+<<<<<<< HEAD
 ```bash
 git clone --recursive https://github.com/aircrack-ng/rtl8188eus.git
+=======
+- Compilation:
+
+```sh
+git clone --recursive https://github.com/KanuX-14/rtl8188eus.git
+>>>>>>> v5.3.9
 cd rtl8188eus
 printf "blacklist r8188eu\n" | sudo tee "/etc/modprobe.d/realtek.conf"
 sudo rmmod r8188eu
@@ -66,10 +92,21 @@ make && sudo make install clean
 sudo modprobe 8188eu
 ```
 
+- The toggle-monitor script:
+
+With this, the toggle script will appear in your DE's menu. Under `Accessories` and `Internet`.
+
+```sh
+sudo cp toggle-monitor.sh /usr/local/sbin/toggle-monitor
+sudo chown $USER:$USER /usr/local/sbin/toggle-monitor
+sudo chmod +x /usr/local/sbin/toggle-monitor
+sudo cp rtl8188eus-toggle-monitor.desktop /usr/share/applications
+```
+
 ## Monitor mode
 
 Use these steps to enter monitor mode.
-```bash
+```sh
 sudo airmon-ng check kill
 sudo ip link set <interface> down
 sudo iw dev <interface> set type monitor
@@ -78,21 +115,21 @@ sudo iw dev <interface> set type monitor
 Frame injection test may be performed with.<br>
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 
-```bash
+```sh
 aireplay -9 <interface>
 ```
 
 ## Disable Monitor mode
 
 Use these steps to disable monitor mode. (not possible if your device's MAC address is added to `unmanaged-devices` variable under "NetworkManager.conf")
-```bash
+```sh
 sudo service NetworkManager start
 sudo iw dev <interface> set type managed
 sudo ip link set <interface> up
 ```
 
 If the adapter still refuses to go back, try:
-```bash
+```sh
 sudo service NetworkManager restart
 ```
 
@@ -102,7 +139,7 @@ Copy "NetworkManager.conf" to "NetworkManager.conf.bak" to create a backup.<br>
 Add these lines below to "NetworkManager.conf" and ADD YOUR ADAPTER MAC below `[keyfile]`.<br>
 This will make the Network-Manager ignore the device, and therefore don't cause problems.
 
-```bash
+```sh
 [device]
 wifi.scan-rand-mac-address=no
 
@@ -141,7 +178,7 @@ Like https://github.com/cccooo/rtl8812au-centos-7.6, forked from aircrack-ng/rtl
 as CentOS Kernel 3.10 contains many code from 4.x
 
 # Troubleshooting
-· You can check your devices by running `sudo iwconfig` or `sudo ifconfig`.<br>
+· You can check your device's interface by running `sudo iwconfig` or `sudo ifconfig`.<br>
 · "NetworkManager.conf" is normally under `/etc/NetworkManager/NetworkManager.conf`.<br>
 · You need your linux headers installed in order to build this driver.<br>
 
