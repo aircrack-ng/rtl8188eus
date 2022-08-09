@@ -61,7 +61,8 @@ fi
 
 # Installation process.
 sudo rmmod r8188eu # This one can be anything. I am using this one because is the common TL-WN722N v2/v3
-make -j${CORE} && sudo make install clean
+sudo rmmod 8188eu 2&>/dev/null # Remove old/installed module. Visual purposes.
+make -j${CORE} && sudo make install
 sudo modprobe 8188eu # Load the new driver/module
 sudo cp -v toggle-monitor.sh /usr/local/sbin/toggle-monitor
 sudo chown ${USER}:${USER} /usr/local/sbin/toggle-monitor
