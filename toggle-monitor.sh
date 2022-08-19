@@ -32,13 +32,13 @@ sudo -S systemctl stop NetworkManager.service
 
 # Toggle the Monitor to Managed mode
 if [[ ${IS_MANAGED} == "Managed" || ${IS_MANAGED} == "Auto" ]]; then
-    printf "[device]\nwifi.scan-rand-mac-address=no\n\n[ifupdown]\n\nmanaged=false\n\n[connection]\nwifi.powersave=0\n\n[main]\nplugins=keyfile\n\n[keyfile]\nunmanaged-devices=${MAC_ADDRESS}\n" | sudo -S tee /etc/NetworkManager/NetworkManager.conf
+    printf "[device]\nwifi.scan-rand-mac-address=no\n\n[ifupdown]\n\nmanaged=false\n\n[connection]\nwifi.powersave=0\n\n[main]\nplugins=keyfile\n\n[keyfile]\nunmanaged-devices=${MAC_ADDRESS}\n" &>/dev/null | sudo -S tee /etc/NetworkManager/NetworkManager.conf
     sudo -S rmmod 8188eu
     sudo -S modprobe 8188eu
     sudo -S ip link set ${INTERFACE} down
     sudo -S iw dev ${INTERFACE} set type monitor
 else
-    printf "\n" | sudo -S tee /etc/NetworkManager/NetworkManager.conf
+    printf "\n" &>/dev/null | sudo -S tee /etc/NetworkManager/NetworkManager.conf
     sudo -S rmmod 8188eu
     sudo -S modprobe 8188eu
     sudo -S ip link set ${INTERFACE} down
