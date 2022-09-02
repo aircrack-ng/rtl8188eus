@@ -31,19 +31,19 @@ You will need to blacklist another driver in order to use this one.
 - curl:
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"
 ```
 
 - wget:
 
 ```sh
-sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"
 ```
 
 - fetch:
 
 ```sh
-sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
+sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"
 ```
 
 ##### Without the automated script:
