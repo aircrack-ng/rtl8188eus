@@ -9644,7 +9644,7 @@ void rtw_wdev_unregister(struct wireless_dev *wdev)
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0)) || defined(COMPAT_KERNEL_RELEASE)
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
 	if (wdev->connected) {
-	#elif
+	#else
 	if (wdev->current_bss) {
 	#endif
 		RTW_INFO(FUNC_ADPT_FMT" clear current_bss by cfg80211_disconnected\n", FUNC_ADPT_ARG(adapter));
