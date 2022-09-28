@@ -61,7 +61,7 @@ As you wish to do all by yourself, the dependency list is right under:
 - Kernel Headers -> Each distribution have a different package.
 - [zenity](https://gitlab.gnome.org/GNOME/zenity)
 
-- Compilation:
+#### Compilation:
 
 ```sh
 git clone --recursive https://github.com/KanuX-14/rtl8188eus.git
@@ -72,14 +72,14 @@ make && sudo make install clean
 sudo modprobe 8188eu
 ```
 
-- The toggle-monitor script:
+#### The toggle-monitor script:
 
 With this, the toggle script will appear in your DE's menu. Under `Accessories` and `Internet`.
 
 ```sh
-sudo cp toggle-monitor.sh /usr/local/sbin/toggle-monitor
-sudo chown $USER:$USER /usr/local/sbin/toggle-monitor
-sudo chmod +x /usr/local/sbin/toggle-monitor
+sudo cp toggle-monitor.sh /usr/local/bin/toggle-monitor
+sudo chown $USER:$USER /usr/local/bin/toggle-monitor
+sudo chmod +x /usr/local/bin/toggle-monitor
 sudo cp rtl8188eus-toggle-monitor.desktop /usr/share/applications
 ```
 
