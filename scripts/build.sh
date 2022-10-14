@@ -70,9 +70,9 @@ sudo rmmod r8188eu # This one can be anything. I am using this one because is th
 sudo rmmod 8188eu 2&>/dev/null # Remove old/installed module. Visual purposes.
 make -j${CORE} && sudo make install
 sudo modprobe 8188eu # Load the new driver/module
-sudo cp -v toggle-monitor.sh /usr/local/sbin/toggle-monitor
-sudo chown ${USER}:${USER} /usr/local/sbin/toggle-monitor
-sudo chmod +x /usr/local/sbin/toggle-monitor
+sudo cp -v scripts/toggle-monitor.sh /usr/local/bin/toggle-monitor
+sudo chown ${USER}:${USER} /usr/local/bin/toggle-monitor
+sudo chmod +x /usr/local/bin/toggle-monitor
 sudo cp -v rtl8188eus-toggle-monitor.desktop /usr/share/applications
 printf "${GREEN}""The driver/module has been installed!""${RESET_COLOUR}""\n"
 notify-send "The driver/module has been installed!"
