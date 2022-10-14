@@ -10,11 +10,11 @@
 [![GitHub issues](https://img.shields.io/github/issues/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/issues)
 [![GitHub forks](https://img.shields.io/github/forks/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/network)
 [![GitHub stars](https://img.shields.io/github/stars/aircrack-ng/rtl8188eus.svg)](https://github.com/aircrack-ng/rtl8188eus/stargazers)
-[![GitHub license](https://img.shields.io/github/license/aircrack-ng/rtl8812au.svg)](https://github.com/aircrack-ng/rtl8188eus/blob/master/LICENSE)<br>
+[![GitHub license](https://img.shields.io/github/license/aircrack-ng/rtl8812au.svg)](https://github.com/aircrack-ng/rtl8188eus/blob/v5.3.9/LICENSE)<br>
 [![Android](https://img.shields.io/badge/android%20(8)-supported-brightgreen.svg)](#)
 [![aircrack-ng](https://img.shields.io/badge/aircrack--ng-supported-blue.svg)](#)
 
-Trying to find a solution? See [troubleshooting](https://github.com/KanuX-14/rtl8188eus/blob/v5.3.9/TROUBLESHOOTING.md).
+Trying to find a solution? See [troubleshooting](https://github.com/aircrack-ng/rtl8188eus/blob/v5.3.9/TROUBLESHOOTING.md).
 
 ## Supports
 
@@ -27,50 +27,13 @@ Trying to find a solution? See [troubleshooting](https://github.com/KanuX-14/rtl
 
 ## Building
 
-You will need to blacklist another driver in order to use this one.
-
 ##### With the automated script:
 
-<<<<<<< HEAD
-- curl:
-
-<<<<<<< HEAD
-```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
-=======
-```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
->>>>>>> v5.3.9
-```
-
-- wget:
-
-<<<<<<< HEAD
-```bash
-sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
-=======
-```sh
-sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
->>>>>>> v5.3.9
-```
-
-- fetch:
-
-<<<<<<< HEAD
-```bash
-sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/build.sh)"
-=======
-```sh
-sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/build.sh)"
->>>>>>> v5.3.9
-```
-=======
 |   Package |   Command                                                                                                 |
 |-----------|-----------------------------------------------------------------------------------------------------------|
-|   curl    |   sh -c "$(curl -fsSL https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"     |
-|   wget    |   sh -c "$(wget -O- https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"       |
-|   fetch   |   sh -c "$(fetch -o - https://raw.githubusercontent.com/KanuX-14/rtl8188eus/v5.3.9/scripts/build.sh)"     |
->>>>>>> v5.3.9
+|   curl    |   sh -c "$(curl -fsSL https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/scripts/build.sh)"     |
+|   wget    |   sh -c "$(wget -O- https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/scripts/build.sh)"       |
+|   fetch   |   sh -c "$(fetch -o - https://raw.githubusercontent.com/aircrack-ng/rtl8188eus/v5.3.9/scripts/build.sh)"     |
 
 ##### Without the automated script:
 
@@ -88,22 +51,15 @@ As you wish to do all by yourself, the dependency list is right under:
 |   net-tools   |   https://sourceforge.net/projects/net-tools/     |
 |   zenity      |   https://gitlab.gnome.org/GNOME/zenity           |
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-```bash
-git clone --recursive https://github.com/aircrack-ng/rtl8188eus.git
-=======
-- Compilation:
-=======
 It is necessary the usage of kernel headers. Each distribution have a different package.<br>
 They can also be manually compiled. See [this](https://www.kernel.org/doc/html/latest/kbuild/modules.html).
 
 #### Compilation:
->>>>>>> v5.3.9
+
+You will need to blacklist another driver in order to use this one.
 
 ```sh
-git clone --recursive https://github.com/KanuX-14/rtl8188eus.git
->>>>>>> v5.3.9
+git clone --recursive https://github.com/aircrack-ng/rtl8188eus.git
 cd rtl8188eus
 printf "blacklist r8188eu\n" | sudo tee "/etc/modprobe.d/realtek.conf"
 sudo rmmod r8188eu
