@@ -9649,6 +9649,8 @@ void rtw_wdev_unregister(struct wireless_dev *wdev)
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0)) || defined(COMPAT_KERNEL_RELEASE)
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 19, 2))
 	if (wdev->current_bss) {
+	#elif (LINUX_VERSION_CODE > KERNEL_VERSION(6, 0, 0))
+	if (wdev->links[0].client.current_bss) {
 	#else
 	if (wdev->connected) {
 	#endif
