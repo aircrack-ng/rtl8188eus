@@ -9,7 +9,9 @@ EXTRA_CFLAGS += -Wno-unused-function
 EXTRA_CFLAGS += -Wno-unused
 EXTRA_CFLAGS += -Wno-address
 EXTRA_CFLAGS += -Wno-cast-function-type
-EXTRA_CFLAGS += -Wno-discarded-qualifiers
+#EXTRA_CFLAGS += -Wno-discarded-qualifiers
+EXTRA_CFLAGS += -Wno-uninitialized
+EXTRA_CFLAGS += -Wno-sometimes-uninitialized
 EXTRA_CFLAGS += -Wno-vla
 EXTRA_CFLAGS += -Wno-date-time
 
