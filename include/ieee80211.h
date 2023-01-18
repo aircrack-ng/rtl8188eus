@@ -1535,7 +1535,7 @@ extern __inline int is_multicast_mac_addr(const u8 *addr)
 	return (addr[0] != 0xff) && (0x01 & addr[0]);
 }
 
-extern __inline int is_broadcast_mac_addr(const u8 *addr)
+static __inline int is_broadcast_mac_addr(const u8 *addr)
 {
 	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
 		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
