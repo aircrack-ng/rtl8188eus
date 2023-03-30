@@ -102,7 +102,7 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 }
 
 
-static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag, unsigned int tag_size)
+static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
 {
 	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
 	int data_len;
@@ -117,7 +117,10 @@ static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_ta
 	/* have a room for new tag */
 	memmove(((unsigned char *)ph->tag + data_len), (unsigned char *)ph->tag, ntohs(ph->length));
 	ph->length = htons(ntohs(ph->length) + data_len);
-	memcpy((unsigned char *)ph->tag, tag, (data_len > tag_size) ? tag_size : data_len);
+#pragma GCC diagnostic ignored "-Wstringop-overread"
+	memcpy((unsigned char *)ph->tag, tag, data_len);
+#pragma GCC diagnostic pop
+
 	return data_len;
 }
 
@@ -1167,7 +1170,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						memcpy(tag->tag_data + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
 
 						/* Add relay tag */
-						if (__nat25_add_pppoe_tag(skb, tag, sizeof(tag_buf)) < 0)
+						if (__nat25_add_pppoe_tag(skb, tag) < 0)
 							return -1;
 
 						RTW_INFO("NAT25: Insert PPPoE, forward %s packet\n",
