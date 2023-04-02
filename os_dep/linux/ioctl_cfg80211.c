@@ -1142,10 +1142,10 @@ check_bss:
 		#endif
 
 		if (check_fwstate(pmlmepriv, WIFI_MONITOR_STATE) != _TRUE) {
-                        roam_info.links[0].bss = cfg80211_get_bss(pwdev->wiphy, roam_info.links[0].channel,
-                                roam_info.links[0].bssid, pwdev->u.client.ssid, pwdev->u.client.ssid_len,
-                                pwdev->conn_bss_type, IEEE80211_PRIVACY_ANY);
-                        cfg80211_connect_bss(wdev_to_ndev(pwdev), cur_network->network.MacAddress, roam_info.links[0].bss
+                        struct cfg80211_bss *bss;
+                        bss = cfg80211_get_bss(pwdev->wiphy, NULL, cur_network->network.MacAddress, NULL, 0, 
+                                IEEE80211_BSS_TYPE_ANY, IEEE80211_PRIVACY_ANY);
+                        cfg80211_connect_bss(wdev_to_ndev(pwdev), cur_network->network.MacAddress, bss
                                 , pmlmepriv->assoc_req + sizeof(struct rtw_ieee80211_hdr_3addr) + 2
                                 , pmlmepriv->assoc_req_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 2
                                 , pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6
