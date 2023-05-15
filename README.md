@@ -26,7 +26,7 @@
 2. `echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'`
 3. Reboot
 4. cd rtl8188eus
-5. `make && sudo make install`
+5. `sudo make && sudo make install` (use sudo if login as normal user or ignore sudo in both)
 6. Reboot in order to blacklist and load the new driver/module.
 
 # MONITOR MODE howto
@@ -39,7 +39,7 @@ $ sudo iw dev <interface> set type monitor
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-$ aireplay -9 <interface>
+$ aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration
