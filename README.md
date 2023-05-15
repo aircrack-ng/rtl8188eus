@@ -39,7 +39,7 @@ $ sudo iw dev <interface> set type monitor
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-$ aireplay -9 <interface>
+$ aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration
