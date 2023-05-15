@@ -26,7 +26,7 @@
 2. `echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'`
 3. Reboot
 4. cd rtl8188eus
-5. `make && sudo make install`
+5. `sudo make && sudo make install` (use sudo if login as normal user or ignore sudo in both)
 6. Reboot in order to blacklist and load the new driver/module.
 
 # MONITOR MODE howto
