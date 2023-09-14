@@ -41,14 +41,14 @@ modprobe 8188eu
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-$ sudo airmon-ng check kill
-$ sudo ip link set <interface> down
-$ sudo iw dev <interface> set type monitor
+sudo airmon-ng check kill
+sudo ip link set <interface> down
+sudo iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-$ aireplay -9 <interface>
+sudo aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration
