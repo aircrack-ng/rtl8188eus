@@ -18,28 +18,37 @@
 * MESH Support
 * Monitor mode
 * Frame injection
-* Up to kernel v6.0+
+* Up to kernel v6.5+
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
-1. You will need to blacklist another driver in order to use this one.
-2. `echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'`
-3. Reboot
-4. cd rtl8188eus
-5. `make && sudo make install`
-6. Reboot in order to blacklist and load the new driver/module.
+1. Compile and install the driver:
+```
+cd rtl8188eus
+make && sudo make install
+```
+2. Blacklist another drivers in order to use this one:
+```
+echo 'blacklist r8188eu' | sudo tee -a '/etc/modprobe.d/realtek.conf'
+echo 'blacklist rtl8xxxu' | sudo tee -a '/etc/modprobe.d/realtek.conf'
+```
+3. `reboot` or remove all drivers related to RTL8188 and reload this one:
+```
+rmmod r8188eu rtl8xxxu 8188eu
+modprobe 8188eu
+```
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-$ sudo airmon-ng check kill
-$ sudo ip link set <interface> down
-$ sudo iw dev <interface> set type monitor
+sudo airmon-ng check kill
+sudo ip link set <interface> down
+sudo iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-$ aireplay -9 <interface>
+sudo aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration

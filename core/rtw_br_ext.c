@@ -117,7 +117,13 @@ static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_ta
 	/* have a room for new tag */
 	memmove(((unsigned char *)ph->tag + data_len), (unsigned char *)ph->tag, ntohs(ph->length));
 	ph->length = htons(ntohs(ph->length) + data_len);
+#if (defined __GNUC__) && (__GNUC__ > 10)
+    #pragma GCC diagnostic ignored "-Wstringop-overread"
+#endif
 	memcpy((unsigned char *)ph->tag, tag, data_len);
+#if (defined __GNUC__) && (__GNUC__ > 10)
+    #pragma GCC diagnostic pop
+#endif
 	return data_len;
 }
 
