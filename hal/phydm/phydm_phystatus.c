@@ -52,12 +52,10 @@ phydm_rx_statistic_cal(
 		phydm->phy_dbg_info.ht_pkt_not_zero = true;
 
 		if (phydm->support_ic_type & PHYSTS_2ND_TYPE_IC) {
-			if ((bw_idx == *phydm->band_width)) {
-				
+			if (bw_idx == *phydm->band_width) {
 				phydm->phy_dbg_info.num_qry_ht_pkt[date_rate - ODM_RATEMCS0]++;
 
 			} else if (bw_idx == CHANNEL_WIDTH_20) {
-			
 				phydm->phy_dbg_info.num_qry_pkt_sc_20m[date_rate - ODM_RATEMCS0]++;
 				phydm->phy_dbg_info.low_bw_20_occur = true;
 			}
@@ -68,9 +66,9 @@ phydm_rx_statistic_cal(
 	#if ODM_IC_11AC_SERIES_SUPPORT
 	else if (date_rate <= ODM_RATEVHTSS4MCS9) {
 		#if (ODM_PHY_STATUS_NEW_TYPE_SUPPORT == 1)
-		if ((phy_status_type == 1) && 
-			(phy_sta_rpt->gid != 0) && 
-			(phy_sta_rpt->gid != 63) && 
+		if ((phy_status_type == 1) &&
+			(phy_sta_rpt->gid != 0) &&
+			(phy_sta_rpt->gid != 63) &&
 			(phydm->support_ic_type & PHYSTS_2ND_TYPE_IC)) {
 			phydm->phy_dbg_info.num_qry_mu_vht_pkt[date_rate - ODM_RATEVHTSS1MCS0]++;
 			if (pktinfo->ppdu_cnt < 4) {
@@ -81,7 +79,6 @@ phydm_rx_statistic_cal(
 		#endif
 		{
 			phydm->phy_dbg_info.vht_pkt_not_zero = true;
-			
 			if (phydm->support_ic_type & PHYSTS_2ND_TYPE_IC) {
 				if ((bw_idx == *phydm->band_width)) {
 					phydm->phy_dbg_info.num_qry_vht_pkt[date_rate - ODM_RATEVHTSS1MCS0]++;

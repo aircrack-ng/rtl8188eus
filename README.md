@@ -1,27 +1,3 @@
-If you are are taking "Learn Ethical Hacking From Scratch | Udemy" by Zaid Sabih and using Kali 2022 x64 Customized by zSecurity 1.0.7 and TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS], you might find this helpful. In the begining, I am able to enter monitor mode. However after a few days, I found out it doesn't allow to enter monitor mode. I think  TP-Link TL-WN722N v2/v3 have automatically updated its driver. Then, I find a video from David Bombal (https://www.youtube.com/watch?v=tYnjMiTTdms) but still can't perfectly solve the issue. However, I find below steps work fine for me.
-
-1. sudo apt update
-2. sudo apt upgrade 
-3. sudo apt-get dist-upgrade
-4. reboot
-5. sudo apt-get install linux-headers-$(uname -r)
-6. sudo apt install bc 
-7. sudo apt-get install build-essential
-8. sudo apt-get install libelf-dev
-10. sudo apt install dkms
-11. sudo rmmod r8188eu.ko 
-12. git https://github.com/drygdryg/rtl8188eus (This works for me 😂)
-13. cd rtl8188eus
-14. sudo -i
-15. echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'
-16. reboot
-17. cd rtl8188eus 
-18. sudo make && make install
-19. reboot 
-
-Like https://github.com/cccooo/rtl8812au-centos-7.6, forked from aircrack-ng/rtl8188eus and modified for CentOS 7.9
-as CentOS Kernel 3.10 contains many code from 4.x
-
 ## rtl8188eus v5.3.9
 
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi drivers
@@ -38,32 +14,41 @@ as CentOS Kernel 3.10 contains many code from 4.x
 
 
 # Supports
-* Android 7
+* Android 12/13
 * MESH Support
 * Monitor mode
 * Frame injection
-* Up to kernel v5.8+
+* Up to kernel v6.5+
 ... And a bunch of various wifi chipsets
 
 # Howto build/install
-1. You will need to blacklist another driver in order to use this one.
-2. `echo 'blacklist r8188eu'|sudo tee -a '/etc/modprobe.d/realtek.conf'`
-3. Reboot
-4. cd rtl8188eus
-5. `make && sudo make install`
-6. Reboot in order to blacklist and load the new driver/module.
+1. Compile and install the driver:
+```
+cd rtl8188eus
+make && sudo make install
+```
+2. Blacklist another drivers in order to use this one:
+```
+echo 'blacklist r8188eu' | sudo tee -a '/etc/modprobe.d/realtek.conf'
+echo 'blacklist rtl8xxxu' | sudo tee -a '/etc/modprobe.d/realtek.conf'
+```
+3. `reboot` or remove all drivers related to RTL8188 and reload this one:
+```
+rmmod r8188eu rtl8xxxu 8188eu
+modprobe 8188eu
+```
 
 # MONITOR MODE howto
 Use these steps to enter monitor mode.
 ```
-$ sudo airmon-ng check kill
-$ sudo ip link set <interface> down
-$ sudo iw dev <interface> set type monitor
+sudo airmon-ng check kill
+sudo ip link set <interface> down
+sudo iw dev <interface> set type monitor
 ```
 Frame injection test may be performed with
 (after kernel v5.2 scanning is slow, run a scan or simply an airodump-ng first!)
 ```
-$ aireplay -9 <interface>
+sudo aireplay-ng -9 <interface>
 ```
 
 # NetworkManager configuration
