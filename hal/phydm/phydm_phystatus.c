@@ -1710,7 +1710,7 @@ phydm_process_rssi_for_dm(
 				}
 			}
 			if (sta->rssi_stat.ofdm_pkt_cnt != 64) {
-				i = 63;
+				i = 7;
 				sta->rssi_stat.ofdm_pkt_cnt -= (u8)(((sta->rssi_stat.packet_map >> i) & BIT(0)) - 1);
 			}
 			sta->rssi_stat.packet_map = (sta->rssi_stat.packet_map << 1) | BIT(0);
@@ -1747,7 +1747,7 @@ phydm_process_rssi_for_dm(
 					PHYDM_DBG(dm, DBG_RSSI_MNTR, "CCK_2: (( %d ))\n", undecorated_smoothed_cck);
 				}
 			}
-			i = 63;
+			i = 7;
 			sta->rssi_stat.ofdm_pkt_cnt -= (u8)((sta->rssi_stat.packet_map >> i) & BIT(0));
 			sta->rssi_stat.packet_map = sta->rssi_stat.packet_map << 1;
 		}
