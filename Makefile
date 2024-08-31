@@ -17,6 +17,9 @@ EXTRA_CFLAGS += -Wno-sometimes-uninitialized
 EXTRA_CFLAGS += -Wno-enum-conversion
 EXTRA_CFLAGS += -Wno-vla
 EXTRA_CFLAGS += -Wno-date-time
+EXTRA_CFLAGS += -Wno-empty-body
+EXTRA_CFLAGS += -Wno-restrict
+
 
 
 GCC_VER_49 := $(shell echo `$(CC) -dumpversion | cut -f1-2 -d.` \>= 4.9 | bc )
