@@ -1,11 +1,5 @@
 ## rtl8188eus v5.3.9
 
-
-# THESE DRIVERS IS DEPRECATED.
-# Use the mac80211 drivers over at [https://github.com/lwfinger/rtw88](https://github.com/lwfinger/rtw88)
-
-
-
 # Realtek rtl8188eus &amp; rtl8188eu &amp; rtl8188etv WiFi drivers
 
 [![Monitor mode](https://img.shields.io/badge/monitor%20mode-supported-brightgreen.svg)](#)
