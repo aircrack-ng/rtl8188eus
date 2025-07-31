@@ -20,6 +20,8 @@ ccflags-y += -Wno-vla
 ccflags-y += -Wno-date-time
 ccflags-y += -Wno-empty-body
 ccflags-y += -Wno-restrict
+ccflags-y += -Wno-vla-larger-than
+ccflags-y += -Wno-attributes
 
 
 
