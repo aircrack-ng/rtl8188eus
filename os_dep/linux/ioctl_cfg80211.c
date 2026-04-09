@@ -3114,7 +3114,7 @@ exit:
 }
 
 static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	int radio_idx,
 #endif
 	u32 changed)
@@ -3148,7 +3148,7 @@ static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy,
 			return ret;
 	}
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	(void)radio_idx;
 #endif
 	RTW_INFO("%s\n", __func__);
@@ -3965,7 +3965,7 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
 	struct wireless_dev *wdev,
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	int radio_idx,
 #endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)) || defined(COMPAT_KERNEL_RELEASE)
@@ -3978,7 +3978,7 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
 	_adapter *padapter = wiphy_to_adapter(wiphy);
 	HAL_DATA_TYPE   *pHalData = GET_HAL_DATA(padapter);
 	int value;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	(void)radio_idx;
 #endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)) || defined(COMPAT_KERNEL_RELEASE)
@@ -4031,14 +4031,14 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
 	struct wireless_dev *wdev,
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	int radio_idx, unsigned int link_id,
 #endif
 	int *dbm)
 {
 	_adapter *padapter = wiphy_to_adapter(wiphy);
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	(void)radio_idx;
 	(void)link_id;
 #endif
@@ -5679,7 +5679,7 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 }
 
 static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	, struct net_device *ndev
 #endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
@@ -5693,7 +5693,7 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
 	struct ieee80211_channel *chan = chandef->chan;
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
 	(void)ndev;
 #endif
 
