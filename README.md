@@ -31,6 +31,8 @@
 
 Driver `rtl8xxxu` coming with newer kernels supports **monitor** mode so use it before trying this one
 
+For a copy-paste Kali lab setup for the TP-Link TL-WN722N v2/v3, see [docs/KALI_QUICKSTART.md](docs/KALI_QUICKSTART.md).
+
 
 # Howto build/install
 1. Compile and install the driver:
