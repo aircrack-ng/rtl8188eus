@@ -18,7 +18,7 @@
 * MESH Support
 * Monitor mode
 * Frame injection
-* Up to kernel v6.9+
+* Up to kernel 6.x-7.0.x
 ... And a bunch of various wifi chipsets
 
 # Note
