@@ -1040,11 +1040,8 @@ recv_buf_hook:
 		precvbuf);
 
 	err = usb_submit_urb(purb, GFP_ATOMIC);
-	if (err && err != (-EPERM)) {
-		RTW_INFO("cannot submit rx in-token(err = 0x%08x),urb_status = %d\n"
-			, err, purb->status);
-		goto exit;
-	}
+	if (err)
+		return _FAIL;
 
 	ATOMIC_INC(&(precvpriv->rx_pending_cnt));
 	ret = _SUCCESS;

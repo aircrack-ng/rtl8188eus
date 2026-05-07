@@ -19,7 +19,7 @@
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
-MODULE_VERSION("DRIVERVERSION");
+MODULE_VERSION(DRIVERVERSION);
 
 struct sk_buff_head rtk_skb_mem_q;
 struct u8 *rtk_buf_mem[NR_RECVBUFF];
