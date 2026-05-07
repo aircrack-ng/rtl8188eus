@@ -1,0 +1,30 @@
+# Kernel module build artifacts
+*.o
+*.ko
+*.mod
+*.mod.c
+*.order
+*.symvers
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Kbuild command metadata generated during module compilation
+.modules.order.cmd
+.Module.symvers.cmd
+.*.cmd
+**/.*.cmd
+
+# Local Realtek backup artifacts created by Makefile helper targets
+backup_rtlwifi_driver.tar
+
+# Local wireless capture/output artifacts
+*.cap
+*.csv
+*.kismet.csv
+*.kismet.netxml
+*.log.csv
+*.hc22000
+
+# Large local wordlists
+rockyou.txt

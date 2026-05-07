@@ -1982,6 +1982,8 @@ endif
 
 ifneq ($(KERNELRELEASE),)
 
+ccflags-y += $(EXTRA_CFLAGS)
+
 ########### this part for *.mk ############################
 include $(src)/hal/phydm/phydm.mk
 
@@ -2061,8 +2063,16 @@ export CONFIG_RTL8188EU = m
 
 all: modules
 
+KERNEL_CC_IS_CLANG := $(shell test -r "$(KSRC)/.config" && \
+	grep -q '^CONFIG_CC_IS_CLANG=y' "$(KSRC)/.config" && echo y)
+KBUILD_TOOLCHAIN :=
+ifeq ($(KERNEL_CC_IS_CLANG),y)
+KBUILD_TOOLCHAIN += LLVM=1
+endif
+
 modules:
-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
+	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) \
+		M=$(shell pwd) $(KBUILD_TOOLCHAIN) modules
 
 strip:
 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded

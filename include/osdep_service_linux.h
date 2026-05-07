@@ -50,6 +50,7 @@
 #include <linux/rtnetlink.h>
 #include <linux/delay.h>
 #include <linux/interrupt.h>	/* for struct tasklet_struct */
+#include <linux/timer.h>
 #include <linux/ip.h>
 #include <linux/kthread.h>
 #include <linux/list.h>
@@ -63,6 +64,25 @@
 	#include <uapi/linux/limits.h>
 #else
 	#include <linux/limits.h>
+#endif
+
+#ifndef from_timer
+	#ifdef timer_container_of
+		#define from_timer(var, callback_timer, timer_fieldname) \
+			timer_container_of(var, callback_timer, timer_fieldname)
+	#else
+		#define from_timer(var, callback_timer, timer_fieldname) \
+			container_of(callback_timer, typeof(*(var)), timer_fieldname)
+	#endif
+#endif
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
+	#ifndef del_timer_sync
+		#define del_timer_sync timer_delete_sync
+	#endif
+	#ifndef del_timer
+		#define del_timer timer_delete
+	#endif
 #endif
 
 #ifdef RTK_DMP_PLATFORM
