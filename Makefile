@@ -1,3 +1,6 @@
+EXTRA_CFLAGS += -I$(src)/include
+EXTRA_CFLAGS += -I$(src)/core
+EXTRA_CFLAGS += -Iinclude/rtw_custom
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS) -fno-pie
 EXTRA_CFLAGS += -O1
 #EXTRA_CFLAGS += -O3
@@ -80,10 +83,10 @@ CONFIG_RTW_IPCAM_APPLICATION = n
 CONFIG_RTW_REPEATER_SON = n
 CONFIG_RTW_WIFI_HAL = y
 ########################## Debug ###########################
-CONFIG_RTW_DEBUG = n
+CONFIG_RTW_DEBUG = y
 # default log level is _DRV_INFO_ = 4,
 # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
-CONFIG_RTW_LOG_LEVEL = 0
+CONFIG_RTW_LOG_LEVEL = 4
 ######################## Wake On Lan ##########################
 CONFIG_WOWLAN = n
 CONFIG_WAKEUP_TYPE = 0x7 #bit2: deauth, bit1: unicast, bit0: magic pkt.
@@ -2052,6 +2055,9 @@ $(MODULE_NAME)-$(CONFIG_MP_INCLUDED) += core/rtw_mp.o
 ifeq ($(CONFIG_RTL8723B), y)
 $(MODULE_NAME)-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
 endif
+
+ccflags-y += $(EXTRA_CFLAGS)
+ldflags-y += $(EXTRA_LDFLAGS)
 
 obj-$(CONFIG_RTL8188EU) := $(MODULE_NAME).o
 

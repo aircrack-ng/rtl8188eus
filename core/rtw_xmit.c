@@ -4441,9 +4441,14 @@ s32 rtw_xmit_posthandle(_adapter *padapter, struct xmit_frame *pxmitframe, _pkt 
 	_irqL irqL0;
 #endif
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	s32 res;
 
 	res = update_attrib(padapter, pkt, &pxmitframe->attrib);
+
+	/* DistributeX Hook: Log intercepted packet destination MAC */
+	if (res != _FAIL)
+		RTW_INFO("DistributeX Hook: Intercepted packet to MAC %pM\n", pattrib->dst);
 
 #ifdef CONFIG_MCC_MODE
 	/* record data kernel TX to driver to check MCC concurrent TX */

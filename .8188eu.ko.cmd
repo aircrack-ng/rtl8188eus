@@ -1,0 +1,1 @@
+savedcmd_8188eu.ko := x86_64-linux-gnu-ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T /usr/src/linux-headers-6.18.12+kali-amd64/arch/x86/module.lds -o 8188eu.ko 8188eu.o 8188eu.mod.o .module-common.o
