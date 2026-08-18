@@ -61,6 +61,11 @@
 	#endif
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
+        #include <ddpehdr.h>
+        #include <elapaarp.h>
+#endif
+
 #ifdef CONFIG_BR_EXT
 
 /* #define BR_EXT_DEBUG */

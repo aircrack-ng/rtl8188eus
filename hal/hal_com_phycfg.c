@@ -17,6 +17,10 @@
 #include <drv_types.h>
 #include <hal_data.h>
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
+#define strncpy strscpy
+#endif
+
 #define PG_TXPWR_1PATH_BYTE_NUM_2G 18
 #define PG_TXPWR_BASE_BYTE_NUM_2G 11
 
