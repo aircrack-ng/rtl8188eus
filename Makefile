@@ -2,6 +2,13 @@ EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS) -fno-pie
 EXTRA_CFLAGS += -O1
 #EXTRA_CFLAGS += -O3
 EXTRA_CFLAGS += -Wno-unused-variable
+
+# Some distro kernels (e.g. Ubuntu 6.8.0-147+) backport the netdev argument of
+# cfg80211_ops.set_monitor_channel without bumping LINUX_VERSION_CODE.
+ifneq ($(shell grep -A2 -E "\(\*set_monitor_channel\)" $(KSRC)/include/net/cfg80211.h 2>/dev/null | grep -c net_device),0)
+EXTRA_CFLAGS += -DRTW_CFG80211_MONITOR_CHANNEL_NETDEV
+endif
+
 EXTRA_CFLAGS += -Wno-unused-value
 EXTRA_CFLAGS += -Wno-unused-label
 EXTRA_CFLAGS += -Wno-unused-parameter
